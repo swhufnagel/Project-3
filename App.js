@@ -1,9 +1,9 @@
-import React, { Fragment, Component } from 'react';
-import GestureRecognizer from 'react-native-swipe-gestures';
-import * as Permissions from 'expo-permissions';
-import * as Contacts from 'expo-contacts';
-import Constants from 'expo-constants';
-import { Notifications } from 'expo';
+import React, { Fragment, Component } from "react";
+import GestureRecognizer from "react-native-swipe-gestures";
+import * as Permissions from "expo-permissions";
+import * as Contacts from "expo-contacts";
+import Constants from "expo-constants";
+import { Notifications } from "expo";
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,68 +11,68 @@ import {
   View,
   Text,
   StatusBar,
-  Image,
-} from 'react-native';
+  Image
+} from "react-native";
 
-const YOUR_PUSH_TOKEN = '';
+const YOUR_PUSH_TOKEN = "http://21b37db1.ngrok.io/token";
 
 const Images = [
   {
-    uri: 'https://i.imgur.com/mxgtWKt.jpg',
-    label: 'Cat on a blue blanket',
+    uri: "https://i.imgur.com/mxgtWKt.jpg",
+    label: "Cat on a blue blanket"
   },
 
   {
-    uri: 'https://i.imgur.com/XCRnNWn.jpg',
-    label: 'A cat toy',
+    uri: "https://i.imgur.com/XCRnNWn.jpg",
+    label: "A cat toy"
   },
 
   {
-    uri: 'https://i.imgur.com/dqQX1K0.jpg',
-    label: 'A close up of a dog',
+    uri: "https://i.imgur.com/dqQX1K0.jpg",
+    label: "A close up of a dog"
   },
 
   {
-    uri: 'https://i.imgur.com/nZXbSbh.jpg',
-    label: 'Sheep next to a cat',
+    uri: "https://i.imgur.com/nZXbSbh.jpg",
+    label: "Sheep next to a cat"
   },
 
   {
-    uri: 'https://i.imgur.com/mXCjefR.jpg',
-    label: 'Cat laying on the grass',
+    uri: "https://i.imgur.com/mXCjefR.jpg",
+    label: "Cat laying on the grass"
   },
 
   {
-    uri: 'https://i.imgur.com/AGyxRcc.jpg',
-    label: 'Bird sitting on a railing',
+    uri: "https://i.imgur.com/AGyxRcc.jpg",
+    label: "Bird sitting on a railing"
   }
 ];
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#abcdef'
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#abcdef"
   },
   image: {
     flex: 2,
     width: 320,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    justifyContent: "flex-end",
+    alignItems: "center"
   },
   imageLabel: {
-    textAlign: 'center',
-    backgroundColor: 'rgba(100, 100, 100, 0.5)',
-    color: 'white',
+    textAlign: "center",
+    backgroundColor: "rgba(100, 100, 100, 0.5)",
+    color: "white",
     width: 320
   },
   notification: {
-    textAlign: 'center',
-    backgroundColor: 'rgba(100, 100, 100, 0.5)',
-    color: 'white',
+    textAlign: "center",
+    backgroundColor: "rgba(100, 100, 100, 0.5)",
+    color: "white",
     width: 320,
-    marginTop: '10%'
+    marginTop: "10%"
   },
   empty: {
     flex: 1
@@ -84,12 +84,12 @@ export default class gimmePermission extends Component {
     index: 0,
     imageWidth: null,
     contactPermission: null,
+    notification: null,
     notifactionPermission: null,
-    status: "",
-    notification: "",
+    status: ""
   };
   componentDidMount() {
-    this.registerForPushNotificationsAsync()
+    this.registerForPushNotificationsAsync();
     this._notificationSubscription = Notifications.addListener(
       this._handleNotification
     );
@@ -105,56 +105,79 @@ export default class gimmePermission extends Component {
         Permissions.NOTIFICATIONS
       );
       let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
+      if (existingStatus !== "granted") {
         const { status } = await Permissions.askAsync(
           Permissions.NOTIFICATIONS
         );
         finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
+      console.log("token:", token);
+
+      // I added this for getting the push token. It might be hard-coded in "YOUR_PUSH_TOKEN" variable as of now
+      // but it said that is the same functionality as localhost:3000
+      return fetch(YOUR_PUSH_TOKEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: {
+            value: token
+          },
+          user: {
+            username: "goobastank",
+            name: "Devin Powell"
+          }
+        })
+      });
+
+      this.notificationSubscription = Notifications.addListener(
+        this.handleNotification
+      );
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert("Must use physical device for Push Notifications");
     }
   };
 
   sendPushNotification = async () => {
     const message = {
       to: YOUR_PUSH_TOKEN,
-      sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { data: 'goes here' },
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" }
     };
-    const response = await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(message),
+      body: JSON.stringify(message)
     });
     const data = response._bodyInit;
-    console.log(`Status & Response ID-> ${data}`);
+    console.log("response", response);
   };
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
-    if (status !== 'granted') {
-      console.log(status);
-      alert('You will need to enable contacts to use our app!');
+    if (status !== "granted") {
+      console.log("status:", status);
+      alert("You will need to enable contacts to use our app!");
       return;
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
     console.log(data);
-  }
+  };
 
   onSwipeLeft(event) {
     let newIndex = this.state.index - 1;
@@ -162,7 +185,7 @@ export default class gimmePermission extends Component {
       newIndex = Images.length - Math.abs(newIndex);
     }
     this.setState({
-      index: newIndex,
+      index: newIndex
     });
   }
 
@@ -172,13 +195,13 @@ export default class gimmePermission extends Component {
       newIndex = Images.length - Math.abs(newIndex);
     }
     this.setState({
-      index: newIndex,
+      index: newIndex
     });
   }
 
   onImageLayout(event) {
     this.setState({
-      imageWidth: event.nativeEvent.layout.width,
+      imageWidth: event.nativeEvent.layout.width
     });
   }
 
@@ -192,11 +215,11 @@ export default class gimmePermission extends Component {
           onSwipeRight={this.onSwipeRight.bind(this)}
           config={{
             velocityThreshold: 0.3,
-            directionalOffsetThreshold: 80,
+            directionalOffsetThreshold: 80
           }}
           // eslint-disable-next-line react-native/no-inline-styles
           style={{
-            flex: 1,
+            flex: 1
           }}
         >
           <Image
