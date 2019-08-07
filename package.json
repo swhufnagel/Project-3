@@ -1,6 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "serve": "node -r esm server/index.js",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -8,10 +9,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "esm": "^3.2.25",
     "@eva-design/eva": "^1.0.1",
     "expo": "^34.0.3",
     "expo-contacts": "~6.0.0",
     "expo-permissions": "~6.0.0",
+    "expo-server-sdk": "^3.3.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",

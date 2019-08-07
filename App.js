@@ -20,7 +20,6 @@ import { HomeScreen } from './src/components/HomeScreen';
 import call from 'react-native-phone-call'
 import Communications from 'react-native-communications';
 
-
 const YOUR_PUSH_TOKEN = "http://21b37db1.ngrok.io/token";
 
 const Images = [
@@ -174,6 +173,7 @@ export default class gimmePermission extends Component {
     });
     const data = response._bodyInit;
     console.log("response", data);
+
   };
 
   permissionFlow = async () => {
