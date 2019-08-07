@@ -12,7 +12,11 @@ import {
   Text,
   StatusBar,
   Image,
+  Button,
 } from 'react-native';
+import { mapping, light as lightTheme } from '@eva-design/eva';
+import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
+import { HomeScreen } from './src/components/HomeScreen';
 
 const YOUR_PUSH_TOKEN = '';
 
@@ -87,6 +91,7 @@ export default class gimmePermission extends Component {
     notifactionPermission: null,
     status: "",
     notification: "",
+    contacts: [],
   };
   componentDidMount() {
     this.registerForPushNotificationsAsync()
@@ -154,6 +159,14 @@ export default class gimmePermission extends Component {
     //get data
     const { data } = await Contacts.getContactsAsync({});
     console.log(data);
+    this.setState({ contacts: data });
+  }
+
+  getRandomContact = () => {
+    let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
+    let randomContact = this.state.contacts[randomNum].name;
+    console.log(randomContact);
+    alert(randomContact);
   }
 
   onSwipeLeft(event) {
@@ -185,6 +198,13 @@ export default class gimmePermission extends Component {
   render() {
     const image = Images[this.state.index];
     return (
+      // <ApplicationProvider
+      //   mapping={mapping}
+      //   theme={lightTheme}>
+      //   <Layout style={{ flex: 1 }} />
+      //   <HomeScreen />
+      // </ApplicationProvider>
+
       <View style={styles.container}>
         <View style={styles.empty} />
         <GestureRecognizer
@@ -213,9 +233,10 @@ export default class gimmePermission extends Component {
         <Text style={styles.imageLabel} onPress={this.permissionFlow}>
           Permissions: {this.state.status}
         </Text>
-        <Text style={styles.notification} onPress={this.sendPushNotification}>
+        <Button title="Get Random Contact" onPress={this.getRandomContact}>Get random contact</Button>
+        {/* <Text style={styles.notification} onPress={this.sendPushNotification}>
           Click for Notification
-        </Text>
+        </Text> */}
         <View style={styles.empty} />
       </View>
     );
