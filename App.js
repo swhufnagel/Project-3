@@ -13,10 +13,15 @@ import {
   StatusBar,
   Image,
   Button,
+  Modal,
+  TouchableOpacity,
+  Platform,
+
 } from 'react-native';
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
 import { HomeScreen } from './src/components/HomeScreen';
+import call from 'react-native-phone-call'
 
 const YOUR_PUSH_TOKEN = '';
 
@@ -80,6 +85,63 @@ const styles = StyleSheet.create({
   },
   empty: {
     flex: 1
+  },
+  MainContainer: {
+
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: (Platform.OS == 'ios') ? 20 : 0
+
+  },
+
+  Alert_Main_View: {
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#009688",
+    height: 125,
+    width: '90%',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 7,
+
+  },
+
+  Alert_Title: {
+
+    fontSize: 25,
+    color: "#fff",
+    textAlign: 'center',
+    padding: 10,
+    height: '28%'
+
+  },
+
+  Alert_Message: {
+
+    fontSize: 22,
+    color: "#fff",
+    textAlign: 'center',
+    padding: 10,
+    height: '42%'
+
+  },
+
+  buttonStyle: {
+
+    width: '50%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+
+  },
+
+  TextStyle: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 22,
+    marginTop: -5
   }
 });
 
@@ -92,61 +154,64 @@ export default class gimmePermission extends Component {
     status: "",
     notification: "",
     contacts: [],
+    Alert_Visibility: false,
+    currentName: "",
+    currentNumber: 55555555555,
   };
-  componentDidMount() {
-    this.registerForPushNotificationsAsync()
-    this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
-    );
-  }
+  // componentDidMount() {
+  //   this.registerForPushNotificationsAsync()
+  //   this._notificationSubscription = Notifications.addListener(
+  //     this._handleNotification
+  //   );
+  // }
 
-  _handleNotification = notification => {
-    this.setState({ notification: notification });
-  };
+  // _handleNotification = notification => {
+  //   this.setState({ notification: notification });
+  // };
 
-  registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-      );
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(
-          Permissions.NOTIFICATIONS
-        );
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
-    } else {
-      alert('Must use physical device for Push Notifications');
-    }
-  };
+  // registerForPushNotificationsAsync = async () => {
+  //   if (Constants.isDevice) {
+  //     const { status: existingStatus } = await Permissions.getAsync(
+  //       Permissions.NOTIFICATIONS
+  //     );
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== 'granted') {
+  //       const { status } = await Permissions.askAsync(
+  //         Permissions.NOTIFICATIONS
+  //       );
+  //       finalStatus = status;
+  //     }
+  //     if (finalStatus !== 'granted') {
+  //       alert('Failed to get push token for push notification!');
+  //       return;
+  //     }
+  //     let token = await Notifications.getExpoPushTokenAsync();
+  //     console.log(token);
+  //   } else {
+  //     alert('Must use physical device for Push Notifications');
+  //   }
+  // };
 
-  sendPushNotification = async () => {
-    const message = {
-      to: YOUR_PUSH_TOKEN,
-      sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { data: 'goes here' },
-    };
-    const response = await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    });
-    const data = response._bodyInit;
-    console.log(`Status & Response ID-> ${data}`);
-  };
+  // sendPushNotification = async () => {
+  //   const message = {
+  //     to: YOUR_PUSH_TOKEN,
+  //     sound: 'default',
+  //     title: 'Original Title',
+  //     body: 'And here is the body!',
+  //     data: { data: 'goes here' },
+  //   };
+  //   const response = await fetch('https://exp.host/--/api/v2/push/send', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Accept-encoding': 'gzip, deflate',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(message),
+  //   });
+  //   const data = response._bodyInit;
+  //   console.log(`Status & Response ID-> ${data}`);
+  // };
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
@@ -164,11 +229,22 @@ export default class gimmePermission extends Component {
 
   getRandomContact = () => {
     let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
-    let randomContact = this.state.contacts[randomNum].name;
-    console.log(randomContact);
-    alert(randomContact);
-  }
+    let randomContact = this.state.contacts[randomNum];
+    console.log(randomContact.name);
+    // alert(randomContact.name)
+    this.setState({ Alert_Visibility: true });
+    this.setState({ currentName: randomContact.name });
+    this.setState({ currentNumber: randomContact.phoneNumbers[0].number });
 
+    // this.callContact(randomContact.phoneNumbers[0].number, true)
+  }
+  callContact = async (number, bool) => {
+    const contact = {
+      number: number, // String value with the number to call
+      prompt: bool // Optional boolean property. Determines if the user should be prompt prior to the call 
+    }
+    call(contact).catch(console.error)
+  }
   onSwipeLeft(event) {
     let newIndex = this.state.index - 1;
     if (newIndex < 0) {
@@ -237,6 +313,37 @@ export default class gimmePermission extends Component {
         {/* <Text style={styles.notification} onPress={this.sendPushNotification}>
           Click for Notification
         </Text> */}
+        <Modal
+          visible={this.state.Alert_Visibility}
+          transparent={true}
+          animationType={"fade"}
+          onRequestClose={() => { this.Show_Custom_Alert(!this.state.Alert_Visibility) }} >
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={styles.Alert_Main_View}>
+              <Text style={styles.Alert_Title}>{this.currentName}</Text>
+              <View style={{ width: '100%', height: 1, backgroundColor: '#fff' }} />
+              <View style={{ flexDirection: 'row', height: '20%' }}>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={this.callContact(this.currentNumber, false)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.TextStyle}> Call </Text>
+                </TouchableOpacity>
+                <View style={{ width: 1, height: '100%', backgroundColor: '#fff' }} />
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => { this.textContact }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.TextStyle}> Text </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+        </Modal>
+
         <View style={styles.empty} />
       </View>
     );
