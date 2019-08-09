@@ -2,7 +2,7 @@ import express from "express";
 import Expo from "expo-server-sdk";
 
 const mongoose = require("mongoose");
-const routes = require("../routes");
+// const routes = require("../routes");
 const app = express();
 const expo = new Expo();
 
