@@ -1,7 +1,13 @@
 import express from "express";
 import Expo from "expo-server-sdk";
+
+const mongoose = require("mongoose");
+const routes = require("../routes");
 const app = express();
 const expo = new Expo();
+
+// Define Middleware
+
 let savedPushTokens = [];
 const PORT_NUMBER = 3000;
 
@@ -40,25 +46,27 @@ const handlePushTokens = message => {
   })();
 };
 
-// // Routing
-// app.use(express.json());
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/sayhay");
 
-// app.get("/", (req, res) => {
-//   res.send("Push Notification Server Running");
-// });
+// Routing
+app.use(express.json());
 
-// app.post("/token", (req, res) => {
-//   saveToken(req.body.token.value);
-//   console.log(`Received push token, ${req.body.token.value}`);
-//   res.send(`Received push token, ${req.body.token.value}`);
-// });
+app.get("/", (req, res) => {
+  res.send("Push Notification Server Running");
+});
 
-// app.post("/message", (req, res) => {
-//   handlePushTokens(req.body.message);
-//   console.log(`Received message, ${req.body.message}`);
-//   res.send(`Received message, ${req.body.message}`);
-// });
+app.post("/token", (req, res) => {
+  saveToken(req.body.token.value);
+  console.log(`Received push token, ${req.body.token.value}`);
+  res.send(`Received push token, ${req.body.token.value}`);
+});
 
-// app.listen(PORT_NUMBER, () => {
-//   console.log(`Server Online on Port ${PORT_NUMBER}`);
-// });
+app.post("/message", (req, res) => {
+  handlePushTokens(req.body.message);
+  console.log(`Received message, ${req.body.message}`);
+  res.send(`Received message, ${req.body.message}`);
+});
+
+app.listen(PORT_NUMBER, () => {
+  console.log(`Server Online on Port ${PORT_NUMBER}`);
+});
