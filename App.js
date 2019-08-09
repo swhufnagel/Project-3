@@ -22,6 +22,8 @@ import {
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
 import { HomeScreen } from './src/components/HomeScreen';
+import call from 'react-native-phone-call'
+import Communications from 'react-native-communications';
 
 const YOUR_PUSH_TOKEN = "http://0d754eaf.ngrok.io/token";
 const MESSAGE_ENPOINT = 'http://0d754eaf.ngrok.io/message';
@@ -74,6 +76,7 @@ export default class gimmePermission extends Component {
     messageText: "",
     status: "",
     contacts: [],
+    currentName: "",
   };
   componentDidMount() {
     this.registerForPushNotificationsAsync();
@@ -196,7 +199,8 @@ export default class gimmePermission extends Component {
       body: JSON.stringify(message)
     });
     const data = response._bodyInit;
-    console.log("response", response);
+    console.log("response", data);
+
   };
 
   permissionFlow = async () => {
@@ -213,22 +217,35 @@ export default class gimmePermission extends Component {
     this.setState({ contacts: data });
   }
 
-  getRandomContact = () => {
+  getRandomContact = async () => {
     let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
-    let randomContact = this.state.contacts[randomNum].name;
-    console.log(randomContact);
-    alert(randomContact);
+    let randomContact = this.state.contacts[randomNum];
+    alert(randomContact.name)
+    this.setState({ Alert_Visibility: true });
+    await this.setState({ currentName: randomContact.name });
+    await this.setState({ currentNumber: randomContact.phoneNumbers[0].number });
+    
+    // this.callContact(randomContact.phoneNumbers[0].number, true)
   }
-
-  // onSwipeLeft(event) {
-  //   let newIndex = this.state.index - 1;
-  //   if (newIndex < 0) {
-  //     newIndex = Images.length - Math.abs(newIndex);
-  //   }
-  //   this.setState({
-  //     index: newIndex
-  //   });
-  // }
+  callContact = () => {
+    const contact = {
+      number: this.state.currentNumber, // String value with the number to call
+      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
+    }
+    call(contact).catch(console.error)
+  }
+  textContact = () => {
+    Communications.text(this.state.currentNumber, 'Test Text Here');
+  }
+  onSwipeLeft(event) {
+    let newIndex = this.state.index - 1;
+    if (newIndex < 0) {
+      newIndex = Images.length - Math.abs(newIndex);
+    }
+    this.setState({
+      index: newIndex
+    });
+  }
 
   // onSwipeRight(event) {
   //   let newIndex = this.state.index + 1;
@@ -298,6 +315,10 @@ export default class gimmePermission extends Component {
         {this.state.notification ?
           this._handleNotification()
           : null}
+        <Button title="Get Random Contact" onPress={this.getRandomContact}></Button>
+        <Button title="Call Contact" onPress={this.callContact}></Button>
+        <Button title="Text Contact" onPress={this.textContact.bind(this)}></Button>
+        <Button title="Click for Notifation" onPress={this.sendPushNotification}></Button>
         <View style={styles.empty} />
       </View>
     );
