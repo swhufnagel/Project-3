@@ -40,25 +40,25 @@ const handlePushTokens = message => {
   })();
 };
 
-// Routing
-app.use(express.json());
+// // Routing
+// app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Push Notification Server Running");
-});
+// app.get("/", (req, res) => {
+//   res.send("Push Notification Server Running");
+// });
 
-app.post("/token", (req, res) => {
-  saveToken(req.body.token.value);
-  console.log(`Received push token, ${req.body.token.value}`);
-  res.send(`Received push token, ${req.body.token.value}`);
-});
+// app.post("/token", (req, res) => {
+//   saveToken(req.body.token.value);
+//   console.log(`Received push token, ${req.body.token.value}`);
+//   res.send(`Received push token, ${req.body.token.value}`);
+// });
 
-app.post("/message", (req, res) => {
-  handlePushTokens(req.body.message);
-  console.log(`Received message, ${req.body.message}`);
-  res.send(`Received message, ${req.body.message}`);
-});
+// app.post("/message", (req, res) => {
+//   handlePushTokens(req.body.message);
+//   console.log(`Received message, ${req.body.message}`);
+//   res.send(`Received message, ${req.body.message}`);
+// });
 
-app.listen(PORT_NUMBER, () => {
-  console.log(`Server Online on Port ${PORT_NUMBER}`);
-});
+// app.listen(PORT_NUMBER, () => {
+//   console.log(`Server Online on Port ${PORT_NUMBER}`);
+// });
