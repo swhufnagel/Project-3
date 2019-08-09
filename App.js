@@ -17,6 +17,8 @@ import {
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
 import { HomeScreen } from './src/components/HomeScreen';
+import call from 'react-native-phone-call'
+import Communications from 'react-native-communications';
 
 const YOUR_PUSH_TOKEN = "http://21b37db1.ngrok.io/token";
 
@@ -93,6 +95,7 @@ export default class gimmePermission extends Component {
     status: "",
     notification: "",
     contacts: [],
+    currentName: "",
   };
   componentDidMount() {
     this.registerForPushNotificationsAsync();
@@ -169,7 +172,8 @@ export default class gimmePermission extends Component {
       body: JSON.stringify(message)
     });
     const data = response._bodyInit;
-    console.log("response", response);
+    console.log("response", data);
+
   };
 
   permissionFlow = async () => {
@@ -186,13 +190,26 @@ export default class gimmePermission extends Component {
     this.setState({ contacts: data });
   }
 
-  getRandomContact = () => {
+  getRandomContact = async () => {
     let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
-    let randomContact = this.state.contacts[randomNum].name;
-    console.log(randomContact);
-    alert(randomContact);
-  }
+    let randomContact = this.state.contacts[randomNum];
+    alert(randomContact.name)
+    this.setState({ Alert_Visibility: true });
+    await this.setState({ currentName: randomContact.name });
+    await this.setState({ currentNumber: randomContact.phoneNumbers[0].number });
 
+    // this.callContact(randomContact.phoneNumbers[0].number, true)
+  }
+  callContact = () => {
+    const contact = {
+      number: this.state.currentNumber, // String value with the number to call
+      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call 
+    }
+    call(contact).catch(console.error)
+  }
+  textContact = () => {
+    Communications.text('7206970289', 'Test Text Here');
+  }
   onSwipeLeft(event) {
     let newIndex = this.state.index - 1;
     if (newIndex < 0) {
@@ -257,10 +274,10 @@ export default class gimmePermission extends Component {
         <Text style={styles.imageLabel} onPress={this.permissionFlow}>
           Permissions: {this.state.status}
         </Text>
-        <Button title="Get Random Contact" onPress={this.getRandomContact}>Get random contact</Button>
-        {/* <Text style={styles.notification} onPress={this.sendPushNotification}>
-          Click for Notification
-        </Text> */}
+        <Button title="Get Random Contact" onPress={this.getRandomContact}></Button>
+        <Button title="Call Contact" onPress={this.callContact}></Button>
+        <Button title="Text Contact" onPress={this.textContact.bind(this)}></Button>
+        <Button title="Click for Notifation" onPress={this.sendPushNotification}></Button>
         <View style={styles.empty} />
       </View>
     );
