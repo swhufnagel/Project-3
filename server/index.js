@@ -1,7 +1,13 @@
 import express from "express";
 import Expo from "expo-server-sdk";
+
+const mongoose = require("mongoose");
+const routes = require("../routes");
 const app = express();
 const expo = new Expo();
+
+// Define Middleware
+
 let savedPushTokens = [];
 const PORT_NUMBER = 3000;
 
@@ -39,6 +45,8 @@ const handlePushTokens = message => {
     }
   })();
 };
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/sayhay");
 
 // Routing
 app.use(express.json());
