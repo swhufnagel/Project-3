@@ -839,6 +839,21 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@eva-design/dss@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@eva-design/dss/-/dss-1.0.1.tgz#7775c18166bce9d9528919af1430ecfa617acbd6"
+  integrity sha512-RSwSjZzirB8izDhDKod9kwinoB7p/Gq8JyMZeEGfHVZJH0DqmahdI2tNLQPd8igPgpP0AkHS4YFGVV1mF34RzQ==
+
+"@eva-design/eva@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@eva-design/eva/-/eva-1.0.1.tgz#6cf62086481d6506c58f3f33d8b1462f4f337e6e"
+  integrity sha512-puz8ejPWvZMTZ0CjzCOASYdW6w9rP8CZ3C4uBqqyerdvIcTKZDoSJ71/DE3WiwSI735gIhZeVANo63lrWfqcUA==
+
+"@eva-design/processor@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@eva-design/processor/-/processor-1.0.1.tgz#5c39c8f65c20b3002561807adfd028d0af8864fb"
+  integrity sha512-/eoR5QnqeR4eKE90jCnOABOtHsyhrpfKe34GYKe2P+GfiJhByz597QDqkG0oCUHJJud9TtauO6fNJnG+UXDEKg==
+
 "@expo/bunyan@1.8.10", "@expo/bunyan@^1.8.10":
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-1.8.10.tgz#7d19354a6bce85aae5fea0e973569d3f0142533e"
@@ -1029,6 +1044,25 @@
     ws "^1.1.0"
     xcode "^2.0.0"
     xmldoc "^0.4.0"
+
+"@react-native-firebase/app-types@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app-types/-/app-types-0.1.3.tgz#d03e3306bb9b9b63c148f2034f8b8fd9263eb717"
+  integrity sha512-SCxRzWNdUr647onE7Clr+8Ko64HULE40kRy2wDDHVv5OK33rMdzPnQ7HIdzMVEAGc80M+FTSgVCeynXW7bJnKw==
+
+"@react-native-firebase/app@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-0.1.3.tgz#aa2c8079348ad85dd5d6fd24780e9fd4852b883a"
+  integrity sha512-AYxYtJxX2wymAPsH/aE9TGW+Bzdef1D9fhpt22gaPkWfB8pOhEP6vUDl1M15zOsVAx+rmj3MtBgKIaYGw5GioQ==
+  dependencies:
+    "@react-native-firebase/app-types" "0.1.3"
+    "@react-native-firebase/common" "0.1.3"
+    opencollective-postinstall "^2.0.1"
+
+"@react-native-firebase/common@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/common/-/common-0.1.3.tgz#11b6b9e898e95eded335b52d761c4721303cd765"
+  integrity sha512-XnYuRtl93Rv/DOWUcFXGIUW8V9CSjZ1nIdzIaRrFkDaEh8DNnfC+Oo8gwWkU9u9xPVwvgOJAQ4WoLloQyhJAUw==
 
 "@segment/loosely-validate-event@^1.1.2":
   version "1.1.2"
@@ -2532,6 +2566,11 @@ escodegen@1.x.x:
   optionalDependencies:
     source-map "~0.6.1"
 
+esm@^3.2.25:
+  version "3.2.25"
+  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
+  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
+
 esprima@3.x.x, esprima@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.1.3.tgz#fdca51cee6133895e3c88d535ce49dbff62a4633"
@@ -2700,6 +2739,14 @@ expo-permissions@~6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-6.0.0.tgz#2943f1aa98de833b88cea73cf03d18d08957cb68"
   integrity sha512-O+RdyfGiq7i+5Vi9fE38DgKn436lNWiqhnS5/Z7CC00bmKahhjVMNDbZvNn/nrdRGyaPneJk1Co1s1sexSnv0A==
+
+expo-server-sdk@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/expo-server-sdk/-/expo-server-sdk-3.3.0.tgz#c9e96e0551768aa91b1cdbcd728e554826d7e535"
+  integrity sha512-7MC2doGrJgrXbgvFmnSiXzvHCawbvDiuPXQTboJ4vSwX3wrXrHlN7rJ39CVqJc55uzlCEAy5XqgsHSOqkpBJVw==
+  dependencies:
+    node-fetch "^2.3.0"
+    promise-limit "^2.7.0"
 
 expo-sqlite@~6.0.0:
   version "6.0.0"
@@ -3452,7 +3499,7 @@ hoek@4.x.x:
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
   integrity sha512-QLg82fGkfnJ/4iy1xZ81/9SIJiq1NGFUMGs6ParyjBZr6jW2Ufj/snDqTHixNlHdPNwN2RLVD0Pi3igeK9+JfA==
 
-hoist-non-react-statics@^3.1.0:
+hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
   integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
@@ -4255,6 +4302,11 @@ lodash.get@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
+lodash.merge@^4.6.1:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
+
 lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
@@ -4955,7 +5007,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.2.0:
+node-fetch@^2.2.0, node-fetch@^2.3.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
@@ -5177,6 +5229,11 @@ onetime@^2.0.0:
   integrity sha1-BnQoIw/WdEOyeUsiu6UotoZ5YtQ=
   dependencies:
     mimic-fn "^1.0.0"
+
+opencollective-postinstall@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.2.tgz#5657f1bede69b6e33a45939b061eb53d3c6c3a89"
+  integrity sha512-pVOEP16TrAO2/fjej1IdOyupJY8KDUM1CvsaScRbw6oddvpQoOfGk4ywha0HKKVAD6RkW4x6Q+tNBwhf3Bgpuw==
 
 opn@^3.0.2:
   version "3.0.3"
@@ -5567,6 +5624,11 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
+promise-limit@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/promise-limit/-/promise-limit-2.7.0.tgz#eb5737c33342a030eaeaecea9b3d3a93cb592b26"
+  integrity sha512-7nJ6v5lnJsXwGprnGXga4wx6d1POjvi5Qmf1ivTRxTjH4Z/9Czja/UCMLVmB9N93GeWOU93XaFaEt6jbuoagNw==
+
 promise-polyfill@^8.1.3:
   version "8.1.3"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.3.tgz#8c99b3cf53f3a91c68226ffde7bde81d7f904116"
@@ -5801,6 +5863,16 @@ react-native-swipe-gestures@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.3.tgz#4160f8d459627323f3a3d2770af4bcd82fd054f5"
   integrity sha512-KOouRzPB2fHFjVombsSdRfYo8SFeNVa4Ho4B5il87DuuF26sPNOtb3je+qaT/xVptedOsCzRPJGbWFMsaBApgg==
+
+react-native-ui-kitten@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-ui-kitten/-/react-native-ui-kitten-4.1.0.tgz#cd0be68167619df588510ceb42b957ca0ac027f9"
+  integrity sha512-98h082/WDYNDvPvtPcfIGra2ahAOguRJADYo1oDWvxkj6bdeyFp73e25cpIoIP7egX9USY9QrP1QqD7pimJq7g==
+  dependencies:
+    "@eva-design/dss" "^1.0.1"
+    "@eva-design/processor" "^1.0.1"
+    hoist-non-react-statics "^3.2.1"
+    lodash.merge "^4.6.1"
 
 react-native-view-shot@2.6.0:
   version "2.6.0"

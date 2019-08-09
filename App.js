@@ -4,6 +4,7 @@ import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import Constants from "expo-constants";
 import { Notifications } from "expo";
+import Dashboard from "./src//components/Dashboard";
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,47 +14,19 @@ import {
   StatusBar,
   Image,
   Button,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
+// import { ListItem } from "react-native-elements";
+// import firebase from "react-native-firebase";
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
 import { HomeScreen } from './src/components/HomeScreen';
 import call from 'react-native-phone-call'
 import Communications from 'react-native-communications';
 
-const YOUR_PUSH_TOKEN = "http://21b37db1.ngrok.io/token";
-
-const Images = [
-  {
-    uri: "https://i.imgur.com/mxgtWKt.jpg",
-    label: "Cat on a blue blanket"
-  },
-
-  {
-    uri: "https://i.imgur.com/XCRnNWn.jpg",
-    label: "A cat toy"
-  },
-
-  {
-    uri: "https://i.imgur.com/dqQX1K0.jpg",
-    label: "A close up of a dog"
-  },
-
-  {
-    uri: "https://i.imgur.com/nZXbSbh.jpg",
-    label: "Sheep next to a cat"
-  },
-
-  {
-    uri: "https://i.imgur.com/mXCjefR.jpg",
-    label: "Cat laying on the grass"
-  },
-
-  {
-    uri: "https://i.imgur.com/AGyxRcc.jpg",
-    label: "Bird sitting on a railing"
-  }
-];
-
+const YOUR_PUSH_TOKEN = "http://0d754eaf.ngrok.io/token";
+const MESSAGE_ENPOINT = 'http://0d754eaf.ngrok.io/message';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -82,6 +55,14 @@ const styles = StyleSheet.create({
   },
   empty: {
     flex: 1
+  },
+  textInput: {
+    height: 50,
+    width: 300,
+    borderColor: '#f6f6f6',
+    borderWidth: 1,
+    backgroundColor: '#fff',
+    padding: 10
   }
 });
 
@@ -92,8 +73,8 @@ export default class gimmePermission extends Component {
     contactPermission: null,
     notification: null,
     notifactionPermission: null,
+    messageText: "",
     status: "",
-    notification: "",
     contacts: [],
     currentName: "",
   };
@@ -102,10 +83,36 @@ export default class gimmePermission extends Component {
     this._notificationSubscription = Notifications.addListener(
       this._handleNotification
     );
+    // Create notification channel required for Android devices
+    this.createNotificationChannel();
+
+    // Ask notification permission and add notification listener
+    this.checkPermission();
   }
+  createNotificationChannel = () => { };
+
+  checkPermission = async () => {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      // We've the permission
+      this.notificationListener = firebase
+        .notifications()
+        .onNotification(async notification => {
+          // Display your notification
+          await firebase.notifications().displayNotification(notification);
+        });
+    } else {
+      // user doesn't have permission
+      try {
+        await firebase.messaging().requestPermission();
+      } catch (error) {
+        Alert.alert("Unable to access the Notification permission. Please enable the Notification Permission from the settings");
+      }
+    }
+  };
 
   _handleNotification = notification => {
-    this.setState({ notification: notification });
+    this.setState({ notification });
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -129,6 +136,8 @@ export default class gimmePermission extends Component {
 
       // I added this for getting the push token. It might be hard-coded in "YOUR_PUSH_TOKEN" variable as of now
       // but it said that is the same functionality as localhost:3000
+
+
       return fetch(YOUR_PUSH_TOKEN, {
         method: "POST",
         headers: {
@@ -153,6 +162,24 @@ export default class gimmePermission extends Component {
       alert("Must use physical device for Push Notifications");
     }
   };
+
+  handleChangeText = (text) => {
+    this.setState({ messageText: text });
+  }
+
+  sendMessage = async () => {
+    fetch(MESSAGE_ENPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: this.state.messageText,
+      }),
+    });
+    this.setState({ messageText: '' });
+  }
 
   sendPushNotification = async () => {
     const message = {
@@ -197,18 +224,18 @@ export default class gimmePermission extends Component {
     this.setState({ Alert_Visibility: true });
     await this.setState({ currentName: randomContact.name });
     await this.setState({ currentNumber: randomContact.phoneNumbers[0].number });
-
+    
     // this.callContact(randomContact.phoneNumbers[0].number, true)
   }
   callContact = () => {
     const contact = {
       number: this.state.currentNumber, // String value with the number to call
-      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call 
+      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
     }
     call(contact).catch(console.error)
   }
   textContact = () => {
-    Communications.text('7206970289', 'Test Text Here');
+    Communications.text(this.state.currentNumber, 'Test Text Here');
   }
   onSwipeLeft(event) {
     let newIndex = this.state.index - 1;
@@ -220,24 +247,24 @@ export default class gimmePermission extends Component {
     });
   }
 
-  onSwipeRight(event) {
-    let newIndex = this.state.index + 1;
-    if (newIndex < 0) {
-      newIndex = Images.length - Math.abs(newIndex);
-    }
-    this.setState({
-      index: newIndex
-    });
-  }
+  // onSwipeRight(event) {
+  //   let newIndex = this.state.index + 1;
+  //   if (newIndex < 0) {
+  //     newIndex = Images.length - Math.abs(newIndex);
+  //   }
+  //   this.setState({
+  //     index: newIndex
+  //   });
+  // }
 
-  onImageLayout(event) {
-    this.setState({
-      imageWidth: event.nativeEvent.layout.width
-    });
-  }
+  // onImageLayout(event) {
+  //   this.setState({
+  //     imageWidth: event.nativeEvent.layout.width
+  //   });
+  // }
 
   render() {
-    const image = Images[this.state.index];
+    // const image = Images[this.state.index];
     return (
       // <ApplicationProvider
       //   mapping={mapping}
@@ -248,7 +275,7 @@ export default class gimmePermission extends Component {
 
       <View style={styles.container}>
         <View style={styles.empty} />
-        <GestureRecognizer
+        {/* <GestureRecognizer
           onSwipeLeft={this.onSwipeLeft.bind(this)}
           onSwipeRight={this.onSwipeRight.bind(this)}
           config={{
@@ -260,20 +287,34 @@ export default class gimmePermission extends Component {
             flex: 1
           }}
         >
-          <Image
-            source={{ uri: image.uri }}
-            style={styles.image}
-            onLayout={this.onImageLayout.bind(this)}
-          />
+          
         </GestureRecognizer>
         {/* <TouchableHighlight onPress={this.nextImage.bind(this)}
           style={styles.image}
         >
-        </TouchableHighlight> */}
-        <Text style={styles.imageLabel}>{image.label}</Text>
+        </TouchableHighlight> 
+         <Text style={styles.imageLabel}>{image.label}</Text> */}
         <Text style={styles.imageLabel} onPress={this.permissionFlow}>
           Permissions: {this.state.status}
         </Text>
+        <Button title="Get Random Contact" onPress={this.getRandomContact}>Get random contact</Button>
+        <Text style={styles.notification} onPress={this.sendPushNotification}>
+          Click for Notification
+        </Text>
+        <TextInput
+          value={this.state.messageText}
+          onChangeText={this.handleChangeText}
+          style={styles.textInput}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.sendMessage}
+        >
+          <Text style={styles.buttonText}>Send</Text>
+        </TouchableOpacity>
+        {this.state.notification ?
+          this._handleNotification()
+          : null}
         <Button title="Get Random Contact" onPress={this.getRandomContact}></Button>
         <Button title="Call Contact" onPress={this.callContact}></Button>
         <Button title="Text Contact" onPress={this.textContact.bind(this)}></Button>
