@@ -224,7 +224,7 @@ export default class gimmePermission extends Component {
     this.setState({ Alert_Visibility: true });
     await this.setState({ currentName: randomContact.name });
     await this.setState({ currentNumber: randomContact.phoneNumbers[0].number });
-    
+
     // this.callContact(randomContact.phoneNumbers[0].number, true)
   }
   callContact = () => {
@@ -237,69 +237,14 @@ export default class gimmePermission extends Component {
   textContact = () => {
     Communications.text(this.state.currentNumber, 'Test Text Here');
   }
-  onSwipeLeft(event) {
-    let newIndex = this.state.index - 1;
-    if (newIndex < 0) {
-      newIndex = Images.length - Math.abs(newIndex);
-    }
-    this.setState({
-      index: newIndex
-    });
-  }
-
-  // onSwipeRight(event) {
-  //   let newIndex = this.state.index + 1;
-  //   if (newIndex < 0) {
-  //     newIndex = Images.length - Math.abs(newIndex);
-  //   }
-  //   this.setState({
-  //     index: newIndex
-  //   });
-  // }
-
-  // onImageLayout(event) {
-  //   this.setState({
-  //     imageWidth: event.nativeEvent.layout.width
-  //   });
-  // }
 
   render() {
-    // const image = Images[this.state.index];
     return (
-      // <ApplicationProvider
-      //   mapping={mapping}
-      //   theme={lightTheme}>
-      //   <Layout style={{ flex: 1 }} />
-      //   <HomeScreen />
-      // </ApplicationProvider>
 
       <View style={styles.container}>
         <View style={styles.empty} />
-        {/* <GestureRecognizer
-          onSwipeLeft={this.onSwipeLeft.bind(this)}
-          onSwipeRight={this.onSwipeRight.bind(this)}
-          config={{
-            velocityThreshold: 0.3,
-            directionalOffsetThreshold: 80
-          }}
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            flex: 1
-          }}
-        >
-          
-        </GestureRecognizer>
-        {/* <TouchableHighlight onPress={this.nextImage.bind(this)}
-          style={styles.image}
-        >
-        </TouchableHighlight> 
-         <Text style={styles.imageLabel}>{image.label}</Text> */}
         <Text style={styles.imageLabel} onPress={this.permissionFlow}>
           Permissions: {this.state.status}
-        </Text>
-        <Button title="Get Random Contact" onPress={this.getRandomContact}>Get random contact</Button>
-        <Text style={styles.notification} onPress={this.sendPushNotification}>
-          Click for Notification
         </Text>
         <TextInput
           value={this.state.messageText}
@@ -310,15 +255,13 @@ export default class gimmePermission extends Component {
           style={styles.button}
           onPress={this.sendMessage}
         >
-          <Text style={styles.buttonText}>Send</Text>
+          <Text onPress={this.state.notification ?
+            this._handleNotification()
+            : null} style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
-        {this.state.notification ?
-          this._handleNotification()
-          : null}
         <Button title="Get Random Contact" onPress={this.getRandomContact}></Button>
         <Button title="Call Contact" onPress={this.callContact}></Button>
         <Button title="Text Contact" onPress={this.textContact.bind(this)}></Button>
-        <Button title="Click for Notifation" onPress={this.sendPushNotification}></Button>
         <View style={styles.empty} />
       </View>
     );
