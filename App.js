@@ -89,7 +89,7 @@ export default class gimmePermission extends Component {
     // Ask notification permission and add notification listener
     this.checkPermission();
   }
-  createNotificationChannel = () => {};
+  createNotificationChannel = () => { };
 
   checkPermission = async () => {
     const enabled = await firebase.messaging().hasPermission();
