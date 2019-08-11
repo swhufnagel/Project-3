@@ -16,6 +16,7 @@
     "expo-contacts": "~6.0.0",
     "expo-permissions": "~6.0.0",
     "expo-server-sdk": "^3.3.0",
+    "mongoose": "^5.6.9",
     "react": "^16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
@@ -25,7 +26,8 @@
     "react-native-sms": "^1.9.0",
     "react-native-swipe-gestures": "^1.0.3",
     "react-native-ui-kitten": "^4.1.0",
-    "react-native-web": "^0.11.4"
+    "react-native-web": "^0.11.4",
+    "timestamp": "^0.0.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^6.0.0"

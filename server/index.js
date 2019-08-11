@@ -1,7 +1,8 @@
 import express from "express";
 import Expo from "expo-server-sdk";
+import timestamp from "time-stamp";
+import mongoose from "mongoose";
 
-const mongoose = require("mongoose");
 // const routes = require("../routes");
 const app = express();
 const expo = new Expo();
@@ -16,6 +17,37 @@ const saveToken = token => {
     savedPushTokens.push(token);
   }
 };
+
+// Connect to the db
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost/hayapp",
+  function(err, db) {
+    if (err) throw err;
+
+    //Write databse Insert/Update/Query code here..
+    // db.collection("users", function(err, collection) {
+    //   collection.insert({
+    //     id: 1,
+    //     name: "Devin Powell",
+    //     contacts: [
+    //       "Sean Hufnagel",
+    //       "Matthew Metrailer",
+    //       "Brian Childs",
+    //       "Mom",
+    //       "Dad",
+    //       "Brother"
+    //     ],
+    //     lastNotified: timestamp("YYYY/MM/DD")
+    //   });
+    // });
+
+    // Log the total number of rows in database
+    db.collection("users").countDocuments(function(err, count) {
+      if (err) throw err;
+      console.log(`Total Rows: ${count}`);
+    });
+  }
+);
 
 const handlePushTokens = message => {
   let notifications = [];
@@ -45,9 +77,6 @@ const handlePushTokens = message => {
     }
   })();
 };
-
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/sayhay");
-
 // Routing
 app.use(express.json());
 
