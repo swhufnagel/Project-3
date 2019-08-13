@@ -1,0 +1,26 @@
+li {
+    display: inline-block;
+    font-family: proxima-nova,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+    
+}
+
+a {
+    display: block;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    /* background-color: #dddddd; */
+  }
+
+ul {
+    margin: 10 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #2699FB;
+    justify-content: center;
+    align-items: flex-start;
+}

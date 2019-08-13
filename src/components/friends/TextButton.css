@@ -1,0 +1,18 @@
+.TextButton {
+    width: 120px;
+    margin-top: 50px;
+    padding: 15px;
+    border-radius: 30px;
+    border-color: #2699FB;
+    background-color: #175897;
+    font-family: proxima-nova,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+    color: white;
+    display: inline-block;
+}
+
+.TextButton:hover {
+    background-color: #2699FB;
+    }
