@@ -1,0 +1,43 @@
+.App {
+  background-image: linear-gradient(125deg, #010d25,#0f345a,#124375,#124375,#0f345a,#010d25);
+  background-size: 200%;
+  animation: bganimation 15s infinite;
+  height: 100%;
+}
+
+.App-logo2 {
+  width: 75%;
+  margin-top: 35px;
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes bganimation {
+  0%{
+      background-position: 0% 100%;
+  }
+  50% {
+      background-position: 100% 0%;
+  }
+  100% {
+      background-position: 0% 100%;
+  }
+}
+
+@keyframes App-logo-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.buttonArea {
+  display: flex;
+}
