@@ -9,10 +9,10 @@ import SelectContact from '../components/friends/SelectContact';
 import FriendImg from '../components/friends/FriendImg';
 import CallButton from '../components/friends/CallButton';
 import TextButton from '../components/friends/TextButton';
-import { Img, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 
-import { View, Img , StyleSheet } from "react-native";
+
 
 const styles = StyleSheet.create({
   App: {
