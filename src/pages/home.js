@@ -7,9 +7,10 @@ import { AuthSession } from 'expo';
 import { Constants } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, ThemeProvider } from 'react-native-elements';
+import { Button, ThemeProvider, Divider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
+
 
 
 function toQueryString(params) {
@@ -134,6 +135,7 @@ class Home extends Component {
       style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
       <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
             {/* <MainBody /> */}
+      <Divider style={{ backgroundColor: 'blue' }} />;
       <Button title="Change Page" style={styles.changePage} className="changePage" onPress={() => navigate('Contact')} />
             {name ?
               <Text >You are logged in, {name}!</Text> :
