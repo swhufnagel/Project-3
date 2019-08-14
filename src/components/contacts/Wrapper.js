@@ -1,10 +1,11 @@
 import React from 'react'
+import { View } from "react-native";
 
 function Wrapper() {
-    return(
-        <div className="Wrapper">
-            
-        </div>
+    return (
+        <View className="Wrapper">
+
+        </View>
     )
 }
 

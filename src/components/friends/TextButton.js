@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import './TextButton.css';
+// import './TextButton.css';
+import { Button } from "react-native";
 
 class TextButton extends Component {
-    render () {
-        return <button className="TextButton">Text</button>
+    render() {
+        return <Button title="Text" className="TextButton"></Button>
     }
 }
 

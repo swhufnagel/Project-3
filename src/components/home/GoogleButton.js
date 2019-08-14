@@ -1,8 +1,9 @@
 import React from 'react'
+import { Button } from "react-native";
 
 function GoogleButton() {
-    return(
-            <button className="Google-login">Google Sign-In</button>
+    return (
+        <Button title="Google Sign-In" className="Google-login"></Button>
     )
 }
 

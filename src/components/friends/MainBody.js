@@ -1,11 +1,12 @@
 import React from "react"
 
+import { View, Text } from "react-native";
 
-function MainBody () {
+function MainBody() {
     return (
-        <div>
-            <h2> Hello Hello Hello</h2>
-        </div>
+        <View>
+            <Text> Hello Hello Hello</Text>
+        </View>
     )
 }
 
