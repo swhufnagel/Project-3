@@ -10,24 +10,24 @@ import FriendImg from '../components/friends/FriendImg';
 import CallButton from '../components/friends/CallButton';
 import TextButton from '../components/friends/TextButton';
 
-import { View, Img } from "react-native";
+import { View, Img , StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   App: {
     // backgroundImage: linear - gradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25);
-    backgroundSize: '200%',
+    // backgroundSize: '200%',
     // animation: bganimation 15s infinite;
     height: '100%'
   },
 
   AppHeader: {
     minHeight: '100%',
-    display: flex,
-    flexDirection: column,
-    alignItems: center,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   buttonArea: {
-    display: flex
+    display: 'flex'
   }
 })
 function Friends() {
