@@ -214,7 +214,7 @@ export default class gimmePermission extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    console.log(data);
+    console.log("contacts: ", data);
     this.setState({ contacts: data });
   };
 

@@ -7,9 +7,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-import Contacts from '../pages/contact';
+
 import { Button, ThemeProvider } from 'react-native-elements';
-import Svg { Image } from 'react-native-svg';
+import SvgUri from 'react-native-svg-uri';
+import * as Permissions from "expo-permissions";
+import * as Contacts from "expo-contacts";
 
 
 function toQueryString(params) {
@@ -25,7 +27,21 @@ class Home extends Component {
   state = {
     text: "",
     name: null,
+    contacts: []
   }
+  permissionFlow = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS);
+    this.setState({ status: status });
+    if (status !== "granted") {
+      console.log("status:", status);
+      alert("You will need to enable contacts to use our app!");
+      return;
+    }
+    //get data
+    const { data } = await Contacts.getContactsAsync({});
+    console.log(data);
+    this.setState({ contacts: data });
+  };
   _loginWithAuth0 = async () => {
     const auth0Domain = "https://dev-ph5frrsm.auth0.com";
     const auth0ClientId = "Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
@@ -62,6 +78,7 @@ class Home extends Component {
     const { name } = decoded;
     this.setState({ name });
     this.props.navigation.navigate('Contact');
+    this.permissionFlow();
   }
   render() {
     const { navigate } = this.props.navigation;
@@ -79,7 +96,7 @@ class Home extends Component {
         flexDirection: 'column',
         alignItems: 'center'
       },
-      
+
       LoginButton: {
         width: 200,
         marginTop: '50%',
@@ -102,16 +119,14 @@ class Home extends Component {
     return (
       <View style={styles.App} className="App" >
         <View style={styles.AppHeader} className="App-header">
-         
+
           <LinearGradient
             colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
             style={{ width: '100%', height: '100%', padding: 15, alignItems: 'center', borderRadius: 5 }}>
 
-               <Svg width="80" height="80">
-            <Image source={require("../../assets/Hay-logo-vert.svg")} />
-          </Svg>
+            {/* <SvgUri source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}} /> */}
             {/* <Image source={require('../../assets/icon.png')} className="App-logo" alt="logo" /> */}
-             <MainBody />
+            <MainBody />
 
 
             {/* <img src={""} className="App-logo" alt="logo" /> */}
@@ -124,7 +139,7 @@ class Home extends Component {
             }
             {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
           </LinearGradient>
-         </View> 
+        </View>
       </View>
     );
   }
