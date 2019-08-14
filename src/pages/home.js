@@ -3,15 +3,13 @@ import React, { Component } from 'react';
 import FacebookButton from '../components/home/FacebookButton'
 import MainBody from "../components/home/MainBody"
 import GoogleButton from "../components/home/GoogleButton"
-// import './App.css'
-import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
+import Contacts from '../pages/contact';
 import { Button, ThemeProvider } from 'react-native-elements';
 import Svg { Image } from 'react-native-svg';
-
-
 
 
 function toQueryString(params) {
@@ -63,8 +61,10 @@ class Home extends Component {
 
     const { name } = decoded;
     this.setState({ name });
+    this.props.navigation.navigate('Contact');
   }
   render() {
+    const { navigate } = this.props.navigation;
     const { name } = this.state;
     const styles = StyleSheet.create({
       App: {
@@ -106,12 +106,17 @@ class Home extends Component {
           <LinearGradient
             colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
             style={{ width: '100%', height: '100%', padding: 15, alignItems: 'center', borderRadius: 5 }}>
+
                <Svg width="80" height="80">
             <Image source={require("../../assets/Hay-logo-vert.svg")} />
           </Svg>
             {/* <Image source={require('../../assets/icon.png')} className="App-logo" alt="logo" /> */}
              <MainBody />
 
+
+            {/* <img src={""} className="App-logo" alt="logo" /> */}
+            <MainBody />
+            <Button title="changePage" onPress={() => navigate('Contact')} />
             {name ?
               <Text >You are logged in, {name}!</Text> :
               <Button style={styles.LoginButton} title="Login" navigation={this.props.navigation}
