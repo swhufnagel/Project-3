@@ -25,18 +25,18 @@ logo: {
 },
 
 li: {
-    display: 'inlinebBlock',
+    // display: 'inlineBlock',
     fontFamily: 'proxima-nova,sansSerif',
     fontWeight: '700',
     fontStyle: 'normal',
-    fontSize: '22px',
+    fontSize: 22,
 },
 
 a: {
-  display: 'block',
-  padding: '8px',
+  // display: 'block',
+  padding: 8,
   textAlign: 'center',
-  textDecoration: 'none',
+  // textDecoration: 'none',
   color: 'white',
   /* background-color: #dddddd; */
 },
