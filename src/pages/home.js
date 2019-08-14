@@ -9,6 +9,8 @@ import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
 import Contacts from '../pages/contact';
 import { Button, ThemeProvider } from 'react-native-elements';
+import Svg { Image } from 'react-native-svg';
+
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -77,8 +79,9 @@ class Home extends Component {
         flexDirection: 'column',
         alignItems: 'center'
       },
+      
       LoginButton: {
-        width: '75%',
+        width: 200,
         marginTop: '50%',
         padding: '5%',
         borderRadius: 30,
@@ -99,9 +102,18 @@ class Home extends Component {
     return (
       <View style={styles.App} className="App" >
         <View style={styles.AppHeader} className="App-header">
+         
           <LinearGradient
             colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
             style={{ width: '100%', height: '100%', padding: 15, alignItems: 'center', borderRadius: 5 }}>
+
+               <Svg width="80" height="80">
+            <Image source={require("../../assets/Hay-logo-vert.svg")} />
+          </Svg>
+            {/* <Image source={require('../../assets/icon.png')} className="App-logo" alt="logo" /> */}
+             <MainBody />
+
+
             {/* <img src={""} className="App-logo" alt="logo" /> */}
             <MainBody />
             <Button title="changePage" onPress={() => navigate('Contact')} />
@@ -112,7 +124,7 @@ class Home extends Component {
             }
             {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
           </LinearGradient>
-        </View>
+         </View> 
       </View>
     );
   }
