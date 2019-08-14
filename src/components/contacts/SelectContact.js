@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import './SelectContact.css';
-
+// import './SelectContact.css';
+import { Button } from "react-native";
 class SelectContact extends Component {
-    render () {
-        return <button className="SelectContact">Select Contact</button>
+    render() {
+        return <Button title="Select Contact" className="SelectContact"></Button>
     }
 }
 

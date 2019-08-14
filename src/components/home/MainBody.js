@@ -1,11 +1,14 @@
 import React from "react"
+import { Text } from 'react-native';
 
 
-function MainBody () {
+function MainBody() {
     return (
-        <div>
-            <h2> Hello Hello Hello</h2>
-        </div>
+
+        <Text>
+            Hello Hello Hello
+        </Text>
+
     )
 }
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import './FaceBookButton.css';
+// import './FaceBookButton.css';
+import { Button } from "react-native";
 
 class FacebookButton extends Component {
-    render () {
-        return <button className="Fbook-login">Facebook Sign-In</button>
+    render() {
+        return <Button title="Facebook Sign-In" className="Fbook-login"></Button>
     }
 }
 

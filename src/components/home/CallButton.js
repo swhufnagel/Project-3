@@ -1,8 +1,9 @@
 import React from 'react'
+import { Button } from "react-native";
 
 function CallButton() {
-    return(
-            <button className="Fbook-login">Call</button>
+    return (
+        <Button title="Call" className="Fbook-login"></Button>
     )
 }
 

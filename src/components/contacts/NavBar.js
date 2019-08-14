@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import './NavBar.css';
+// import './NavBar.css';
+import { View, Text } from "react-native";
 
 class NavBar extends Component {
-    render () {
-        return <div>
-            <ul>
-                <li><a href="default.asp">Friend</a></li>
-                <li><a href="news.asp">Family</a></li>
-                <li><a href="contact.asp">Business</a></li>
-                <li><a href="about.asp">Other</a></li>
-            </ul>
-        </div>
+    render() {
+        return <View>
+            <Text> Navbar </Text>
+        </View>
     }
 }
 
