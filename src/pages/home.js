@@ -135,7 +135,7 @@ class Home extends Component {
       style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
       <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
             {/* <MainBody /> */}
-      <Divider style={{ backgroundColor: 'blue' }} />;
+            {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
       <Button title="Change Page" style={styles.changePage} className="changePage" onPress={() => navigate('Contact')} />
             {name ?
               <Text >You are logged in, {name}!</Text> :

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 // import logo2 from './logo2.svg';
 import FacebookButton from '../components/friends/FacebookButton'
 import MainBody from "../components/friends/MainBody"
@@ -31,19 +31,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  buttonArea: {
-    display: 'flex'
+  AppLogo: {
+    marginTop: '15%',
+    width: '120%',
+    height: 52
+  },
+
+  // buttonArea: {
+  //   display: 'flex'
+  // },
+  
+  Call: {
+    width: 250,
+    marginTop: 100
+  },
+
+  Text: {
+    width: 250,
+    marginTop: 25
   }
 })
-function Friends() {
+// function Friends() {
+  class Friends extends Component {
+    render () {
   return (
     <LinearGradient
       colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
       style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
     <View style={styles.App} className="App">
-      <View style={styles.AppHeader} className="App-header">
+      <View style={styles.AppHeader} className="AppHeader">
       <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-
         {/* <Img src={""} className="App-logo2" alt="logo" /> */}
         {/* <NavBar /> */}
 
@@ -61,7 +78,8 @@ function Friends() {
       </View>
     </View>
     </LinearGradient>
-  );
+    );
+  }
 }
 
-export default Friends;
+export default Friends
