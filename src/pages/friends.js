@@ -7,9 +7,11 @@ import NavBar from "../components/friends/NavBar"
 // import '../App.css';
 import SelectContact from '../components/friends/SelectContact';
 import FriendImg from '../components/friends/FriendImg';
+import { LinearGradient } from 'expo-linear-gradient';
 import CallButton from '../components/friends/CallButton';
 import TextButton from '../components/friends/TextButton';
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Button, ThemeProvider } from 'react-native-elements';
 
 
 
@@ -35,22 +37,30 @@ const styles = StyleSheet.create({
 })
 function Friends() {
   return (
+    <LinearGradient
+      colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+      style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
     <View style={styles.App} className="App">
       <View style={styles.AppHeader} className="App-header">
+      <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+
         {/* <Img src={""} className="App-logo2" alt="logo" /> */}
         {/* <NavBar /> */}
 
         {/* <FriendImg /> */}
-        <MainBody />
+        {/* <MainBody /> */}
         <View style={styles.buttonArea} className="buttonArea">
-          <CallButton />
-          <TextButton />
+        <Button title="Call" style={styles.Call} className="Call" onPress={this.goToNextPage}></Button>
+        <Button title="Text" style={styles.Text} className="Text" onPress={this.goToNextPage}></Button>
+          {/* <CallButton />
+          <TextButton /> */}
         </View>
         {/* <SelectContact /> */}
         {/* <GoogleButton /> */}
         {/* <FacebookButton /> */}
       </View>
     </View>
+    </LinearGradient>
   );
 }
 

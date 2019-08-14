@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import FacebookButton from '../components/home/FacebookButton'
 import MainBody from "../components/home/MainBody"
 import GoogleButton from "../components/home/GoogleButton"
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { AuthSession } from 'expo';
+import { Constants } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import { Button, ThemeProvider } from 'react-native-elements';
-import SvgUri from 'react-native-svg-uri';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 
@@ -83,63 +81,70 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
+    
     const styles = StyleSheet.create({
       App: {
-        // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
-        // backgroundSize: '200%',
-        // animation: bganimation 15s infinite,
-        height: '100%'
+      //   // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
+      //   // backgroundSize: '200%',
+      //   // animation: bganimation 15s infinite,
+        height: '200%'
       },
-      AppHeader: {
-        minHeight: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
+      // AppHeader: {
+      //   // minHeight: '200%',
+      //   display: 'flex',
+      //   // flexDirection: 'column',
+      //   alignItems: 'center'
+      // },
+
+      AppLogo: {
+        marginTop: '15%',
+        width: 250,
+        height: 250
+      },
+
+      changePage: {
+        width: 250,
+        marginTop: 100,
       },
 
       LoginButton: {
-        width: 200,
-        marginTop: '50%',
-        padding: '5%',
-        borderRadius: 30,
-        borderColor: '#2699FB',
+        width: 250,
+        marginTop: '10%',
+        // padding: '5%',
+        // borderRadius: 30,
+        // borderColor: '#2699FB',
         // cursor: 'pointer',
-        backgroundColor: '#175897',
-        fontWeight: '700',
-        fontStyle: 'normal',
-        fontSize: 22,
-        color: 'white',
+        // backgroundColor: '#175897',
+        // fontWeight: '700',
+        // fontStyle: 'normal',
+        // fontSize: 22,
+        // color: 'white',
       },
 
-      buttonArea: {
-        display: 'flex'
-      }
+      // buttonArea: {
+      //   display: 'flex'
+      // }
     })
 
     return (
       <View style={styles.App} className="App" >
-        <View style={styles.AppHeader} className="App-header">
-
-          <LinearGradient
-            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-            style={{ width: '100%', height: '100%', padding: 15, alignItems: 'center', borderRadius: 5 }}>
-
-            {/* <SvgUri source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}} /> */}
-            {/* <Image source={require('../../assets/icon.png')} className="App-logo" alt="logo" /> */}
-            <MainBody />
-
-
-            {/* <img src={""} className="App-logo" alt="logo" /> */}
-            <MainBody />
-            <Button title="changePage" onPress={() => navigate('Contact')} />
+      <View style={styles.AppHeader} className="AppHeader">
+      <LinearGradient
+      colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+      style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+      <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+            {/* <MainBody /> */}
+      <Button title="Change Page" style={styles.changePage} className="changePage" onPress={() => navigate('Contact')} />
             {name ?
               <Text >You are logged in, {name}!</Text> :
               <Button style={styles.LoginButton} title="Login" navigation={this.props.navigation}
                 onPress={() => this._loginWithAuth0()} />
             }
             {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-          </LinearGradient>
-        </View>
+         
+         
+       </LinearGradient>
+       </View>
       </View>
     );
   }
