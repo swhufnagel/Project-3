@@ -2,6 +2,7 @@ import express from "express";
 import Expo from "expo-server-sdk";
 import timestamp from "time-stamp";
 import mongoose from "mongoose";
+import db from "./../models";
 
 // const routes = require("../routes");
 const app = express();
@@ -94,6 +95,16 @@ app.post("/message", (req, res) => {
   handlePushTokens(req.body.message);
   console.log(`Received message, ${req.body.message}`);
   res.send(`Received message, ${req.body.message}`);
+});
+
+app.get("/db", (req, res) => {
+  db.User.find()
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(err => {
+      if (err) return err;
+    });
 });
 
 app.listen(PORT_NUMBER, () => {

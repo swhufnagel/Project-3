@@ -24,10 +24,10 @@ import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 import { HomeScreen } from "./src/components/HomeScreen";
 import call from "react-native-phone-call";
 import Communications from "react-native-communications";
-import server from "./server/index";
+// import server from "./server/index";
 
-const YOUR_PUSH_TOKEN = "http://13c13043.ngrok.io/token";
-const MESSAGE_ENPOINT = "http://13c13043.ngrok.io/message";
+const YOUR_PUSH_TOKEN = "http://4b910f16.ngrok.io/token";
+const MESSAGE_ENPOINT = "http://4b910f16.ngrok.io/message";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -241,20 +241,17 @@ export default class gimmePermission extends Component {
     Communications.text(this.state.currentNumber, "Test Text Here");
   };
 
-  makeContact = () => {
-    const testContact = this.state.contacts[1];
-    // console.log("contact:", testContact);
-    // process.env.MONGODB_URI || "mongodb://localhost/hayapp"
-    fetch(server, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contact: testContact
+  getContacts = () => {
+    // const testContact = this.state.contacts[1];
+    // GET Request to Database.
+    return fetch("http://4b910f16.ngrok.io/db")
+      .then(response => response.json())
+      .then(responseJson => {
+        return responseJson;
       })
-    });
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   render() {
@@ -278,7 +275,7 @@ export default class gimmePermission extends Component {
         <Button title="Get Random Contact" onPress={this.getRandomContact} />
         <Button title="Call Contact" onPress={this.callContact} />
         <Button title="Text Contact" onPress={this.textContact.bind(this)} />
-        <Button title="Contact to Database" onPress={this.makeContact} />
+        <Button title="Get Contacts from DB" onPress={this.getContacts} />
         <View style={styles.empty} />
       </View>
     );
