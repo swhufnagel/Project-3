@@ -79,20 +79,7 @@ class Contact extends Component {
     //state changes according to switch
     //which will result in re-render the text
   }
-  setSwitchValue = (val, ind) => {
-    const tempData = JSON.parse(JSON.stringify(this.state.listKeys))
-    tempData[ind].switch = val;
-    this.setState({ listKeys: tempData });
-  }
-  listItem = ({ item, index }) => (
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-      <Text style={styles.item}>{item.key}</Text>
-      <Switch
-        onValueChange={(value) => this.setSwitchValue(value, index)}
-        value={item.switch}
-      />
-    </View>
-  );
+
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
@@ -145,6 +132,11 @@ class Contact extends Component {
                         onValueChange: value => this.setState({ switchValue: value }),
                       }}
                       hideChevron
+                      thumbColor="red"
+                      trackColor={{
+                        true: "yellow",
+                        false: "purple",
+                      }}
                     />
                   </View>
 
