@@ -8,6 +8,13 @@ import SelectContact from '../components/contacts/SelectContact';
 import FacebookButton from './../components/contacts/FacebookButton';
 import { View, Image, StyleSheet } from "react-native";
 import { Button, ThemeProvider } from 'react-native-elements';
+import * as Permissions from "expo-permissions";
+import * as Contacts from "expo-contacts";
+import { Switch, ScrollView, FlatList, Button, View, Img, Text, StyleSheet } from "react-native";
+import { ContactList } from "../components/contacts/List";
+import { LinearGradient } from 'expo-linear-gradient';
+import { ListItem, Overlay } from 'react-native-elements'
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 
 
 
@@ -68,30 +75,96 @@ nextPage: {
 //   alignItems: 'flex-start',
 // }
 
-
-
 })
-
-
+let contacts = [];
 class Contact extends Component {
+
+  state = {
+    contacts: [],
+    isVisible: false,
+    switchValue: true,
+    key: null,
+    listKeys: [],
+  }
+  toggleSwitch = (value) => {
+    //onValueChange of the switch this function will be called
+    this.setState({ switchValue: value })
+    //state changes according to switch
+    //which will result in re-render the text
+  }
+
+
+  permissionFlow = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS);
+    this.setState({ status: status });
+    if (status !== "granted") {
+      console.log("status:", status);
+      alert("You will need to enable contacts to use our app!");
+      return;
+    }
+    //get data
+    const { data } = await Contacts.getContactsAsync({});
+    console.log(data);
+    await this.setState({ contacts: data });
+    await this.setState({
+      listKeys: this.state.contacts.map((contact, i) => {
+        contact.switch = true;
+        contact.key = i;
+      })
+    });
+  };
   goToNextPage = () => {
     this.props.navigation.navigate('Friends');
   }
-
+  componentDidMount() {
+    this.setState({ isVisible: true });
+    this.permissionFlow();
+  }
   render() {
     return (
       <View className="App" >
-        <View className="AppHeader">
-        <LinearGradient
-          colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-          style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-         <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-          {/* <NavBar /> */}
-          {/* <MainBody /> */}
-          <Button title="next page" type="clear" style={styles.nextPage} className="nextPage" onPress={this.goToNextPage}></Button>
+        <View className="App-header">
+          <LinearGradient
+            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+            style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 5 }}>
+           <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+            <NavBar />
+            {console.log(this.state.contacts[0])}
+
+            <ScrollView style={styles.item}>
+              {
+                this.state.contacts.map((l, i) => (
+                  <View>
+                    <ListItem
+                      key={i}
+                      title={l.name}
+                      bottomDivider={true}
+                      leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
+                      switch={{
+                        value: this.state.switchValue,
+                        onValueChange: value => this.setState({ switchValue: value }),
+                      }}
+                      hideChevron
+                      thumbColor="red"
+                      trackColor={{
+                        true: "yellow",
+                        false: "purple",
+                      }}
+                    />
+                  </View>
+
+                ))
+              }
+            </ScrollView>
+            {/* <FlatList
+              data={this.state.listKeys}
+              renderItem={this.listItem}
+            /> */}
+
+            <Button title="next page" onPress={this.goToNextPage}></Button>
           </LinearGradient>
         </View>
-      </View>
+      </View >
     );
   }
 }

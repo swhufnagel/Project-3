@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeProvider, Divider, Button } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
+// import SvgUri from 'react-native-svg-uri';
 
 
 
@@ -28,19 +29,6 @@ class Home extends Component {
     name: null,
     contacts: []
   }
-  permissionFlow = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CONTACTS);
-    this.setState({ status: status });
-    if (status !== "granted") {
-      console.log("status:", status);
-      alert("You will need to enable contacts to use our app!");
-      return;
-    }
-    //get data
-    const { data } = await Contacts.getContactsAsync({});
-    console.log(data);
-    this.setState({ contacts: data });
-  };
   _loginWithAuth0 = async () => {
     const auth0Domain = "https://dev-ph5frrsm.auth0.com";
     const auth0ClientId = "Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
@@ -77,7 +65,6 @@ class Home extends Component {
     const { name } = decoded;
     this.setState({ name });
     this.props.navigation.navigate('Contact');
-    this.permissionFlow();
   }
   render() {
     const { navigate } = this.props.navigation;
@@ -162,4 +149,5 @@ class Home extends Component {
     );
   }
 }
+
 export default Home;
