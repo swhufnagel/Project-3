@@ -32,6 +32,7 @@
     "react-native-svg": "~9.5.1",
     "react-native-svg-uri": "^1.2.3",
     "react-native-swipe-gestures": "^1.0.3",
+    "react-native-touchable-scale": "^2.0.0",
     "react-native-ui-kitten": "^4.1.0",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.1",
