@@ -4,7 +4,7 @@ import MainBody from "../components/contacts/MainBody"
 import NavBar from "../components/contacts/NavBar"
 // import '../App.css';
 import SelectContact from '../components/contacts/SelectContact';
-import FacebookButton from './../components/contacts/FacebookButton';
+import Friends from './friends';
 import { ThemeProvider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
@@ -97,48 +97,49 @@ class Contact extends Component {
   }
   render() {
     return (
-      <View className="App" >
-        <View className="App-header">
-          <LinearGradient
-            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-            style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 5 }}>
-            <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-            <NavBar />
-            <Button title="next page" onPress={this.goToNextPage}></Button>
+      <LinearGradient
+        colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+        style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <NavBar />
+        <View className="App" >
+          <View className="App-header">
+            <Overlay isVisible={this.state.isVisible}>
+              <ScrollView style={styles.item}>
+                {
+                  this.state.contacts.map((l, i) => (
+                    <View>
+                      <ListItem
+                        key={l.id}
+                        title={l.name}
+                        bottomDivider={true}
+                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
+                        switch={{
+                          value: this.state.switchValue,
+                          onValueChange: value => this.setState({ value: value }),
+                        }}
+                        hideChevron
+                        thumbColor="red"
+                        trackColor={{
+                          true: "yellow",
+                          false: "purple",
+                        }}
+                      />
+                    </View>
 
-            <ScrollView style={styles.item}>
-              {
-                this.state.contacts.map((l, i) => (
-                  <View>
-                    <ListItem
-                      key={i}
-                      title={l.name}
-                      bottomDivider={true}
-                      leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
-                      switch={{
-                        value: this.state.switchValue,
-                        onValueChange: value => this.setState({ switchValue: value }),
-                      }}
-                      hideChevron
-                      thumbColor="red"
-                      trackColor={{
-                        true: "yellow",
-                        false: "purple",
-                      }}
-                    />
-                  </View>
-
-                ))
-              }
-            </ScrollView>
+                  ))
+                }
+              </ScrollView>
+              <Button title="Accept" onPress={() => this.setState({ isVisible: false })}></Button>
+            </Overlay>
             {/* <FlatList
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
+            <Friends />
 
-          </LinearGradient>
-        </View>
-      </View >
+          </View>
+        </View >
+      </LinearGradient>
     );
   }
 }

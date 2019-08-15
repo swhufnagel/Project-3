@@ -11,6 +11,7 @@ import { ThemeProvider, Divider, Button } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
+import createAuth0Client from '@auth0/auth0-spa-js';
 
 
 
@@ -37,7 +38,7 @@ class Home extends Component {
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
       response_type: 'id_token', // id_token will return a JWT token
-      scope: 'openid profile', // retrieve the user's profile
+      scope: 'openid profile email', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
     let authUrl = `${auth0Domain}/authorize` + queryParams;
@@ -47,7 +48,7 @@ class Home extends Component {
     const response = await AuthSession.startAsync({
       authUrl: authUrl
     });
-    console.log('response ', response);
+    // console.log('response ', response);
     if (response.type === 'success') {
       this.handleResponse(response.params);
     }
@@ -57,11 +58,10 @@ class Home extends Component {
       Alert('Authentication error', response.error_description || 'something went wrong');
       return;
     }
-
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
-
+    console.log("scopes: ", decoded)
     const { name } = decoded;
     this.setState({ name });
     this.props.navigation.navigate('Contact');
@@ -69,12 +69,12 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
-    
+
     const styles = StyleSheet.create({
       App: {
-      //   // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
-      //   // backgroundSize: '200%',
-      //   // animation: bganimation 15s infinite,
+        //   // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
+        //   // backgroundSize: '200%',
+        //   // animation: bganimation 15s infinite,
         height: '200%'
       },
       // AppHeader: {
@@ -122,29 +122,29 @@ class Home extends Component {
     return (
       <ThemeProvider>
         <View style={styles.App} className="App" >
-        <View style={styles.AppHeader} className="AppHeader">
-        <LinearGradient
-            colors={['#35302c', '#4c3825', '#7f4d1f']} 
-            // 722211 , ef9337 ,efb560 - orange
-            // 010d25, 0f345a, 124375 - blue
-            // 35302c, 4c3825, 7f4d1f -brown
+          <View style={styles.AppHeader} className="AppHeader">
+            <LinearGradient
+              colors={['#35302c', '#4c3825', '#7f4d1f']}
+              // 722211 , ef9337 ,efb560 - orange
+              // 010d25, 0f345a, 124375 - blue
+              // 35302c, 4c3825, 7f4d1f -brown
 
-            style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-            {/* <MainBody /> */}
-            {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-        <Button title="Change Page" type="clear"  style={ styles.buttonStyle } onPress={() => navigate('Contact')} />
-        {/* style={ styles.buttonStyle } */}
-            {name ?
-        <Text style={{ fontSize:22, color:"white", marginTop: 25}}>You are logged in, {name}!</Text> :
-        <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={() => this._loginWithAuth0()} />
-            }
-            {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-         
-         
-       </LinearGradient>
-       </View>
-      </View>
+              style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+              <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              {/* <MainBody /> */}
+              {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
+              <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} />
+              {/* style={ styles.buttonStyle } */}
+              {name ?
+                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
+                <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
+              }
+              {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
+
+
+            </LinearGradient>
+          </View>
+        </View>
       </ThemeProvider>
     );
   }

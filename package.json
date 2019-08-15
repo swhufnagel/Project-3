@@ -9,6 +9,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.1.1",
     "@eva-design/eva": "^1.0.1",
     "@react-native-firebase/app": "^0.1.3",
     "esm": "^3.2.25",
@@ -28,6 +29,7 @@
     "react-native-gesture-handler": "^1.3.0",
     "react-native-phone-call": "^1.0.9",
     "react-native-scripts": "1.12.0",
+    "react-native-shake": "^3.3.1",
     "react-native-sms": "^1.9.0",
     "react-native-svg": "~9.5.1",
     "react-native-svg-uri": "^1.2.3",
