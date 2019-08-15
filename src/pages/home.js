@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import FacebookButton from '../components/home/FacebookButton'
 import MainBody from "../components/home/MainBody"
 import GoogleButton from "../components/home/GoogleButton"
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, } from 'react-native'
 import { AuthSession } from 'expo';
+import { Constants } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from 'react-native-elements';
+import { ThemeProvider, Divider, Button } from 'react-native-elements';
+import * as Permissions from "expo-permissions";
+import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
+
 
 
 function toQueryString(params) {
@@ -66,64 +69,83 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
+    
     const styles = StyleSheet.create({
       App: {
-        // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
-        // backgroundSize: '200%',
-        // animation: bganimation 15s infinite,
-        height: '100%'
+      //   // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
+      //   // backgroundSize: '200%',
+      //   // animation: bganimation 15s infinite,
+        height: '200%'
       },
-      AppHeader: {
-        minHeight: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
+      // AppHeader: {
+      //   // minHeight: '200%',
+      //   display: 'flex',
+      //   // flexDirection: 'column',
+      //   alignItems: 'center'
+      // },
+
+      AppLogo: {
+        marginTop: '15%',
+        width: 250,
+        height: 250
+      },
+
+      buttonStyle: {
+        width: 250,
+        marginTop: 100,
+        borderRadius: 25,
+        backgroundColor: "#010d25",
+        borderBottomColor: "#175084",
+        borderRightColor: "#175084",
+        padding: 5,
+        borderWidth: 2,
+        borderColor: "#2699FB",
       },
 
       LoginButton: {
-        width: 200,
-        marginTop: '50%',
-        padding: '5%',
-        borderRadius: 30,
-        borderColor: '#2699FB',
-        // cursor: 'pointer',
-        backgroundColor: '#175897',
-        fontWeight: '700',
-        fontStyle: 'normal',
-        fontSize: 22,
-        color: 'white',
+        width: 250,
+        marginTop: 40,
+        borderRadius: 25,
+        borderBottomColor: "#175084",
+        borderRightColor: "#175084",
+        padding: 5,
+        backgroundColor: "#010d25",
+        borderWidth: 2,
+        borderColor: "#2699FB",
       },
 
-      buttonArea: {
-        display: 'flex'
-      }
+      // buttonArea: {
+      //   display: 'flex'
+      // }
     })
 
     return (
-      <View style={styles.App} className="App" >
-        <View style={styles.AppHeader} className="App-header">
+      <ThemeProvider>
+        <View style={styles.App} className="App" >
+        <View style={styles.AppHeader} className="AppHeader">
+        <LinearGradient
+            colors={['#35302c', '#4c3825', '#7f4d1f']} 
+            // 722211 , ef9337 ,efb560 - orange
+            // 010d25, 0f345a, 124375 - blue
+            // 35302c, 4c3825, 7f4d1f -brown
 
-          <LinearGradient
-            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-            style={{ width: '100%', height: '100%', padding: 15, alignItems: 'center', borderRadius: 5 }}>
-
-            {/* <SvgUri source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}} /> */}
-            {/* <Image source={require('../../assets/icon.png')} className="App-logo" alt="logo" /> */}
-            <MainBody />
-
-
-            {/* <img src={""} className="App-logo" alt="logo" /> */}
-            <MainBody />
-            <Button title="changePage" onPress={() => navigate('Contact')} />
+            style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+            {/* <MainBody /> */}
+            {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
+        <Button title="Change Page" type="clear"  style={ styles.buttonStyle } onPress={() => navigate('Contact')} />
+        {/* style={ styles.buttonStyle } */}
             {name ?
-              <Text >You are logged in, {name}!</Text> :
-              <Button style={styles.LoginButton} title="Login" navigation={this.props.navigation}
-                onPress={() => this._loginWithAuth0()} />
+        <Text style={{ fontSize:22, color:"white", marginTop: 25}}>You are logged in, {name}!</Text> :
+        <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={() => this._loginWithAuth0()} />
             }
             {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-          </LinearGradient>
-        </View>
+         
+         
+       </LinearGradient>
+       </View>
       </View>
+      </ThemeProvider>
     );
   }
 }
