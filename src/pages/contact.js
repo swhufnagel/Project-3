@@ -6,7 +6,7 @@ import NavBar from "../components/contacts/NavBar"
 import SelectContact from '../components/contacts/SelectContact';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import { Switch, ScrollView, Button, View, Img, Text, StyleSheet } from "react-native";
+import { Switch, ScrollView, FlatList, Button, View, Img, Text, StyleSheet } from "react-native";
 import { ContactList } from "../components/contacts/List";
 import { LinearGradient } from 'expo-linear-gradient';
 import { ListItem, Overlay } from 'react-native-elements'
@@ -63,12 +63,15 @@ const styles = StyleSheet.create({
 
 
 })
+let contacts = [];
 class Contact extends Component {
 
   state = {
     contacts: [],
     isVisible: false,
-    switchValue: true
+    switchValue: true,
+    key: null,
+    listKeys: [],
   }
   toggleSwitch = (value) => {
     //onValueChange of the switch this function will be called
@@ -76,6 +79,21 @@ class Contact extends Component {
     //state changes according to switch
     //which will result in re-render the text
   }
+  setSwitchValue = (val, ind) => {
+    const tempData = JSON.parse(JSON.stringify(this.state.listKeys))
+    tempData[ind].switch = val;
+    this.setState({ listKeys: tempData });
+  }
+  listItem = ({ item, index }) => (
+    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Text style={styles.item}>{item.key}</Text>
+      <Switch
+        onValueChange={(value) => this.setSwitchValue(value, index)}
+        value={item.switch}
+      />
+    </View>
+  );
+
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
@@ -88,6 +106,12 @@ class Contact extends Component {
     const { data } = await Contacts.getContactsAsync({});
     console.log(data);
     await this.setState({ contacts: data });
+    await this.setState({
+      listKeys: this.state.contacts.map((contact, i) => {
+        contact.switch = true;
+        contact.key = i;
+      })
+    });
   };
   goToNextPage = () => {
     this.props.navigation.navigate('Friends');
@@ -115,6 +139,7 @@ class Contact extends Component {
                       key={i}
                       title={l.name}
                       bottomDivider={true}
+                      leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
                       switch={{
                         value: this.state.switchValue,
                         onValueChange: value => this.setState({ switchValue: value }),
@@ -126,6 +151,10 @@ class Contact extends Component {
                 ))
               }
             </ScrollView>
+            {/* <FlatList
+              data={this.state.listKeys}
+              renderItem={this.listItem}
+            /> */}
 
             <Button title="next page" onPress={this.goToNextPage}></Button>
           </LinearGradient>
