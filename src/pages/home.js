@@ -108,6 +108,8 @@ class Home extends Component {
         marginTop: 100,
         borderRadius: 25,
         backgroundColor: "#010d25",
+        borderBottomColor: "#175084",
+        borderRightColor: "#175084",
         padding: 5,
         borderWidth: 2,
         borderColor: "#2699FB",
@@ -117,6 +119,8 @@ class Home extends Component {
         width: 250,
         marginTop: 40,
         borderRadius: 25,
+        borderBottomColor: "#175084",
+        borderRightColor: "#175084",
         padding: 5,
         backgroundColor: "#010d25",
         borderWidth: 2,
@@ -133,9 +137,9 @@ class Home extends Component {
         <View style={styles.App} className="App" >
         <View style={styles.AppHeader} className="AppHeader">
         <LinearGradient
-            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-            style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+            colors={['#010d25', '#0f345a', '#124375']}
+            style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
             {/* <MainBody /> */}
             {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
         <Button title="Change Page" type="clear"  style={ styles.buttonStyle } onPress={() => navigate('Contact')} />

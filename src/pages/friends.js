@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#010d25",
     borderWidth: 2,
     borderColor: "#2699FB",
+    borderBottomColor: "#175084",
+    borderRightColor: "#175084",
     borderRadius: 25,
     padding: 5
   },
@@ -54,6 +56,8 @@ const styles = StyleSheet.create({
   Text: {
     borderWidth: 2,
     borderColor: "#2699FB",
+    borderBottomColor: "#175084",
+    borderRightColor: "#175084",
     width: 250,
     marginTop: 25,
     backgroundColor: "#010d25",
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
         <LinearGradient
           colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
           style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+        <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
         <Image
           source={require('../../assets/melanie-person.jpg')}
           style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
