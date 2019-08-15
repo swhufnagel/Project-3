@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import logo2 from './logo2.svg';
 import MainBody from "../components/contacts/MainBody"
-import NavBar from "../components/contacts/NavBar"
+import NavBar from "../components/friends/NavBar"
 // import '../App.css';
 import SelectContact from '../components/contacts/SelectContact';
 import Friends from './friends';
@@ -13,7 +13,7 @@ import { ContactList } from "../components/contacts/List";
 import { LinearGradient } from 'expo-linear-gradient';
 import { ListItem, Overlay } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
-
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 
 const styles = StyleSheet.create({
@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
   },
   item: {
     width: '100%'
+  },
+  friends: {
+    width: '100%'
   }
 
 })
@@ -73,13 +76,13 @@ class Contact extends Component {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
-      console.log("status:", status);
+      // console.log("status:", status);
       alert("You will need to enable contacts to use our app!");
       return;
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    console.log(data);
+    // console.log(data);
     await this.setState({ contacts: data });
     await this.setState({
       listKeys: this.state.contacts.map((contact, i) => {
@@ -100,9 +103,13 @@ class Contact extends Component {
       <LinearGradient
         colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <NavBar />
+        <GestureRecognizer
+          onSwipeDown={() => this.setState({ isVisible: true })}>
+          <NavBar />
+        </GestureRecognizer>
         <View className="App" >
           <View className="App-header">
+
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
                 {
@@ -115,7 +122,7 @@ class Contact extends Component {
                         leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
                         switch={{
                           value: this.state.switchValue,
-                          onValueChange: value => this.setState({ value: value }),
+                          onValueChange: value => this.setState({ switchValue: value }),
                         }}
                         hideChevron
                         thumbColor="red"
@@ -129,7 +136,9 @@ class Contact extends Component {
                   ))
                 }
               </ScrollView>
-              <Button title="Accept" onPress={() => this.setState({ isVisible: false })}></Button>
+              <Button title="Accept" onPress={() => {
+                this.setState({ isVisible: false });
+              }}></Button>
             </Overlay>
             {/* <FlatList
               data={this.state.listKeys}
@@ -139,7 +148,7 @@ class Contact extends Component {
 
           </View>
         </View >
-      </LinearGradient>
+      </LinearGradient >
     );
   }
 }
