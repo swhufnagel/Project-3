@@ -33,6 +33,11 @@ AppLogo: {
 nextPage: {
   width: 250,
   marginTop: 100,
+  backgroundColor: "#010d25",
+  borderWidth: 2,
+  borderColor: "#2699FB",
+  borderRadius: 25,
+  padding: 5
 },
 
 // li: {
@@ -76,12 +81,12 @@ class Contact extends Component {
       <View className="App" >
         <View className="AppHeader">
         <LinearGradient
-      colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-      style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+          colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+          style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
          <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
           {/* <NavBar /> */}
           {/* <MainBody /> */}
-          <Button title="next page" style={styles.nextPage} className="nextPage" onPress={this.goToNextPage}></Button>
+          <Button title="next page" type="clear" style={styles.nextPage} className="nextPage" onPress={this.goToNextPage}></Button>
           </LinearGradient>
         </View>
       </View>

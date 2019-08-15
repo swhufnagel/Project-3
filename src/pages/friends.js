@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   },
 
   AppLogo: {
-    marginTop: '15%',
-    width: '120%',
+    marginTop: '10%',
+    width: '80%',
     height: 52
   },
 
@@ -43,41 +43,47 @@ const styles = StyleSheet.create({
   
   Call: {
     width: 250,
-    marginTop: 100
+    marginTop: 50,
+    backgroundColor: "#010d25",
+    borderWidth: 2,
+    borderColor: "#2699FB",
+    borderRadius: 25,
+    padding: 5
   },
 
   Text: {
+    borderWidth: 2,
+    borderColor: "#2699FB",
     width: 250,
-    marginTop: 25
+    marginTop: 25,
+    backgroundColor: "#010d25",
+    borderRadius: 25,
+    padding: 5
   }
 })
 // function Friends() {
   class Friends extends Component {
     render () {
   return (
-    <LinearGradient
-      colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-      style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+    
     <View style={styles.App} className="App">
       <View style={styles.AppHeader} className="AppHeader">
-      <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-        {/* <Img src={""} className="App-logo2" alt="logo" /> */}
-        {/* <NavBar /> */}
-
-        {/* <FriendImg /> */}
-        {/* <MainBody /> */}
+        <LinearGradient
+          colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+          style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <Image source={require('../../assets/HayLogoHorz.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+        <Image
+          source={require('../../assets/melanie-person.jpg')}
+          style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
+        <MainBody />
         <View style={styles.buttonArea} className="buttonArea">
-        <Button title="Call" style={styles.Call} className="Call" onPress={this.goToNextPage}></Button>
-        <Button title="Text" style={styles.Text} className="Text" onPress={this.goToNextPage}></Button>
-          {/* <CallButton />
-          <TextButton /> */}
+        <Button title="Call" style={styles.Call} type="clear" className="Call" onPress={this.goToNextPage}></Button>
+        <Button title="Text" style={styles.Text} type="clear" className="Text" onPress={this.goToNextPage}></Button>
         </View>
-        {/* <SelectContact /> */}
-        {/* <GoogleButton /> */}
-        {/* <FacebookButton /> */}
+        </LinearGradient>
       </View>
     </View>
-    </LinearGradient>
+    
     );
   }
 }

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import FacebookButton from '../components/home/FacebookButton'
 import MainBody from "../components/home/MainBody"
 import GoogleButton from "../components/home/GoogleButton"
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, } from 'react-native'
 import { AuthSession } from 'expo';
 import { Constants } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, ThemeProvider, Divider } from 'react-native-elements';
+import { ThemeProvider, Divider, Button } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 
@@ -103,23 +103,24 @@ class Home extends Component {
         height: 250
       },
 
-      changePage: {
+      buttonStyle: {
         width: 250,
         marginTop: 100,
+        borderRadius: 25,
+        backgroundColor: "#010d25",
+        padding: 5,
+        borderWidth: 2,
+        borderColor: "#2699FB",
       },
 
       LoginButton: {
         width: 250,
-        marginTop: '10%',
-        // padding: '5%',
-        // borderRadius: 30,
-        // borderColor: '#2699FB',
-        // cursor: 'pointer',
-        // backgroundColor: '#175897',
-        // fontWeight: '700',
-        // fontStyle: 'normal',
-        // fontSize: 22,
-        // color: 'white',
+        marginTop: 40,
+        borderRadius: 25,
+        padding: 5,
+        backgroundColor: "#010d25",
+        borderWidth: 2,
+        borderColor: "#2699FB",
       },
 
       // buttonArea: {
@@ -128,19 +129,20 @@ class Home extends Component {
     })
 
     return (
-      <View style={styles.App} className="App" >
-      <View style={styles.AppHeader} className="AppHeader">
-      <LinearGradient
-      colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-      style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-      <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+      <ThemeProvider>
+        <View style={styles.App} className="App" >
+        <View style={styles.AppHeader} className="AppHeader">
+        <LinearGradient
+            colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+            style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <Image source={require('../../assets/HayLogoVert.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
             {/* <MainBody /> */}
             {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-      <Button title="Change Page" style={styles.changePage} className="changePage" onPress={() => navigate('Contact')} />
+        <Button title="Change Page" type="clear"  style={ styles.buttonStyle } onPress={() => navigate('Contact')} />
+        {/* style={ styles.buttonStyle } */}
             {name ?
-              <Text >You are logged in, {name}!</Text> :
-              <Button style={styles.LoginButton} title="Login" navigation={this.props.navigation}
-                onPress={() => this._loginWithAuth0()} />
+        <Text style={{ fontSize:22, color:"white", marginTop: 25}}>You are logged in, {name}!</Text> :
+        <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={() => this._loginWithAuth0()} />
             }
             {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
          
@@ -148,6 +150,7 @@ class Home extends Component {
        </LinearGradient>
        </View>
       </View>
+      </ThemeProvider>
     );
   }
 }
