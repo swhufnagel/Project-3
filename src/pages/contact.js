@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import logo2 from './logo2.svg';
 import MainBody from "../components/contacts/MainBody"
 import NavBar from "../components/friends/NavBar"
@@ -15,6 +15,8 @@ import { ListItem, Overlay } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
+
+const YOUR_NGROK_LINK = "http://bbf76b28.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -52,25 +54,22 @@ const styles = StyleSheet.create({
   friends: {
     width: '100%'
   }
-
-})
+});
 let contacts = [];
 class Contact extends Component {
-
   state = {
     contacts: [],
     isVisible: false,
     switchValue: true,
     key: null,
-    listKeys: [],
-  }
-  toggleSwitch = (value) => {
+    listKeys: []
+  };
+  toggleSwitch = value => {
     //onValueChange of the switch this function will be called
-    this.setState({ switchValue: value })
+    this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
-  }
-
+  };
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
@@ -82,7 +81,8 @@ class Contact extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    // console.log(data);
+
+    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
     await this.setState({ contacts: data });
     await this.setState({
       listKeys: this.state.contacts.map((contact, i) => {
@@ -92,12 +92,33 @@ class Contact extends Component {
     });
   };
   goToNextPage = () => {
-    this.props.navigation.navigate('Friends');
-  }
+    this.props.navigation.navigate("Friends");
+  };
   componentDidMount() {
     this.setState({ isVisible: true });
     this.permissionFlow();
+    this.storeContacts();
   }
+
+  // Save Contacts for db post request
+  storeContacts = async () => {
+    // Returns an array of objects for each contact
+    const { data } = await Contacts.getContactsAsync({});
+    slicedData = data.slice(0, 5);
+    // console.log("slicedData:", slicedData);
+    fetch(YOUR_NGROK_LINK + "/contacts/store", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: slicedData[0].name,
+        number: slicedData[0].phoneNumbers[0].number
+      })
+    });
+  }; // End saveContacts
+
   render() {
     return (
       <LinearGradient
@@ -140,12 +161,12 @@ class Contact extends Component {
                 this.setState({ isVisible: false });
               }}></Button>
             </Overlay>
+
             {/* <FlatList
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
             <Friends />
-
           </View>
         </View >
       </LinearGradient >
@@ -153,4 +174,4 @@ class Contact extends Component {
   }
 }
 
-export default Contact
+export default Contact;
