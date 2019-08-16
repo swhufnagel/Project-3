@@ -1,24 +1,28 @@
-import React, { Component } from 'react';
-import FacebookButton from '../components/home/FacebookButton'
-import MainBody from "../components/home/MainBody"
-import GoogleButton from "../components/home/GoogleButton"
-import { View, Text, StyleSheet, TouchableOpacity, Image, } from 'react-native'
-import { AuthSession } from 'expo';
-import { Constants } from 'expo';
-import jwtDecode from 'jwt-decode';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeProvider, Divider, Button } from 'react-native-elements';
+import React, { Component } from "react";
+import FacebookButton from "../components/home/FacebookButton";
+import MainBody from "../components/home/MainBody";
+import GoogleButton from "../components/home/GoogleButton";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { AuthSession } from "expo";
+import { Constants } from "expo";
+import jwtDecode from "jwt-decode";
+import { LinearGradient } from "expo-linear-gradient";
+import { ThemeProvider, Divider, Button } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
 import createAuth0Client from '@auth0/auth0-spa-js';
 
-
-
 function toQueryString(params) {
-  return '?' + Object.entries(params)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
+  return (
+    "?" +
+    Object.entries(params)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&")
+  );
 }
 class Home extends Component {
   // static navigationOptions = {
@@ -29,7 +33,7 @@ class Home extends Component {
     text: "",
     name: null,
     contacts: []
-  }
+  };
   _loginWithAuth0 = async () => {
     const auth0Domain = "https://dev-ph5frrsm.auth0.com";
     const auth0ClientId = "Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
@@ -40,6 +44,7 @@ class Home extends Component {
       response_type: 'id_token', // id_token will return a JWT token
       scope: 'openid profile email', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
+
     });
     let authUrl = `${auth0Domain}/authorize` + queryParams;
 
@@ -48,14 +53,17 @@ class Home extends Component {
     const response = await AuthSession.startAsync({
       authUrl: authUrl
     });
-    // console.log('response ', response);
-    if (response.type === 'success') {
+    // console.log("response ", response);
+    if (response.type === "success") {
       this.handleResponse(response.params);
     }
   };
-  handleResponse = (response) => {
+  handleResponse = response => {
     if (response.error) {
-      Alert('Authentication error', response.error_description || 'something went wrong');
+      Alert(
+        "Authentication error",
+        response.error_description || "something went wrong"
+      );
       return;
     }
     // Retrieve the JWT token and decode it
@@ -64,8 +72,8 @@ class Home extends Component {
     console.log("scopes: ", decoded)
     const { name } = decoded;
     this.setState({ name });
-    this.props.navigation.navigate('Contact');
-  }
+    this.props.navigation.navigate("Contact");
+  };
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
@@ -75,7 +83,9 @@ class Home extends Component {
         //   // backgroundImage: linearGradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25),
         //   // backgroundSize: '200%',
         //   // animation: bganimation 15s infinite,
+
         height: '200%'
+
       },
       // AppHeader: {
       //   // minHeight: '200%',
@@ -85,7 +95,7 @@ class Home extends Component {
       // },
 
       AppLogo: {
-        marginTop: '15%',
+        marginTop: "15%",
         width: 250,
         height: 250
       },
@@ -99,7 +109,7 @@ class Home extends Component {
         borderRightColor: "#175084",
         padding: 5,
         borderWidth: 2,
-        borderColor: "#2699FB",
+        borderColor: "#2699FB"
       },
 
       LoginButton: {
@@ -111,13 +121,13 @@ class Home extends Component {
         padding: 5,
         backgroundColor: "#010d25",
         borderWidth: 2,
-        borderColor: "#2699FB",
-      },
+        borderColor: "#2699FB"
+      }
 
       // buttonArea: {
       //   display: 'flex'
       // }
-    })
+    });
 
     return (
       <ThemeProvider>

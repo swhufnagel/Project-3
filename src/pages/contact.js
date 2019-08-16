@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import logo2 from './logo2.svg';
 import MainBody from "../components/contacts/MainBody"
 import NavBar from "../components/friends/NavBar"
@@ -15,6 +15,8 @@ import { ListItem, Overlay } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
+
+const YOUR_NGROK_LINK = "http://bbf76b28.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -52,23 +54,22 @@ const styles = StyleSheet.create({
   friends: {
     width: '100%'
   }
-
-})
+});
 let contacts = [];
 class Contact extends Component {
-
   state = {
     contacts: [],
     isVisible: false,
     switchValue: true,
     key: null,
-    listKeys: [],
-  }
-  toggleSwitch = (value) => {
+    listKeys: []
+  };
+  toggleSwitch = value => {
     //onValueChange of the switch this function will be called
-    this.setState({ switchValue: value })
+    this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
+<<<<<<< HEAD
   }
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
@@ -78,6 +79,10 @@ class Contact extends Component {
     const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
     this.setState({ newState })
   }
+=======
+  };
+
+>>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
   permissionFlow = async () => {
     const newListKeys = this.state.contacts.map((contact, i) => {
       contact.switch = true;
@@ -94,10 +99,18 @@ class Contact extends Component {
 
     //get data
     const { data } = await Contacts.getContactsAsync({});
+<<<<<<< HEAD
     // console.log(data);
     this.setState({ contacts: data });
     this.setState({
       listKeys: data.map((contact, i) => {
+=======
+
+    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
+    await this.setState({ contacts: data });
+    await this.setState({
+      listKeys: this.state.contacts.map((contact, i) => {
+>>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
         contact.switch = true;
         contact.key = i;
         return contact
@@ -105,15 +118,39 @@ class Contact extends Component {
     })
   };
   goToNextPage = () => {
-    this.props.navigation.navigate('Friends');
-  }
+    this.props.navigation.navigate("Friends");
+  };
   componentDidMount() {
     this.setState({ isVisible: true });
     this.permissionFlow();
+    this.storeContacts();
   }
+<<<<<<< HEAD
   componentDidUpdate() {
     // console.log('listKeys ', this.state.listKeys);
   }
+=======
+
+  // Save Contacts for db post request
+  storeContacts = async () => {
+    // Returns an array of objects for each contact
+    const { data } = await Contacts.getContactsAsync({});
+    slicedData = data.slice(0, 5);
+    // console.log("slicedData:", slicedData);
+    fetch(YOUR_NGROK_LINK + "/contacts/store", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: slicedData[0].name,
+        number: slicedData[0].phoneNumbers[0].number
+      })
+    });
+  }; // End saveContacts
+
+>>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
   render() {
     return (
       <LinearGradient
@@ -158,12 +195,12 @@ class Contact extends Component {
                 this.setState({ isVisible: false });
               }}></Button>
             </Overlay>
+
             {/* <FlatList
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
             <Friends />
-
           </View>
         </View >
       </LinearGradient >
@@ -171,4 +208,4 @@ class Contact extends Component {
   }
 }
 
-export default Contact
+export default Contact;
