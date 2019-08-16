@@ -12,8 +12,11 @@ import CallButton from '../components/friends/CallButton';
 import TextButton from '../components/friends/TextButton';
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Button, ThemeProvider } from 'react-native-elements';
-
-
+import call from "react-native-phone-call";
+import Communications from "react-native-communications";
+import RNShake from 'react-native-shake';
+import * as Contacts from "expo-contacts";
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 
 const styles = StyleSheet.create({
@@ -29,18 +32,19 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%',
   },
 
   AppLogo: {
     marginTop: '10%',
-    width: '80%',
+    width: '90%',
     height: 52
   },
 
   // buttonArea: {
   //   display: 'flex'
   // },
-  
+
   Call: {
     width: 250,
     marginTop: 50,
@@ -66,28 +70,81 @@ const styles = StyleSheet.create({
   }
 })
 // function Friends() {
-  class Friends extends Component {
-    render () {
-  return (
-    
-    <View style={styles.App} className="App">
-      <View style={styles.AppHeader} className="AppHeader">
-        <LinearGradient
-          colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-          style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-        <Image
-          source={require('../../assets/melanie-person.jpg')}
-          style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
-        <MainBody />
-        <View style={styles.buttonArea} className="buttonArea">
-        <Button title="Call" style={styles.Call} type="clear" className="Call" onPress={this.goToNextPage}></Button>
-        <Button title="Text" style={styles.Text} type="clear" className="Text" onPress={this.goToNextPage}></Button>
+class Friends extends Component {
+  state = {
+    currentPhoto: "https://i.pravatar.cc/300",
+    currentName: "",
+    currentNumber: null,
+    contacts: [],
+  }
+  getContacts = async () => {
+    const { data } = await Contacts.getContactsAsync({});
+    console.log('contacts: ', data);
+    await this.setState({ contacts: data });
+    await this.getRandomContact;
+  }
+  componentDidMount = async () => {
+    await this.getContacts;
+    console.log('mounted')
+  }
+  componentWillMount() {
+    RNShake.addEventListener('ShakeEvent', () => {
+    });
+  }
+  componentWillUnmount() {
+    RNShake.removeEventListener('ShakeEvent');
+  }
+  getRandomContact = async () => {
+    let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
+    let randomContact = this.state.contacts[randomNum];
+    // alert(randomContact.name);
+    this.setState({ Alert_Visibility: true });
+    await this.setState({ currentName: randomContact.name });
+    await this.setState({
+      currentNumber: randomContact.phoneNumbers[0].number
+    });
+    await this.setState({
+      currentPhoto: 'https://i.pravatar.cc/300'
+    });
+
+    // this.callContact(randomContact.phoneNumbers[0].number, true)
+  };
+  callContact = () => {
+    const contact = {
+      number: this.state.currentNumber, // String value with the number to call
+      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
+    };
+    call(contact).catch(console.error);
+  };
+  textContact = () => {
+    Communications.text(this.state.currentNumber, "Test Text Here");
+  };
+
+  render() {
+    return (
+      <View style={styles.App} className="App">
+        <View style={styles.AppHeader} className="AppHeader">
+          <GestureRecognizer
+            onSwipeUp={this.getRandomContact}
+          >
+            <LinearGradient
+              colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+              style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+              <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              <Image
+                source={{ uri: 'https://i.pravatar.cc/300' }}
+                style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
+              <Text> {this.state.currentName} </Text>
+              <Text> {this.state.currentNumber} </Text>
+              <View style={styles.buttonArea} className="buttonArea">
+                <Button title="Call" style={styles.Call} type="clear" className="Call" onPress={this.callContact}></Button>
+                <Button title="Text" style={styles.Text} type="clear" className="Text" onPress={this.textContact.bind(this)}></Button>
+              </View>
+            </LinearGradient>
+          </GestureRecognizer>
         </View>
-        </LinearGradient>
       </View>
-    </View>
-    
+
     );
   }
 }
