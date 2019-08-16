@@ -16,7 +16,7 @@ import TouchableScale from 'react-native-touchable-scale'; // https://github.com
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 
-const YOUR_NGROK_LINK = "http://bbf76b28.ngrok.io";
+const YOUR_NGROK_LINK = "http://7babc0c7.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -105,17 +105,18 @@ class Contact extends Component {
     // Returns an array of objects for each contact
     const { data } = await Contacts.getContactsAsync({});
     slicedData = data.slice(0, 5);
-    // console.log("slicedData:", slicedData);
-    fetch(YOUR_NGROK_LINK + "/contacts/store", {
+    let contactIds = [];
+    for (let i = 0; i < data.length; i++) {
+      contactIds.push(data[i].id);
+    }
+    console.log("slicedData:", slicedData);
+    await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        name: slicedData[0].name,
-        number: slicedData[0].phoneNumbers[0].number
-      })
+      body: JSON.stringify({ slicedData })
     });
   }; // End saveContacts
 
