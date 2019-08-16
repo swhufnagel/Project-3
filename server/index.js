@@ -2,7 +2,7 @@ import express from "express";
 import Expo from "expo-server-sdk";
 import timestamp from "time-stamp";
 import mongoose from "mongoose";
-import db from "./../models";
+const db = require("./../models");
 // const routes = require("../routes");
 const app = express();
 const expo = new Expo();
@@ -22,7 +22,7 @@ const saveToken = token => {
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/hayapp",
   function(err, db) {
-    console.log("db:", db);
+    // console.log("db:", db);
     if (err) throw err;
 
     //     //Write databse Insert/Update/Query code here..
@@ -78,6 +78,7 @@ const handlePushTokens = message => {
     }
   })();
 };
+
 // Routing
 app.use(express.json());
 
@@ -97,29 +98,30 @@ app.post("/message", (req, res) => {
   res.send(`Received message, ${req.body.message}`);
 });
 
-app.post("/contacts/store", (req, res) => {
-  console.log("req.body:", req.body);
-  var contacts = req.body;
-  // for (let i = 0; i < contacts.length; i++) {
-  // db.User.create({
-  //   name: req.body.name,
-  //   number: contacts.phoneNumbers[0].number
-  // });
-  // }
-  db.User.create(req.body).then(function(response) {
-    console.log("response:", response);
-    console.log("Stored contact in db");
-  });
+app.post("/contacts/store", async (req, res) => {
+  console.log("REQUEST BODY", req.body);
+
+  let response = [];
+
+  for (let i = 0; i < req.body.slicedData.length; i++) {
+    let user = new db.User(req.body.slicedData[i]);
+    console.log("req body i:", req.body.slicedData[i]);
+    let createdUser = await user.save();
+    console.log("created user:", createdUser);
+    response.push(createdUser);
+  }
+  console.log(response);
+  res.json(response);
 });
 
 // Store array to database
-app.post("/contacts/stash", (req, res) => {
-  console.log("req.body:", req.body);
-  const contacts = req.body;
-  db.User.insertMany(contacts).then(function(response) {
-    console.log(response);
-  });
-});
+// app.post("/contacts/stash", (req, res) => {
+//   console.log("req.body:", req.body);
+//   const contacts = req.body;
+//   db.User.insertMany(contacts).then(function(response) {
+//     console.log(response);
+//   });
+// });
 
 app.listen(PORT_NUMBER, () => {
   console.log(`Server Online on Port ${PORT_NUMBER}`);
