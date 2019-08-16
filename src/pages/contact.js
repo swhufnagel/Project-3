@@ -15,7 +15,7 @@ import { ContactList } from "../components/contacts/List";
 import { ListItem, Overlay } from "react-native-elements";
 import TouchableScale from "react-native-touchable-scale"; // https://github.com/kohver/react-native-touchable-scale
 
-const YOUR_NGROK_LINK = "http://7babc0c7.ngrok.io";
+const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -100,7 +100,7 @@ class Contact extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
+    console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
     await this.setState({ contacts: data });
     await this.setState({
       listKeys: this.state.contacts.map((contact, i) => {
@@ -122,19 +122,25 @@ class Contact extends Component {
   storeContacts = async () => {
     // Returns an array of objects for each contact
     const { data } = await Contacts.getContactsAsync({});
+    console.log("PHONE:", data[0].phoneNumbers[0].number);
     slicedData = data.slice(0, 5);
-    let contactIds = [];
+    let contacts = [];
     for (let i = 0; i < data.length; i++) {
-      contactIds.push(data[i].id);
+      if (data[i].phoneNumbers[0].number) {
+        let contact = {
+          name: data[i].name // name
+          // number: JSON.stringify(data[i].phoneNumbers[0].number) // phone number not working for some reason
+        };
+        contacts.push(contact);
+      }
     }
-    console.log("slicedData:", slicedData);
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ slicedData })
+      body: JSON.stringify(contacts)
     });
   }; // End saveContacts
 

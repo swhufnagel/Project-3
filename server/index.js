@@ -103,14 +103,14 @@ app.post("/contacts/store", async (req, res) => {
 
   let response = [];
 
-  for (let i = 0; i < req.body.slicedData.length; i++) {
-    let user = new db.User(req.body.slicedData[i]);
-    console.log("req body i:", req.body.slicedData[i]);
+  for (let i = 0; i < req.body.length; i++) {
+    let user = new db.User(req.body[i]);
+    console.log("req body i:", req.body[i]);
     let createdUser = await user.save();
     console.log("created user:", createdUser);
     response.push(createdUser);
   }
-  console.log(response);
+  console.log("response1:", response);
   res.json(response);
 });
 
