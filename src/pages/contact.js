@@ -1,38 +1,39 @@
 import React, { Component } from "react";
 // import logo2 from './logo2.svg';
-import MainBody from "../components/contacts/MainBody";
-import NavBar from "../components/contacts/NavBar";
-import { LinearGradient } from "expo-linear-gradient";
+import MainBody from "../components/contacts/MainBody"
+import NavBar from "../components/friends/NavBar"
 // import '../App.css';
-import SelectContact from "../components/contacts/SelectContact";
-import FacebookButton from "./../components/contacts/FacebookButton";
-import { View, Image, StyleSheet } from "react-native";
-import { Button, ThemeProvider } from "react-native-elements";
+import SelectContact from '../components/contacts/SelectContact';
+import Friends from './friends';
+import { ThemeProvider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import { Switch, ScrollView, FlatList, Img, Text } from "react-native";
+import { Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
 import { ContactList } from "../components/contacts/List";
-import { ListItem, Overlay } from "react-native-elements";
-import TouchableScale from "react-native-touchable-scale"; // https://github.com/kohver/react-native-touchable-scale
+import { LinearGradient } from 'expo-linear-gradient';
+import { ListItem, Overlay } from 'react-native-elements'
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+
 
 const YOUR_NGROK_LINK = "http://bbf76b28.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
     // backgroundSize: '200%',
-    height: "100%"
+    height: '100%'
   },
 
   AppHeader: {
-    minHeight: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
+    minHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   AppLogo: {
-    marginTop: "10%",
-    width: "80%",
+    marginTop: '10%',
+    width: '80%',
     height: 52
   },
 
@@ -46,33 +47,13 @@ const styles = StyleSheet.create({
     borderRightColor: "#175084",
     borderRadius: 25,
     padding: 5
+  },
+  item: {
+    width: '100%'
+  },
+  friends: {
+    width: '100%'
   }
-
-  // li: {
-  //     // display: 'inlineBlock',
-  //     fontFamily: 'proxima-nova,sansSerif',
-  //     fontWeight: '700',
-  //     fontStyle: 'normal',
-  //     fontSize: 22,
-  // },
-
-  // a: {
-  //   // display: 'block',
-  //   padding: 8,
-  //   textAlign: 'center',
-  //   // textDecoration: 'none',
-  //   color: 'white',
-  //   /* background-color: #dddddd; */
-  // },
-
-  // ul: {
-  //   margin: '10',
-  //   padding: '0',
-  //   overflow: 'hidden',
-  //   backgroundColor: '#2699FB',
-  //   justifyContent: 'center',
-  //   alignItems: 'flex-start',
-  // }
 });
 let contacts = [];
 class Contact extends Component {
@@ -94,12 +75,13 @@ class Contact extends Component {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
-      console.log("status:", status);
+      // console.log("status:", status);
       alert("You will need to enable contacts to use our app!");
       return;
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
+
     // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
     await this.setState({ contacts: data });
     await this.setState({
@@ -139,68 +121,55 @@ class Contact extends Component {
 
   render() {
     return (
-      <View className="App">
-        <View className="App-header">
-          <LinearGradient
-            colors={[
-              "#010d25",
-              "#0f345a",
-              "#124375",
-              "#124375",
-              "#0f345a",
-              "#010d25"
-            ]}
-            style={{
-              width: "100%",
-              height: "200%",
-              padding: 0,
-              alignItems: "center",
-              borderRadius: 5
-            }}
-          >
-            <Image
-              source={require("../../assets/HayLogoHorz4.png")}
-              style={styles.AppLogo}
-              className="AppLogo"
-              alt="logo"
-            />
-            <NavBar />
-            {/* {console.log(this.state.contacts[0])} */}
+      <LinearGradient
+        colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+        style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <GestureRecognizer
+          onSwipeDown={() => this.setState({ isVisible: true })}>
+          <NavBar />
+        </GestureRecognizer>
+        <View className="App" >
+          <View className="App-header">
 
-            <ScrollView style={styles.item}>
-              {this.state.contacts.map((l, i) => (
-                <View>
-                  <ListItem
-                    key={i}
-                    title={l.name}
-                    bottomDivider={true}
-                    leftAvatar={{
-                      source: { uri: "https://i.pravatar.cc/300" }
-                    }}
-                    switch={{
-                      value: this.state.switchValue,
-                      onValueChange: value =>
-                        this.setState({ switchValue: value })
-                    }}
-                    hideChevron
-                    thumbColor="red"
-                    trackColor={{
-                      true: "yellow",
-                      false: "purple"
-                    }}
-                  />
-                </View>
-              ))}
-            </ScrollView>
+            <Overlay isVisible={this.state.isVisible}>
+              <ScrollView style={styles.item}>
+                {
+                  this.state.contacts.map((l, i) => (
+                    <View>
+                      <ListItem
+                        key={l.id}
+                        title={l.name}
+                        bottomDivider={true}
+                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
+                        switch={{
+                          value: this.state.switchValue,
+                          onValueChange: value => this.setState({ switchValue: value }),
+                        }}
+                        hideChevron
+                        thumbColor="red"
+                        trackColor={{
+                          true: "yellow",
+                          false: "purple",
+                        }}
+                      />
+                    </View>
+
+                  ))
+                }
+              </ScrollView>
+              <Button title="Accept" onPress={() => {
+                this.setState({ isVisible: false });
+              }}></Button>
+            </Overlay>
+
             {/* <FlatList
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
-
-            <Button title="next page" onPress={this.goToNextPage} />
-          </LinearGradient>
-        </View>
-      </View>
+            <Friends />
+          </View>
+        </View >
+      </LinearGradient >
     );
   }
 }
