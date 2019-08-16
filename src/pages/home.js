@@ -5,11 +5,13 @@ import GoogleButton from "../components/home/GoogleButton"
 import { View, Text, StyleSheet, TouchableOpacity, Image, } from 'react-native'
 import { AuthSession } from 'expo';
 import { Constants } from 'expo';
+import { Font } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeProvider, Divider, Button } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
+
 
 
 
@@ -125,6 +127,7 @@ class Home extends Component {
         backgroundColor: "#010d25",
         borderWidth: 2,
         borderColor: "#2699FB",
+        fontFamily: Franklin Gothic,
       },
 
       // buttonArea: {

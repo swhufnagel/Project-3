@@ -36,6 +36,7 @@
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.1",
     "timestamp": "^0.0.1"
+ 
   },
   "devDependencies": {
     "babel-preset-expo": "^6.0.0"
