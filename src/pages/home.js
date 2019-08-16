@@ -8,7 +8,7 @@ import { Constants } from 'expo';
 import { Font } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeProvider, Divider, Button } from 'react-native-elements';
+import { ThemeProvider, Divider, Button, Header } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 
@@ -137,8 +137,13 @@ class Home extends Component {
 
     return (
       <ThemeProvider>
-        <View style={styles.App} className="App" >
-        <View style={styles.AppHeader} className="AppHeader">
+        <Header 
+          statusBarProps={{ barStyle: "dark-content"}}
+          leftComponent={{ text: 'BACK', style: { color: '#fff' } }}
+          rightComponent={{ text: 'SETTINGS', style: { color: '#fff' }}}
+          />
+        {/* <View style={styles.App} className="App" > */}
+        {/* <View style={styles.AppHeader} className="AppHeader"> */}
         <LinearGradient
             colors={['#010d25', '#0f345a', '#124375']} 
             // 722211 , ef9337 ,efb560 - orange
@@ -159,9 +164,9 @@ class Home extends Component {
          
          
        </LinearGradient>
-       </View>
-      </View>
-      </ThemeProvider>
+       {/* </View> */}
+      {/* </View> */}
+    </ThemeProvider>
     );
   }
 }

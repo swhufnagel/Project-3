@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import SelectContact from '../components/contacts/SelectContact';
 import FacebookButton from './../components/contacts/FacebookButton';
 import { View, Image, StyleSheet } from "react-native";
-import { Button, ThemeProvider } from 'react-native-elements';
+import { Button, ThemeProvider, Header } from 'react-native-elements';
 
 
 
@@ -80,8 +80,13 @@ class Contact extends Component {
 
   render() {
     return (
+      
       <View className="App" >
         <View className="AppHeader">
+        <Header 
+          leftComponent={{ text: 'BACK', style: { color: '#fff' } }}
+          rightComponent={{ text: 'SETTINGS', style: { color: '#fff' }}}
+        />
         <LinearGradient
           colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
           style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
