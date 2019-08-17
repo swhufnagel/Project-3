@@ -1,39 +1,49 @@
 import React, { Component } from "react";
 // import logo2 from './logo2.svg';
-import MainBody from "../components/contacts/MainBody"
-import NavBar from "../components/friends/NavBar"
+import MainBody from "../components/contacts/MainBody";
+import NavBar from "../components/friends/NavBar";
 // import '../App.css';
-import SelectContact from '../components/contacts/SelectContact';
-import Friends from './friends';
-import { ThemeProvider } from 'react-native-elements';
+import SelectContact from "../components/contacts/SelectContact";
+import Friends from "./friends";
+import { ThemeProvider } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import { Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
+import {
+  Switch,
+  ScrollView,
+  FlatList,
+  Button,
+  View,
+  Image,
+  Text,
+  StyleSheet
+} from "react-native";
 import { ContactList } from "../components/contacts/List";
-import { LinearGradient } from 'expo-linear-gradient';
-import { ListItem, Overlay } from 'react-native-elements'
-import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { LinearGradient } from "expo-linear-gradient";
+import { ListItem, Overlay } from "react-native-elements";
+import TouchableScale from "react-native-touchable-scale"; // https://github.com/kohver/react-native-touchable-scale
+import GestureRecognizer, {
+  swipeDirections
+} from "react-native-swipe-gestures";
 
-
-const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
+const YOUR_NGROK_LINK = "http://1329f99f.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
     // backgroundSize: '200%',
-    height: '100%'
+    height: "100%"
   },
 
   AppHeader: {
-    minHeight: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    minHeight: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
 
   AppLogo: {
-    marginTop: '10%',
-    width: '80%',
+    marginTop: "10%",
+    width: "80%",
     height: 52
   },
 
@@ -49,10 +59,10 @@ const styles = StyleSheet.create({
     padding: 5
   },
   item: {
-    width: '100%'
+    width: "100%"
   },
   friends: {
-    width: '100%'
+    width: "100%"
   }
 });
 let contacts = [];
@@ -69,22 +79,26 @@ class Contact extends Component {
     this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
-  }
+  };
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
     console.log(id);
-    const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
-    console.log('index', index);
-    const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
-    this.setState({ newState })
-  }
+    const index = await this.state.listKeys.findIndex(
+      listKey => listKey.id === id
+    );
+    console.log("index", index);
+    const newState = (this.state.listKeys[index].switch = !this.state.listKeys[
+      index
+    ].switch);
+    this.setState({ newState });
+  };
 
   permissionFlow = async () => {
     const newListKeys = this.state.contacts.map((contact, i) => {
       contact.switch = true;
       contact.key = i;
-      return contact
-    })
+      return contact;
+    });
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
@@ -101,9 +115,9 @@ class Contact extends Component {
       listKeys: data.map((contact, i) => {
         contact.switch = true;
         contact.key = i;
-        return contact
+        return contact;
       })
-    })
+    });
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -120,19 +134,30 @@ class Contact extends Component {
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
-    const { data } = await Contacts.getContactsAsync({});
-    console.log("PHONE:", data[0].phoneNumbers[0].number);
-    slicedData = data.slice(0, 5);
+    const results = await Contacts.getContactsAsync({});
+    let { data } = results;
+
     let contacts = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].phoneNumbers[0].number) {
+
+    data.map(obj => {
+      let phoneInfo;
+      phoneInfo = obj.phoneNumbers;
+
+      if (Array.isArray(obj.phoneNumbers)) {
+        phoneInfo = obj.phoneNumbers[0].digits;
+        // console.log("is an array.", obj.phoneNumbers);
         let contact = {
-          name: data[i].name // name
-          // number: JSON.stringify(data[i].phoneNumbers[0].number) // phone number not working for some reason
+          name: obj.name,
+          remind: false,
+          number: phoneInfo
         };
+        console.log("Contact:", contact);
         contacts.push(contact);
+      } else {
+        // console.log("is not an array:", obj);
       }
-    }
+    });
+
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
@@ -140,52 +165,78 @@ class Contact extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
     });
   }; // End saveContacts
+
+  // Change Remind Boolean
+  // changeRemind = async () => {
+  //   console.log("THIS:", this.state);
+  // };
 
   render() {
     return (
       <LinearGradient
-        colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-        style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        colors={[
+          "#010d25",
+          "#0f345a",
+          "#124375",
+          "#124375",
+          "#0f345a",
+          "#010d25"
+        ]}
+        style={{
+          width: "100%",
+          height: "200%",
+          padding: 0,
+          alignItems: "center",
+          borderRadius: 0
+        }}
+      >
         <GestureRecognizer
-          onSwipeDown={() => this.setState({ isVisible: true })}>
+          onSwipeDown={() => this.setState({ isVisible: true })}
+        >
           <NavBar />
         </GestureRecognizer>
-        <View className="App" >
+        <View className="App">
           <View className="App-header">
-
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
-                {
-                  this.state.listKeys.map((l, i) => (
-                    <View key={i}>
-                      <ListItem
-                        key={l.id}
-                        title={l.name}
-                        name={l.name}
-                        bottomDivider={true}
-                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
-                        switch={{
-                          value: this.state.listKeys[i].switch,
-                          onChange: event => this.findContactSwitch(event, l.name, l.id)
-                        }}
-                        hideChevron
-                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
-                        thumbColor="red"
-                        trackColor={{
-                          true: "yellow",
-                          false: "purple",
-                        }}
-                      />
-                    </View>
-
-                  ))
-                }
+                {this.state.listKeys.map((l, i) => (
+                  <View key={i}>
+                    <ListItem
+                      key={l.id}
+                      title={l.name}
+                      name={l.name}
+                      bottomDivider={true}
+                      leftAvatar={{
+                        source: { uri: "https://i.pravatar.cc/300" }
+                      }}
+                      switch={{
+                        value: this.state.listKeys[i].switch,
+                        onChange: event =>
+                          this.findContactSwitch(event, l.name, l.id)
+                      }}
+                      hideChevron
+                      // onChange={event => this.findContactSwitch(event, l.name, l.id)}
+                      thumbColor="red"
+                      trackColor={{
+                        true: "yellow",
+                        false: "purple"
+                      }}
+                    />
+                  </View>
+                ))}
               </ScrollView>
-              <Button title="Accept" onPress={() => {
-                this.setState({ isVisible: false });
-              }}></Button>
+              <Button
+                title="Accept"
+                onPress={() => {
+                  this.setState({ isVisible: false });
+                  // this.changeRemind();
+                }}
+              />
             </Overlay>
 
             {/* <FlatList
@@ -194,8 +245,8 @@ class Contact extends Component {
             /> */}
             <Friends />
           </View>
-        </View >
-      </LinearGradient >
+        </View>
+      </LinearGradient>
     );
   }
 }
