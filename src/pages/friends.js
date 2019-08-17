@@ -17,6 +17,7 @@ import Communications from "react-native-communications";
 import RNShake from 'react-native-shake';
 import * as Contacts from "expo-contacts";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
 
 const styles = StyleSheet.create({
@@ -37,7 +38,8 @@ const styles = StyleSheet.create({
 
   AppLogo: {
     marginTop: '10%',
-    width: '90%',
+    width: '60%',
+    alignItems: 'center',
     height: 52
   },
 
@@ -124,6 +126,7 @@ class Friends extends Component {
     return (
       <View style={styles.App} className="App">
         <View style={styles.AppHeader} className="AppHeader">
+          {/* <NavBar /> */}
           <GestureRecognizer
             onSwipeUp={this.getRandomContact}
           >

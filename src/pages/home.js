@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import FacebookButton from "../components/home/FacebookButton";
 import MainBody from "../components/home/MainBody";
 import GoogleButton from "../components/home/GoogleButton";
+import NavBar from "../components/friends/NavBar";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AuthSession } from "expo";
 import { Constants } from "expo";
 import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
+
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
@@ -25,10 +28,12 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
+
   // static navigationOptions = {
   //   title: 'Home'
   // };
   // const { navigate } = this.props.navigation;
+
   state = {
     text: "",
     name: null,
@@ -77,6 +82,8 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
+    
+ 
 
     const styles = StyleSheet.create({
       App: {
@@ -133,6 +140,7 @@ class Home extends Component {
       <ThemeProvider>
         <View style={styles.App} className="App" >
           <View style={styles.AppHeader} className="AppHeader">
+            {/* <NavBar /> */}
             <LinearGradient
               colors={['#010d25', '#0f345a', '#124375']}
               // 722211 , ef9337 ,efb560 - orange
@@ -150,8 +158,10 @@ class Home extends Component {
                 <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
               }
               {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-
-
+            
+            {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+              <Text>Home Screen</Text>
+            </View> */}
             </LinearGradient>
           </View>
         </View>

@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ListItem, Overlay } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
@@ -150,11 +151,12 @@ class Contact extends Component {
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
         <GestureRecognizer
           onSwipeDown={() => this.setState({ isVisible: true })}>
-          <NavBar />
+          {/* <NavBar /> */}
+          {/* <Button onPress={() => this.props.navigation.navigate('HomeScreen')} title="Home"/> */}
         </GestureRecognizer>
         <View className="App" >
           <View className="App-header">
-
+          <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
                 {
