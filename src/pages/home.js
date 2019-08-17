@@ -134,13 +134,13 @@ class Home extends Component {
         <View style={styles.App} className="App" >
           <View style={styles.AppHeader} className="AppHeader">
             <LinearGradient
-              colors={['#35302c', '#4c3825', '#7f4d1f']}
+              colors={['#010d25', '#0f345a', '#124375']}
               // 722211 , ef9337 ,efb560 - orange
               // 010d25, 0f345a, 124375 - blue
               // 35302c, 4c3825, 7f4d1f -brown
 
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               {/* <MainBody /> */}
               {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
               <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} />
