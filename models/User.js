@@ -1,22 +1,9 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  contactType: { type: String },
-  firstName: { type: String },
-  id: { type: String },
-  imageAvailable: { type: Boolean },
-  lastName: { type: String },
-  name: { type: String },
-  phoneNumbers: [
-    {
-      countryCode: String,
-      digits: String,
-      id: String,
-      label: String,
-      number: String
-    }
-  ]
+  name: { type: String }
+  // number: { type: String }
 });
 
 const User = mongoose.model("User", userSchema);

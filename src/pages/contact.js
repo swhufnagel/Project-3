@@ -16,7 +16,7 @@ import TouchableScale from 'react-native-touchable-scale'; // https://github.com
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 
-const YOUR_NGROK_LINK = "http://7babc0c7.ngrok.io";
+const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -61,14 +61,18 @@ class Contact extends Component {
     isVisible: false,
     switchValue: true,
     key: null,
-    listKeys: []
+    listKeys: [],
+    loadRandom: false,
   };
-  toggleSwitch = value => {
-    //onValueChange of the switch this function will be called
-    this.setState({ switchValue: value });
-    //state changes according to switch
-    //which will result in re-render the text
-  };
+
+  findContactSwitch = async (event, name, id) => {
+    // console.log('LOGGING EVENT', event, name);
+    console.log(id);
+    const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
+    console.log('index', index);
+    const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
+    this.setState({ newState })
+  }
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
@@ -80,6 +84,7 @@ class Contact extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
+<<<<<<< HEAD
 
     // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
     await this.setState({ contacts: data });
@@ -92,6 +97,17 @@ class Contact extends Component {
     }, () => {
       // console.log("listKeys", this.state.listKeys);
     });
+=======
+    // console.log(data);
+    this.setState({ contacts: data });
+    this.setState({
+      listKeys: data.map((contact, i) => {
+        contact.switch = true;
+        contact.key = i;
+        return contact
+      })
+    })
+>>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -102,24 +118,37 @@ class Contact extends Component {
     this.permissionFlow();
     this.storeContacts();
   }
+  componentDidUpdate() {
+    // console.log('listKeys ', this.state.listKeys);
+  }
 
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
     const { data } = await Contacts.getContactsAsync({});
+    console.log("PHONE:", data[0].phoneNumbers[0].number);
     slicedData = data.slice(0, 5);
-    let contactIds = [];
+    let contacts = [];
     for (let i = 0; i < data.length; i++) {
-      contactIds.push(data[i].id);
+      if (data[i].phoneNumbers[0].number) {
+        let contact = {
+          name: data[i].name // name
+          // number: JSON.stringify(data[i].phoneNumbers[0].number) // phone number not working for some reason
+        };
+        contacts.push(contact);
+      }
     }
+<<<<<<< HEAD
     // console.log("slicedData:", slicedData);
+=======
+>>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ slicedData })
+      body: JSON.stringify(contacts)
     });
   }; // End saveContacts
 
@@ -136,34 +165,39 @@ class Contact extends Component {
           <View className="App-header">
 
             <Overlay isVisible={this.state.isVisible}>
-              <ScrollView style={styles.item}>
-                {
-                  this.state.contacts.map((l, i) => (
-                    <View>
-                      <ListItem
-                        key={l.id}
-                        title={l.name}
-                        bottomDivider={true}
-                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
-                        switch={{
-                          value: this.state.switchValue,
-                          onValueChange: value => this.setState({ switchValue: value }),
-                        }}
-                        hideChevron
-                        thumbColor="red"
-                        trackColor={{
-                          true: "yellow",
-                          false: "purple",
-                        }}
-                      />
-                    </View>
+              <View>
+                <ScrollView style={styles.item}>
+                  {
+                    this.state.listKeys.map((l, i) => (
+                      <View key={i}>
+                        <ListItem
+                          key={l.id}
+                          title={l.name}
+                          name={l.name}
+                          bottomDivider={true}
+                          leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300?img=' } }}
+                          switch={{
+                            value: this.state.listKeys[i].switch,
+                            onChange: event => this.findContactSwitch(event, l.name, l.id)
+                          }}
+                          hideChevron
+                          // onChange={event => this.findContactSwitch(event, l.name, l.id)}
+                          thumbColor="red"
+                          trackColor={{
+                            true: "yellow",
+                            false: "purple",
+                          }}
+                        />
+                      </View>
 
-                  ))
-                }
-              </ScrollView>
-              <Button title="Accept" onPress={() => {
-                this.setState({ isVisible: false });
-              }}></Button>
+                    ))
+                  }
+                </ScrollView>
+                <Button title="Accept" onPress={() => {
+                  this.setState({ isVisible: false });
+                  this.setState({ loadRandom: true });
+                }}></Button>
+              </View>
             </Overlay>
 
             {/* <FlatList
@@ -171,7 +205,12 @@ class Contact extends Component {
               renderItem={this.listItem}
             /> */}
             <Friends
+<<<<<<< HEAD
               contacts={this.state.listKeys} />
+=======
+              contacts={this.state.listKeys}
+              loadRandom={this.state.loadRandom} />
+>>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
           </View>
         </View >
       </LinearGradient >
