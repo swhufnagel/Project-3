@@ -84,20 +84,6 @@ class Contact extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-<<<<<<< HEAD
-
-    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
-    await this.setState({ contacts: data });
-    await this.setState({
-      listKeys: data.map((contact, i) => {
-        contact.switch = true;
-        contact.key = i;
-        return contact;
-      })
-    }, () => {
-      // console.log("listKeys", this.state.listKeys);
-    });
-=======
     // console.log(data);
     this.setState({ contacts: data });
     this.setState({
@@ -107,7 +93,6 @@ class Contact extends Component {
         return contact
       })
     })
->>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -138,10 +123,6 @@ class Contact extends Component {
         contacts.push(contact);
       }
     }
-<<<<<<< HEAD
-    // console.log("slicedData:", slicedData);
-=======
->>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
@@ -205,12 +186,9 @@ class Contact extends Component {
               renderItem={this.listItem}
             /> */}
             <Friends
-<<<<<<< HEAD
-              contacts={this.state.listKeys} />
-=======
+
               contacts={this.state.listKeys}
               loadRandom={this.state.loadRandom} />
->>>>>>> e4e06b5f1b65c3eee42bb16cae9b1a80387dfa9e
           </View>
         </View >
       </LinearGradient >

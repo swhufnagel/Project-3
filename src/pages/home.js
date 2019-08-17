@@ -25,10 +25,18 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
-  // static navigationOptions = {
-  //   title: 'Home'
-  // };
-  // const { navigate } = this.props.navigation;
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <LogoTitle />,
+      headerRight: (
+        <Button
+          onPress={navigation.getParam('increaseCount')}
+          title="+1"
+          color={Platform.OS === 'ios' ? '#fff' : null}
+        />
+      ),
+    };
+  }
   state = {
     text: "",
     name: null,
