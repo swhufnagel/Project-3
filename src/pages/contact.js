@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
-let contacts = [];
 class Contact extends Component {
   state = {
     contacts: [],
@@ -85,16 +84,20 @@ class Contact extends Component {
     // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
     await this.setState({ contacts: data });
     await this.setState({
-      listKeys: this.state.contacts.map((contact, i) => {
+      listKeys: data.map((contact, i) => {
         contact.switch = true;
         contact.key = i;
+        return contact;
       })
+    }, () => {
+      // console.log("listKeys", this.state.listKeys);
     });
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
   };
   componentDidMount() {
+    console.log("mounting first comp")
     this.setState({ isVisible: true });
     this.permissionFlow();
     this.storeContacts();
@@ -109,7 +112,7 @@ class Contact extends Component {
     for (let i = 0; i < data.length; i++) {
       contactIds.push(data[i].id);
     }
-    console.log("slicedData:", slicedData);
+    // console.log("slicedData:", slicedData);
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
@@ -167,7 +170,8 @@ class Contact extends Component {
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
-            <Friends />
+            <Friends
+              contacts={this.state.listKeys} />
           </View>
         </View >
       </LinearGradient >

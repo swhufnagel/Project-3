@@ -71,21 +71,30 @@ const styles = StyleSheet.create({
 })
 // function Friends() {
 class Friends extends Component {
-  state = {
-    currentPhoto: "https://i.pravatar.cc/300",
-    currentName: "",
-    currentNumber: null,
-    contacts: [],
+  constructor(props) {
+    super(props)
+    state = {
+      currentPhoto: "https://i.pravatar.cc/300",
+      currentName: "",
+      currentNumber: null,
+      contacts: [],
+    }
+    console.log("props up here", props.contacts);
   }
   getContacts = async () => {
     const { data } = await Contacts.getContactsAsync({});
-    console.log('contacts: ', data);
-    await this.setState({ contacts: data });
-    await this.getRandomContact;
+    // console.log('contacts: ', data);
+    // await this.setState({ contacts: data });
+    this.getRandomContact;
   }
-  componentDidMount = async () => {
-    await this.getContacts;
+  componentDidMount = () => {
+    // this.getContacts;
+    this.setState({ contacts: this.props.contacts })
     console.log('mounted')
+    console.log('contacts in friends: ', this.props.contacts);
+  }
+  componentDidUpdate = () => {
+    console.log(this.state.contacts);
   }
   componentWillMount() {
     RNShake.addEventListener('ShakeEvent', () => {
@@ -95,11 +104,14 @@ class Friends extends Component {
     RNShake.removeEventListener('ShakeEvent');
   }
   getRandomContact = async () => {
-    let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
-    let randomContact = this.state.contacts[randomNum];
+    let randomNum = Math.floor(Math.random() * this.props.contacts.length + 1);
+    let randomContact = this.props.contacts[randomNum];
+    console.log("props down here", props.contacts);
+
     // alert(randomContact.name);
+    console.log('rando ', randomContact);
     this.setState({ Alert_Visibility: true });
-    await this.setState({ currentName: randomContact.name });
+    // await this.setState({ currentName: randomContact.name });
     await this.setState({
       currentNumber: randomContact.phoneNumbers[0].number
     });
@@ -111,13 +123,13 @@ class Friends extends Component {
   };
   callContact = () => {
     const contact = {
-      number: this.state.currentNumber, // String value with the number to call
+      // number: this.state.currentNumber, // String value with the number to call
       prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
     };
     call(contact).catch(console.error);
   };
   textContact = () => {
-    Communications.text(this.state.currentNumber, "Test Text Here");
+    // Communications.text(this.state.currentNumber, "Test Text Here");
   };
 
   render() {
@@ -134,8 +146,8 @@ class Friends extends Component {
               <Image
                 source={{ uri: 'https://i.pravatar.cc/300' }}
                 style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
-              <Text> {this.state.currentName} </Text>
-              <Text> {this.state.currentNumber} </Text>
+              {/* <Text> {this.state.currentName} </Text> */}
+              {/* <Text> {this.state.currentNumber} </Text> */}
               <View style={styles.buttonArea} className="buttonArea">
                 <Button title="Call" style={styles.Call} type="clear" className="Call" onPress={this.callContact}></Button>
                 <Button title="Text" style={styles.Text} type="clear" className="Text" onPress={this.textContact.bind(this)}></Button>
