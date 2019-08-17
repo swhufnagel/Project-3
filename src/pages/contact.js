@@ -56,6 +56,21 @@ const styles = StyleSheet.create({
   }
 });
 class Contact extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <Text>Hay</Text>,
+      headerRight: (
+        <Button
+          title="settings"
+        />
+      ),
+      headerLeft: (
+        <Button
+          title="logout"
+        />
+      ),
+    };
+  }
   state = {
     contacts: [],
     isVisible: false,
