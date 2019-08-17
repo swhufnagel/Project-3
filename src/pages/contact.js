@@ -62,14 +62,10 @@ class Contact extends Component {
     isVisible: false,
     switchValue: true,
     key: null,
-    listKeys: []
+    listKeys: [],
+    loadRandom: false,
   };
-  toggleSwitch = value => {
-    //onValueChange of the switch this function will be called
-    this.setState({ switchValue: value });
-    //state changes according to switch
-    //which will result in re-render the text
-  }
+
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
     console.log(id);
@@ -80,11 +76,6 @@ class Contact extends Component {
   }
 
   permissionFlow = async () => {
-    const newListKeys = this.state.contacts.map((contact, i) => {
-      contact.switch = true;
-      contact.key = i;
-      return contact
-    })
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
@@ -92,7 +83,6 @@ class Contact extends Component {
       alert("You will need to enable contacts to use our app!");
       return;
     }
-
     //get data
     const { data } = await Contacts.getContactsAsync({});
     // console.log(data);
@@ -149,43 +139,48 @@ class Contact extends Component {
           <View className="App-header">
 
             <Overlay isVisible={this.state.isVisible}>
-              <ScrollView style={styles.item}>
-                {
-                  this.state.listKeys.map((l, i) => (
-                    <View key={i}>
-                      <ListItem
-                        key={l.id}
-                        title={l.name}
-                        name={l.name}
-                        bottomDivider={true}
-                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
-                        switch={{
-                          value: this.state.listKeys[i].switch,
-                          onChange: event => this.findContactSwitch(event, l.name, l.id)
-                        }}
-                        hideChevron
-                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
-                        thumbColor="red"
-                        trackColor={{
-                          true: "yellow",
-                          false: "purple",
-                        }}
-                      />
-                    </View>
+              <View>
+                <ScrollView style={styles.item}>
+                  {
+                    this.state.listKeys.map((l, i) => (
+                      <View key={i}>
+                        <ListItem
+                          key={l.id}
+                          title={l.name}
+                          name={l.name}
+                          bottomDivider={true}
+                          leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300?img=' } }}
+                          switch={{
+                            value: this.state.listKeys[i].switch,
+                            onChange: event => this.findContactSwitch(event, l.name, l.id)
+                          }}
+                          hideChevron
+                          // onChange={event => this.findContactSwitch(event, l.name, l.id)}
+                          thumbColor="red"
+                          trackColor={{
+                            true: "yellow",
+                            false: "purple",
+                          }}
+                        />
+                      </View>
 
-                  ))
-                }
-              </ScrollView>
-              <Button title="Accept" onPress={() => {
-                this.setState({ isVisible: false });
-              }}></Button>
+                    ))
+                  }
+                </ScrollView>
+                <Button title="Accept" onPress={() => {
+                  this.setState({ isVisible: false });
+                  this.setState({ loadRandom: true });
+                }}></Button>
+              </View>
             </Overlay>
 
             {/* <FlatList
               data={this.state.listKeys}
               renderItem={this.listItem}
             /> */}
-            <Friends />
+            <Friends
+              contacts={this.state.listKeys}
+              loadRandom={this.state.loadRandom} />
           </View>
         </View >
       </LinearGradient >
