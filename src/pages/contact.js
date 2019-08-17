@@ -69,7 +69,6 @@ class Contact extends Component {
     this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
-<<<<<<< HEAD
   }
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
@@ -79,10 +78,7 @@ class Contact extends Component {
     const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
     this.setState({ newState })
   }
-=======
-  };
 
->>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
   permissionFlow = async () => {
     const newListKeys = this.state.contacts.map((contact, i) => {
       contact.switch = true;
@@ -99,18 +95,10 @@ class Contact extends Component {
 
     //get data
     const { data } = await Contacts.getContactsAsync({});
-<<<<<<< HEAD
     // console.log(data);
     this.setState({ contacts: data });
     this.setState({
       listKeys: data.map((contact, i) => {
-=======
-
-    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
-    await this.setState({ contacts: data });
-    await this.setState({
-      listKeys: this.state.contacts.map((contact, i) => {
->>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
         contact.switch = true;
         contact.key = i;
         return contact
@@ -125,11 +113,9 @@ class Contact extends Component {
     this.permissionFlow();
     this.storeContacts();
   }
-<<<<<<< HEAD
   componentDidUpdate() {
     // console.log('listKeys ', this.state.listKeys);
   }
-=======
 
   // Save Contacts for db post request
   storeContacts = async () => {
@@ -150,7 +136,6 @@ class Contact extends Component {
     });
   }; // End saveContacts
 
->>>>>>> cb4f64081ccfe4caf90e0367f44969dec9951734
   render() {
     return (
       <LinearGradient
