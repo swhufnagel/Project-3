@@ -69,9 +69,22 @@ class Contact extends Component {
     this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
-  };
+  }
+  findContactSwitch = async (event, name, id) => {
+    // console.log('LOGGING EVENT', event, name);
+    console.log(id);
+    const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
+    console.log('index', index);
+    const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
+    this.setState({ newState })
+  }
 
   permissionFlow = async () => {
+    const newListKeys = this.state.contacts.map((contact, i) => {
+      contact.switch = true;
+      contact.key = i;
+      return contact
+    })
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
@@ -79,17 +92,18 @@ class Contact extends Component {
       alert("You will need to enable contacts to use our app!");
       return;
     }
+
     //get data
     const { data } = await Contacts.getContactsAsync({});
-
-    // console.log("data:", data); // feel free to uncomment, i needed to declutter terminal for my requests
-    await this.setState({ contacts: data });
-    await this.setState({
-      listKeys: this.state.contacts.map((contact, i) => {
+    // console.log(data);
+    this.setState({ contacts: data });
+    this.setState({
+      listKeys: data.map((contact, i) => {
         contact.switch = true;
         contact.key = i;
+        return contact
       })
-    });
+    })
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -98,6 +112,9 @@ class Contact extends Component {
     this.setState({ isVisible: true });
     this.permissionFlow();
     this.storeContacts();
+  }
+  componentDidUpdate() {
+    // console.log('listKeys ', this.state.listKeys);
   }
 
   // Save Contacts for db post request
@@ -135,18 +152,20 @@ class Contact extends Component {
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
                 {
-                  this.state.contacts.map((l, i) => (
-                    <View>
+                  this.state.listKeys.map((l, i) => (
+                    <View key={i}>
                       <ListItem
                         key={l.id}
                         title={l.name}
+                        name={l.name}
                         bottomDivider={true}
                         leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
                         switch={{
-                          value: this.state.switchValue,
-                          onValueChange: value => this.setState({ switchValue: value }),
+                          value: this.state.listKeys[i].switch,
+                          onChange: event => this.findContactSwitch(event, l.name, l.id)
                         }}
                         hideChevron
+                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
