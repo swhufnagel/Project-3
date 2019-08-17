@@ -137,11 +137,11 @@ class Home extends Component {
 
     return (
       <ThemeProvider>
-        <Header 
+        {/* <Header 
           statusBarProps={{ barStyle: "dark-content"}}
           leftComponent={{ text: 'BACK', style: { color: '#fff' } }}
           rightComponent={{ text: 'SETTINGS', style: { color: '#fff' }}}
-          />
+          /> */}
         {/* <View style={styles.App} className="App" > */}
         {/* <View style={styles.AppHeader} className="AppHeader"> */}
         <LinearGradient
