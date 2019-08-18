@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
 import LogoTitle from '../components/contacts/LogoTitle';
+
 function toQueryString(params) {
   return (
     "?" +
@@ -46,7 +47,6 @@ class Home extends Component {
     const response = await AuthSession.startAsync({
       authUrl: authUrl
     });
-    // console.log("response ", response);
     if (response.type === "success") {
       this.handleResponse(response.params);
     }
@@ -127,24 +127,13 @@ class Home extends Component {
         <View style={styles.App} className="App" >
           <View style={styles.AppHeader} className="AppHeader">
             <LinearGradient
-              colors={['#35302c', '#4c3825', '#7f4d1f']}
+              colors={['#010d25', '#0f345a', '#124375']}
               // 722211 , ef9337 ,efb560 - orange
               // 010d25, 0f345a, 124375 - blue
               // 35302c, 4c3825, 7f4d1f -brown
-
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
               <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-              {/* <MainBody /> */}
-              {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-              <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} />
-              {/* style={ styles.buttonStyle } */}
-              {name ?
-                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-                <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
-              }
-              {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-
-
+              <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
             </LinearGradient>
           </View>
         </View>
