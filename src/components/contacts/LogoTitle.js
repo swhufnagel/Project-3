@@ -6,7 +6,7 @@ class LogoTitle extends Component {
     render() {
         return <Image
             source={require('../../pages/logo.png')}
-            className="AppLogo" alt="logo" />
+            style={{ height: 50, width: 50 }} className="AppLogo" alt="logo" />
 
     }
 }

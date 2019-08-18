@@ -8,13 +8,15 @@ import Friends from './friends';
 import { ThemeProvider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import { Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
+import { Alert, Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
 import { ContactList } from "../components/contacts/List";
 import { LinearGradient } from 'expo-linear-gradient';
 import { ListItem, Overlay, Icon } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import LogoTitle from '../components/contacts/LogoTitle';
+import { AuthSession } from "expo";
+import * as WebBrowser from 'expo-web-browser';
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
@@ -55,6 +57,17 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
+function toQueryString(params) {
+  return (
+    "?" +
+    Object.entries(params)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&")
+  );
+}
 class Contact extends Component {
   constructor(props) {
     super(props)
@@ -82,16 +95,44 @@ class Contact extends Component {
         />
       ),
       headerLeft: (
-        <Button
-          title="logout"
+        <Icon
+          name='directions-walk'
+          type='material'
+          color='#517fa4'
+          onPress={navigation.getParam('nowLogout')}
         />
       )
     };
   }
+  nowLogout = () => {
+    console.log("logging out");
+    Alert.alert(
+      'Logout from Hay?',
+      'This will also log you out from any services you logged in with',
+      [
+        {
+          text: 'Logout', onPress: async () => {
+
+            let authUrl = 'https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5';
+            const response = await AuthSession.startAsync({
+              authUrl: authUrl
+            });
+            console.log('response ', response);
+            // await WebBrowser.openBrowserAsync(
+            //   'https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5'
+            // )
+            this.props.navigation.navigate('Home');
+          }
+        },
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }],
+      { cancelable: true }
+    )
+  }
   showSettings = () => {
-    console.log("show settings");
     this.setState({ isVisible: true })
   }
+
+
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
     // console.log(id);
@@ -134,7 +175,7 @@ class Contact extends Component {
     // console.log('listKeys ', this.state.listKeys);
   }
   componentWillMount() {
-    this.props.navigation.setParams({ showSettings: this.showSettings });
+    this.props.navigation.setParams({ showSettings: this.showSettings, nowLogout: this.nowLogout });
   }
   // Save Contacts for db post request
   storeContacts = async () => {

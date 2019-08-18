@@ -17,6 +17,7 @@ import Communications from "react-native-communications";
 import RNShake from 'react-native-shake';
 import * as Contacts from "expo-contacts";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { AuthSession } from 'expo';
 
 
 const styles = StyleSheet.create({
@@ -87,6 +88,7 @@ class Friends extends Component {
     }
   }
   componentDidMount = async () => {
+    AuthSession.dismiss();
   }
   componentWillMount() {
     RNShake.addEventListener('ShakeEvent', () => {
