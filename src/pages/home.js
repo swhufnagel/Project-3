@@ -34,6 +34,28 @@ class Home extends Component {
   // };
   // const { navigate } = this.props.navigation;
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: (
+        <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
+        // style={styles.AppLogo} 
+      ), 
+    headerRight: (
+        <Button
+          title="settings" 
+          type="clear"
+          />
+      ),
+      headerLeft:(
+        <Button
+        title="logout"  
+        type="clear"
+        />
+      ),
+    };
+  }
+  
+
   state = {
     text: "",
     name: null,
@@ -121,7 +143,7 @@ class Home extends Component {
 
       LoginButton: {
         width: 250,
-        marginTop: 40,
+        marginTop: 130,
         borderRadius: 25,
         borderBottomColor: "#175084",
         borderRightColor: "#175084",
@@ -151,7 +173,7 @@ class Home extends Component {
               <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               {/* <MainBody /> */}
               {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-              <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} />
+              {/* <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} /> */}
               {/* style={ styles.buttonStyle } */}
               {name ?
                 <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :

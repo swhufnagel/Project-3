@@ -58,6 +58,24 @@ const styles = StyleSheet.create({
 });
 let contacts = [];
 class Contact extends Component {
+static navigationOptions = ({ navigation }) => {
+  return {
+     headerTitle: (
+      <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
+    ),
+    headerRight: (
+      <Button
+        title="settings"
+        />
+    ),
+    headerLeft:(
+      <Button
+      title="logout"
+      />
+    ),
+  };
+}
+
   state = {
     contacts: [],
     isVisible: false,
