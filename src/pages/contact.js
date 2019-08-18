@@ -14,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ListItem, Overlay, Icon } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import SettingsButton from '../components/contacts/SettingsButton';
+import LogoTitle from '../components/contacts/LogoTitle';
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
@@ -71,9 +71,7 @@ class Contact extends Component {
     return {
       headerTitle: <GestureRecognizer
         onSwipeDown={navigation.getParam('showSettings')}>
-        <Image
-          source={require('../../assets/HayLogo-TextBubble@2x.png')}
-        />
+        <LogoTitle />
       </GestureRecognizer>,
       headerRight: (
         <Icon
