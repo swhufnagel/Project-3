@@ -1,18 +1,10 @@
 import React, { Component } from "react";
-import FacebookButton from "../components/home/FacebookButton";
-import MainBody from "../components/home/MainBody";
-import GoogleButton from "../components/home/GoogleButton";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, } from "react-native";
 import { AuthSession } from "expo";
-import { Constants } from "expo";
 import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
-import * as Permissions from "expo-permissions";
-import * as Contacts from "expo-contacts";
-// import SvgUri from 'react-native-svg-uri';
-import createAuth0Client from '@auth0/auth0-spa-js';
-
+import LogoTitle from '../components/contacts/LogoTitle';
 function toQueryString(params) {
   return (
     "?" +
@@ -25,10 +17,11 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
-  // static navigationOptions = {
-  //   title: 'Home'
-  // };
-  // const { navigate } = this.props.navigation;
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <LogoTitle />
+    };
+  }
   state = {
     text: "",
     name: null,

@@ -17,6 +17,7 @@ import Communications from "react-native-communications";
 import RNShake from 'react-native-shake';
 import * as Contacts from "expo-contacts";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { AuthSession } from 'expo';
 
 
 const styles = StyleSheet.create({
@@ -82,13 +83,12 @@ class Friends extends Component {
     }
   }
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    console.log("updated", this.state.currentPhoto);
     if (this.props.loadRandom === true && this.state.done === false) {
-      console.log("running");
       this.getContacts();
     }
   }
   componentDidMount = async () => {
+    AuthSession.dismiss();
   }
   componentWillMount() {
     RNShake.addEventListener('ShakeEvent', () => {
@@ -99,32 +99,30 @@ class Friends extends Component {
   componentWillUnmount() {
     RNShake.removeEventListener('ShakeEvent');
   }
+
   getContacts = () => {
     this.setState({ contacts: this.props.contacts }, () => {
-      // console.log("contacts up here ", this.state.contacts);
-      this.getRandomContact();
+      let includedContacts = this.props.contacts.filter((item) => {
+        return item.switch === true;
+      })
+      this.setState({ includedContacts: includedContacts }, () => {
+        this.getRandomContact();
+      })
     })
     this.setState({ done: true }, () => {
-      console.log("is it done ", this.state.done);
+      // console.log("is it done ", this.state.done);
     })
   }
   getRandomContact = () => {
-    let randomNum = Math.floor((Math.random() * this.props.contacts.length));
-    let randomContact = this.props.contacts[randomNum];
+    let randomNum = Math.floor((Math.random() * this.state.includedContacts.length));
+    let randomContact = this.state.includedContacts[randomNum];
     this.setState({ currentPhoto: 'https://i.pravatar.cc/300?img=' + randomNum })
-    // console.log("rando ", randomContact);
     this.setState({ randomContact: randomContact })
-    console.log("random cont ", randomContact);
-    console.log("random num ", randomNum);
-    console.log(randomContact.phoneNumbers[0].digits);
-    // alert(randomContact.name);
-    // this.setState({ Alert_Visibility: true });
     this.setState({ currentName: randomContact.name });
     this.setState({
       currentNumber: randomContact.phoneNumbers[0].digits
     });
 
-    // this.callContact(randomContact.phoneNumbers[0].number, true)
   };
   callContact = () => {
     const contact = {
@@ -151,6 +149,7 @@ class Friends extends Component {
               <Image
                 source={{ uri: this.state.currentPhoto }}
                 style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
+
               <Text style={{ color: 'white' }}> {this.state.currentName} </Text>
               <Text style={{ color: 'white' }}> {this.state.currentNumber} </Text>
               <View style={styles.buttonArea} className="buttonArea">
