@@ -4,7 +4,13 @@ import { Button } from "react-native";
 
 class FacebookButton extends Component {
     render() {
-        return <Button title="Facebook Sign-In" className="Fbook-login"></Button>
+        return <Button
+            title="Settings"
+            className="settings"
+            onPress={() => {
+                this.props.isVisible = true;
+            }}
+        ></Button>
     }
 }
 

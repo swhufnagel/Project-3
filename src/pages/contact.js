@@ -11,10 +11,10 @@ import * as Contacts from "expo-contacts";
 import { Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
 import { ContactList } from "../components/contacts/List";
 import { LinearGradient } from 'expo-linear-gradient';
-import { ListItem, Overlay } from 'react-native-elements'
+import { ListItem, Overlay, Icon } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-
+import SettingsButton from '../components/contacts/SettingsButton';
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
@@ -56,33 +56,47 @@ const styles = StyleSheet.create({
   }
 });
 class Contact extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      contacts: [],
+      isVisible: false,
+      switchValue: true,
+      key: null,
+      listKeys: [],
+      loadRandom: false,
+    };
+  }
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <Text>Hay</Text>,
+      headerTitle: <GestureRecognizer
+        onSwipeDown={navigation.getParam('showSettings')}>
+        <Image
+          source={require('../../assets/HayLogo-TextBubble@2x.png')}
+        />
+      </GestureRecognizer>,
       headerRight: (
-        <Button
-          title="settings"
+        <Icon
+          name='settings'
+          type='material'
+          color='#517fa4'
+          onPress={navigation.getParam('showSettings')}
         />
       ),
       headerLeft: (
         <Button
           title="logout"
         />
-      ),
+      )
     };
   }
-  state = {
-    contacts: [],
-    isVisible: false,
-    switchValue: true,
-    key: null,
-    listKeys: [],
-    loadRandom: false,
-  };
-
+  showSettings = () => {
+    console.log("show settings");
+    this.setState({ isVisible: true })
+  }
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
-    console.log(id);
+    // console.log(id);
     const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
     console.log('index', index);
     const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
@@ -113,7 +127,7 @@ class Contact extends Component {
     this.props.navigation.navigate("Friends");
   };
   componentDidMount() {
-    console.log("mounting first comp")
+    // console.log("mounting first comp")
     this.setState({ isVisible: true });
     this.permissionFlow();
     this.storeContacts();
@@ -121,7 +135,9 @@ class Contact extends Component {
   componentDidUpdate() {
     // console.log('listKeys ', this.state.listKeys);
   }
-
+  componentWillMount() {
+    this.props.navigation.setParams({ showSettings: this.showSettings });
+  }
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
@@ -153,10 +169,6 @@ class Contact extends Component {
       <LinearGradient
         colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <GestureRecognizer
-          onSwipeDown={() => this.setState({ isVisible: true })}>
-          <NavBar />
-        </GestureRecognizer>
         <View className="App" >
           <View className="App-header">
 
