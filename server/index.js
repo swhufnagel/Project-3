@@ -98,14 +98,23 @@ app.post("/message", (req, res) => {
   res.send(`Received message, ${req.body.message}`);
 });
 
-app.post("/contacts/store", async (req, res) => {
-  console.log("REQUEST BODY", req.body);
+// Switch from true to false / false to true
+// app.post("/contacts/:id", (req, res) => {
+//   console.log(req);
+//   db.User.findOneAndUpdate({ _id: req.params.id }, { remind: true });
+// });
 
+// Store all contacts in database
+app.post("/contacts/store", async (req, res) => {
+  // console.log("REQUEST BODY", req.body);
+
+  // Array for database
   let response = [];
 
+  // Loop through contact array to store in database
   for (let i = 0; i < req.body.length; i++) {
     let user = new db.User(req.body[i]);
-    console.log("req body i:", req.body[i]);
+    // console.log("req body i:", req.body[i]);
     let createdUser = await user.save();
     console.log("created user:", createdUser);
     response.push(createdUser);
@@ -113,15 +122,6 @@ app.post("/contacts/store", async (req, res) => {
   console.log("response1:", response);
   res.json(response);
 });
-
-// Store array to database
-// app.post("/contacts/stash", (req, res) => {
-//   console.log("req.body:", req.body);
-//   const contacts = req.body;
-//   db.User.insertMany(contacts).then(function(response) {
-//     console.log(response);
-//   });
-// });
 
 app.listen(PORT_NUMBER, () => {
   console.log(`Server Online on Port ${PORT_NUMBER}`);

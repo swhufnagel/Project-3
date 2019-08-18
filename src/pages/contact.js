@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 // import logo2 from './logo2.svg';
-import MainBody from "../components/contacts/MainBody"
-import NavBar from "../components/friends/NavBar"
+import MainBody from "../components/contacts/MainBody";
+import NavBar from "../components/friends/NavBar";
 // import '../App.css';
-import SelectContact from '../components/contacts/SelectContact';
-import Friends from './friends';
-import { ThemeProvider } from 'react-native-elements';
+import SelectContact from "../components/contacts/SelectContact";
+import Friends from "./friends";
+import { ThemeProvider } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import { Alert, Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
@@ -20,22 +20,23 @@ import * as WebBrowser from 'expo-web-browser';
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
+
 const styles = StyleSheet.create({
   App: {
     // backgroundSize: '200%',
-    height: '100%'
+    height: "100%"
   },
 
   AppHeader: {
-    minHeight: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    minHeight: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
 
   AppLogo: {
-    marginTop: '10%',
-    width: '80%',
+    marginTop: "10%",
+    width: "80%",
     height: 52
   },
 
@@ -51,10 +52,10 @@ const styles = StyleSheet.create({
     padding: 5
   },
   item: {
-    width: '100%'
+    width: "100%"
   },
   friends: {
-    width: '100%'
+    width: "100%"
   }
 });
 function toQueryString(params) {
@@ -132,7 +133,6 @@ class Contact extends Component {
     this.setState({ isVisible: true })
   }
 
-
   findContactSwitch = async (event, name, id) => {
     // console.log('LOGGING EVENT', event, name);
     // console.log(id);
@@ -158,9 +158,9 @@ class Contact extends Component {
       listKeys: data.map((contact, i) => {
         contact.switch = true;
         contact.key = i;
-        return contact
+        return contact;
       })
-    })
+    });
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -180,19 +180,30 @@ class Contact extends Component {
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
-    const { data } = await Contacts.getContactsAsync({});
-    console.log("PHONE:", data[0].phoneNumbers[0].number);
-    slicedData = data.slice(0, 5);
+    const results = await Contacts.getContactsAsync({});
+    let { data } = results;
+
     let contacts = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].phoneNumbers[0].number) {
+
+    data.map(obj => {
+      let phoneInfo;
+      phoneInfo = obj.phoneNumbers;
+
+      if (Array.isArray(obj.phoneNumbers)) {
+        phoneInfo = obj.phoneNumbers[0].digits;
+        // console.log("is an array.", obj.phoneNumbers);
         let contact = {
-          name: data[i].name // name
-          // number: JSON.stringify(data[i].phoneNumbers[0].number) // phone number not working for some reason
+          name: obj.name,
+          remind: false,
+          number: phoneInfo
         };
+        console.log("Contact:", contact);
         contacts.push(contact);
+      } else {
+        // console.log("is not an array:", obj);
       }
-    }
+    });
+
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
@@ -200,8 +211,16 @@ class Contact extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
     });
   }; // End saveContacts
+
+  // Change Remind Boolean
+  // changeRemind = async () => {
+  //   console.log("THIS:", this.state);
+  // };
 
   render() {
     return (
@@ -209,8 +228,8 @@ class Contact extends Component {
         colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
         <View className="App" >
-          <View className="App-header">
 
+          <View className="App-header">
             <Overlay isVisible={this.state.isVisible}>
               <View>
                 <ScrollView style={styles.item}>
@@ -256,8 +275,8 @@ class Contact extends Component {
               contacts={this.state.listKeys}
               loadRandom={this.state.loadRandom} />
           </View>
-        </View >
-      </LinearGradient >
+        </View>
+      </LinearGradient>
     );
   }
 }
