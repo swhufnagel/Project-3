@@ -15,7 +15,7 @@ import { ListItem, Overlay } from 'react-native-elements'
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
-
+import { Icon } from 'react-native-elements'
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
@@ -32,11 +32,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  AppLogo: {
-    marginTop: '10%',
-    width: 100,
-    height: 52
-  },
+  // AppLogo: {
+  //   // marginTop: '10%',
+  //   width: 200,
+  //   height: 30
+  
+  // },
 
   nextPage: {
     width: 250,
@@ -64,17 +65,27 @@ static navigationOptions = ({ navigation }) => {
       backgroundColor: "#124375"
     },
      headerTitle: (
-      <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
+      <Image style={{ width: 200, height: 30 }}source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
     ),
     headerRight: (
-      <Button
-        title="settings"
+      // <Button
+      //   title="settings"
+      //   />
+      <Icon
+        name="cog"
+        type="font-awesome"
+        color="#2699FB"
         />
     ),
     headerLeft:(
-      <Button
-      title="logout"
-      />
+      // <Button
+      // title="logout"
+      // />
+      <Icon
+        name='arrow-left'
+        type='font-awesome'
+        color='#2699FB'
+        />
     ),
   };
 }
@@ -177,7 +188,7 @@ static navigationOptions = ({ navigation }) => {
         </GestureRecognizer>
         <View className="App" >
           <View className="App-header">
-          <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+          {/* <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" /> */}
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
                 {

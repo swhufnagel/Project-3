@@ -10,7 +10,7 @@ import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
-
+import { Icon } from 'react-native-elements'
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
@@ -40,19 +40,30 @@ class Home extends Component {
         backgroundColor: "#124375"
       },
       headerTitle: (
-        <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
+        <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
         // style={styles.AppLogo} 
       ), 
     headerRight: (
-        <Button
-          title="settings" 
-          type="clear"
-          />
+        // <Button
+        //   title="settings" 
+        //   type="clear"
+        //   />
+        <Icon
+        name="cog"
+        type="font-awesome"
+        color="white"
+        // onPress={() => console.log('hello')}
+        />
       ),
       headerLeft:(
-        <Button
-        title="logout"  
-        type="clear"
+        // <Button
+        // title="logout"  
+        // type="clear"
+        // />
+        <Icon
+        name='arrow-left'
+        type='font-awesome'
+        color='#2699FB'
         />
       ),
     };
