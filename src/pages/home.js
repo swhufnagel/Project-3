@@ -36,6 +36,9 @@ class Home extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
+      headerStyle: {
+        backgroundColor: "#124375"
+      },
       headerTitle: (
         <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
         // style={styles.AppLogo} 
@@ -170,7 +173,7 @@ class Home extends Component {
               // 35302c, 4c3825, 7f4d1f -brown
 
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              <Image source={require('../../assets/SayHay-Logo-Spin.gif')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               {/* <MainBody /> */}
               {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
               {/* <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} /> */}

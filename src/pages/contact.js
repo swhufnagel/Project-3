@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 
   AppLogo: {
     marginTop: '10%',
-    width: '80%',
+    width: 100,
     height: 52
   },
 
@@ -60,6 +60,9 @@ let contacts = [];
 class Contact extends Component {
 static navigationOptions = ({ navigation }) => {
   return {
+    headerStyle: {
+      backgroundColor: "#124375"
+    },
      headerTitle: (
       <Image source={require('../../assets/TextBalloon-2.png')} className="AppLogo" alt="logo" />
     ),
