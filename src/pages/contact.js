@@ -62,7 +62,9 @@ class Contact extends Component {
 static navigationOptions = ({ navigation }) => {
   return {
     headerStyle: {
-      backgroundColor: "#124375"
+      backgroundColor: "#124375",
+      marginRight: "2%",
+      marginLeft: "2%"
     },
      headerTitle: (
       <Image style={{ width: 200, height: 30 }}source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />

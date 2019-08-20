@@ -15,6 +15,7 @@ import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 // import SvgUri from 'react-native-svg-uri';
 import createAuth0Client from '@auth0/auth0-spa-js';
+import { Asset, Font } from "expo";
 
 function toQueryString(params) {
   return (
@@ -37,11 +38,13 @@ class Home extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerStyle: {
-        backgroundColor: "#124375"
+        backgroundColor: "#124375",
+        marginRight: "2%",
+        marginLeft: "2%"
       },
       headerTitle: (
         <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
-        // style={styles.AppLogo} 
+        // style={styles.AppLogo}
       ), 
     headerRight: (
         // <Button
@@ -51,9 +54,9 @@ class Home extends Component {
         <Icon
         name="cog"
         type="font-awesome"
-        color="white"
+        color="#2699FB"
         // onPress={() => console.log('hello')}
-        />
+        />      
       ),
       headerLeft:(
         // <Button
@@ -152,7 +155,8 @@ class Home extends Component {
         borderRightColor: "#175084",
         padding: 5,
         borderWidth: 2,
-        borderColor: "#2699FB"
+        borderColor: "#2699FB",
+        fontFamily: font.FranklinGothic
       },
 
       LoginButton: {

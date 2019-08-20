@@ -1,5 +1,10 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "scripts": {
     "serve": "node -r esm server/index.js",
     "start": "expo start",
@@ -20,6 +25,7 @@
     "expo-server-sdk": "^3.3.0",
     "install": "^0.13.0",
     "jwt-decode": "^2.2.0",
+    "link": "^0.1.5",
     "mongoose": "^5.6.9",
     "react": "^16.8.3",
     "react-dom": "^16.8.6",
