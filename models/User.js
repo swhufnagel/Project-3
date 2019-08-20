@@ -1,12 +1,40 @@
 import mongoose from "mongoose";
+// import Contacts from "./Contacts";
+// import contacts from "./Contacts";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   name: { type: String },
-  remind: { type: Boolean, default: false },
-  number: { type: String }
+  contacts: [
+    {
+      name: String,
+      remind: Boolean,
+      number: String
+    }
+  ]
 });
+
+// const userSchema = new Schema({
+//   name: { type: String, required: true },
+//   remind: false,
+//   number: { type: String }
+// });
 
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+// When a user is logged in, create a table for them with the title of their user name or id.
+// Then make a table for all of their contacts to be put inside of that table
+// ex:
+//  - Devin Table
+//    - Contacts
+
+// Old user Schema
+// const userSchema = new Schema({
+//   name: {
+//     type: String,
+//     required: true
+//   },
+//   contacts: [contacts]
+// });

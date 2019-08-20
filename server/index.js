@@ -45,7 +45,12 @@ mongoose.connect(
     // Log the total number of rows in database
     db.collection("users").countDocuments(function(err, count) {
       if (err) throw err;
-      console.log(`Total Rows: ${count}`);
+      console.log(`Total User Rows: ${count}`);
+    });
+
+    db.collection("contacts").countDocuments(function(err, count) {
+      if (err) throw err;
+      console.log(`Total Contacts ${count}`);
     });
   }
 );
@@ -113,14 +118,25 @@ app.post("/contacts/store", async (req, res) => {
 
   // Loop through contact array to store in database
   for (let i = 0; i < req.body.length; i++) {
-    let user = new db.User(req.body[i]);
-    // console.log("req body i:", req.body[i]);
-    let createdUser = await user.save();
-    console.log("created user:", createdUser);
-    response.push(createdUser);
+    let contact = new db.Contacts(req.body[i]);
+    console.log("req body i:", req.body[i]);
+    let createdContacts = await contact.save();
+    console.log("created user:", createdContacts);
+    response.push(createdContacts);
   }
   console.log("response1:", response);
   res.json(response);
+  // =============================
+
+  // Take the object from the fetch request (req.body) and send it to the database.
+  // let user = new db.User(req.body);
+  // console.log("user:", user);
+  // let createdUser = await user.save();
+  // console.log("Created user:", createdUser);
+  // response.push(createdUser);
+
+  // console.log("response:", response);
+  // res.json(response);
 });
 
 app.listen(PORT_NUMBER, () => {
