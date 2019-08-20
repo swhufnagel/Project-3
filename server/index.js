@@ -19,36 +19,36 @@ const saveToken = token => {
 };
 
 // Connect to the db
-mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/hayapp",
-  function(err, db) {
-    // console.log("db:", db);
-    if (err) throw err;
+// mongoose.connect(
+//   process.env.MONGODB_URI || "mongodb://localhost/hayapp",
+//   function(err, db) {
+//     // console.log("db:", db);
+//     if (err) throw err;
 
-    //     //Write databse Insert/Update/Query code here..
-    //     // db.collection("users", function(err, collection) {
-    //     //   collection.insert({
-    //     //     id: 1,
-    //     //     name: "Devin Powell",
-    //     //     contacts: [
-    //     //       "Sean Hufnagel",
-    //     //       "Matthew Metrailer",
-    //     //       "Brian Childs",
-    //     //       "Mom",
-    //     //       "Dad",
-    //     //       "Brother"
-    //     //     ],
-    //     //     lastNotified: timestamp("YYYY/MM/DD")
-    //     //   });
-    //     // });
+//     //Write databse Insert/Update/Query code here..
+//     // db.collection("users", function(err, collection) {
+//     //   collection.insert({
+//     //     id: 1,
+//     //     name: "Devin Powell",
+//     //     contacts: [
+//     //       "Sean Hufnagel",
+//     //       "Matthew Metrailer",
+//     //       "Brian Childs",
+//     //       "Mom",
+//     //       "Dad",
+//     //       "Brother"
+//     //     ],
+//     //     lastNotified: timestamp("YYYY/MM/DD")
+//     //   });
+//     // });
 
-    // Log the total number of rows in database
-    db.collection("users").countDocuments(function(err, count) {
-      if (err) throw err;
-      console.log(`Total Rows: ${count}`);
-    });
-  }
-);
+// Log the total number of rows in database
+// db.collection("users").countDocuments(function (err, count) {
+//   if (err) throw err;
+//   console.log(`Total Rows: ${count}`);
+// });
+//   }
+// );
 
 const handlePushTokens = message => {
   let notifications = [];
@@ -60,7 +60,7 @@ const handlePushTokens = message => {
     notifications.push({
       to: pushToken,
       sound: "default",
-      title: "Message received!",
+      title: "Don't forget to Say Hay to your friends & family today!",
       body: message,
       data: { message }
     });
@@ -68,12 +68,13 @@ const handlePushTokens = message => {
 
   let chunks = expo.chunkPushNotifications(notifications);
   (async () => {
+    console.log('chunkin');
     for (let chunk of chunks) {
       try {
         let receipts = await expo.sendPushNotificationsAsync(chunk);
-        console.log(receipts);
+        console.log("receipt ", receipts);
       } catch (error) {
-        console.error(error);
+        console.error("err ", error);
       }
     }
   })();
