@@ -2,6 +2,7 @@ import express from "express";
 import Expo from "expo-server-sdk";
 import timestamp from "time-stamp";
 import mongoose from "mongoose";
+import { create } from "uuid-js";
 const db = require("./../models");
 // const routes = require("../routes");
 const app = express();
@@ -45,7 +46,12 @@ mongoose.connect(
     // Log the total number of rows in database
     db.collection("users").countDocuments(function(err, count) {
       if (err) throw err;
-      console.log(`Total Rows: ${count}`);
+      console.log(`Total User Rows: ${count}`);
+    });
+
+    db.collection("contacts").countDocuments(function(err, count) {
+      if (err) throw err;
+      console.log(`Total Contacts ${count}`);
     });
   }
 );
@@ -98,29 +104,30 @@ app.post("/message", (req, res) => {
   res.send(`Received message, ${req.body.message}`);
 });
 
-// Switch from true to false / false to true
-// app.post("/contacts/:id", (req, res) => {
-//   console.log(req);
-//   db.User.findOneAndUpdate({ _id: req.params.id }, { remind: true });
-// });
+// Create User
+app.post("/users/create", async (req, res) => {
+  let user = new db.User(req.body);
+  let createdUser = await user.save();
+  console.log("Made new user:", createdUser);
+  res.json(createdUser);
+});
 
 // Store all contacts in database
 app.post("/contacts/store", async (req, res) => {
-  // console.log("REQUEST BODY", req.body);
-
   // Array for database
   let response = [];
 
   // Loop through contact array to store in database
   for (let i = 0; i < req.body.length; i++) {
-    let user = new db.User(req.body[i]);
+    let contact = new db.Contacts(req.body[i]);
     // console.log("req body i:", req.body[i]);
-    let createdUser = await user.save();
-    console.log("created user:", createdUser);
-    response.push(createdUser);
+    let createdContacts = await contact.save();
+    // console.log("created user:", createdContacts);
+    response.push(createdContacts);
   }
   console.log("response1:", response);
   res.json(response);
+  // =============================
 });
 
 app.listen(PORT_NUMBER, () => {

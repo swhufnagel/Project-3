@@ -12,6 +12,7 @@ import { AuthSession } from "expo";
 
 const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
+const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -53,50 +54,52 @@ const styles = StyleSheet.create({
 
 class Contact extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       contacts: [],
       isVisible: false,
       switchValue: true,
       key: null,
       listKeys: [],
-      loadRandom: false,
+      loadRandom: false
     };
   }
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <GestureRecognizer
-        onSwipeDown={navigation.getParam('showSettings')}>
-        <LogoTitle />
-      </GestureRecognizer>,
+      headerTitle: (
+        <GestureRecognizer onSwipeDown={navigation.getParam("showSettings")}>
+          <LogoTitle />
+        </GestureRecognizer>
+      ),
       headerRight: (
         <Icon
-          name='settings'
-          type='material'
-          color='#517fa4'
-          onPress={navigation.getParam('showSettings')}
+          name="settings"
+          type="material"
+          color="#517fa4"
+          onPress={navigation.getParam("showSettings")}
         />
       ),
       headerLeft: (
         <Icon
-          name='directions-walk'
-          type='material'
-          color='#517fa4'
-          onPress={navigation.getParam('nowLogout')}
+          name="directions-walk"
+          type="material"
+          color="#517fa4"
+          onPress={navigation.getParam("nowLogout")}
         />
       )
     };
-  }
+  };
   nowLogout = () => {
     console.log("logging out");
     Alert.alert(
-      'Logout from Hay?',
-      'This will also log you out from any services you logged in with',
+      "Logout from Hay?",
+      "This will also log you out from any services you logged in with",
       [
         {
-          text: 'Logout', onPress: async () => {
-
-            let authUrl = 'https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5';
+          text: "Logout",
+          onPress: async () => {
+            let authUrl =
+              "https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
             const response = await AuthSession.startAsync({
               authUrl: authUrl
             }, () => {
@@ -106,13 +109,18 @@ class Contact extends Component {
             this.props.navigation.navigate('Home');
           }
         },
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }],
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ],
       { cancelable: true }
-    )
-  }
+    );
+  };
   showSettings = () => {
-    this.setState({ isVisible: true })
-  }
+    this.setState({ isVisible: true });
+  };
 
   findContactSwitch = async (event, name, id) => {
     const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
@@ -151,7 +159,10 @@ class Contact extends Component {
   componentDidUpdate() {
   }
   componentWillMount() {
-    this.props.navigation.setParams({ showSettings: this.showSettings, nowLogout: this.nowLogout });
+    this.props.navigation.setParams({
+      showSettings: this.showSettings,
+      nowLogout: this.nowLogout
+    });
   }
   // Save Contacts for db post request
   storeContacts = async () => {
@@ -172,7 +183,6 @@ class Contact extends Component {
           remind: false,
           number: phoneInfo
         };
-        console.log("Contact:", contact);
         contacts.push(contact);
       } else {
         // console.log("is not an array:", obj);
@@ -200,44 +210,60 @@ class Contact extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
-        style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-        <View className="App" >
-
+        colors={[
+          "#010d25",
+          "#0f345a",
+          "#124375",
+          "#124375",
+          "#0f345a",
+          "#010d25"
+        ]}
+        style={{
+          width: "100%",
+          height: "200%",
+          padding: 0,
+          alignItems: "center",
+          borderRadius: 0
+        }}
+      >
+        <View className="App">
           <View className="App-header">
             <Overlay isVisible={this.state.isVisible}>
               <View>
                 <ScrollView style={styles.item}>
-                  {
-                    this.state.listKeys.map((l, i) => (
-                      <View key={i}>
-                        <ListItem
-                          key={l.id}
-                          title={l.name}
-                          name={l.name}
-                          bottomDivider={true}
-                          leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300?img=' } }}
-                          switch={{
-                            value: this.state.listKeys[i].switch,
-                            onChange: event => this.findContactSwitch(event, l.name, l.id)
-                          }}
-                          hideChevron
-                          // onChange={event => this.findContactSwitch(event, l.name, l.id)}
-                          thumbColor="red"
-                          trackColor={{
-                            true: "yellow",
-                            false: "purple",
-                          }}
-                        />
-                      </View>
-
-                    ))
-                  }
+                  {this.state.listKeys.map((l, i) => (
+                    <View key={i}>
+                      <ListItem
+                        key={l.id}
+                        title={l.name}
+                        name={l.name}
+                        bottomDivider={true}
+                        leftAvatar={{
+                          source: { uri: "https://i.pravatar.cc/300?img=" }
+                        }}
+                        switch={{
+                          value: this.state.listKeys[i].switch,
+                          onChange: event =>
+                            this.findContactSwitch(event, l.name, l.id)
+                        }}
+                        hideChevron
+                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
+                        thumbColor="red"
+                        trackColor={{
+                          true: "yellow",
+                          false: "purple"
+                        }}
+                      />
+                    </View>
+                  ))}
                 </ScrollView>
-                <Button title="Accept" onPress={() => {
-                  this.setState({ isVisible: false });
-                  this.setState({ loadRandom: true });
-                }}></Button>
+                <Button
+                  title="Accept"
+                  onPress={() => {
+                    this.setState({ isVisible: false });
+                    this.setState({ loadRandom: true });
+                  }}
+                />
               </View>
             </Overlay>
 
@@ -246,9 +272,9 @@ class Contact extends Component {
               renderItem={this.listItem}
             /> */}
             <Friends
-
               contacts={this.state.listKeys}
-              loadRandom={this.state.loadRandom} />
+              loadRandom={this.state.loadRandom}
+            />
           </View>
         </View>
       </LinearGradient>
