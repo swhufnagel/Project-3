@@ -64,6 +64,8 @@ class Friends extends Component {
     super(props)
     this.state = {
       currentPhoto: 'https://i.pravatar.cc/300?img=',
+      // if photo available = false then do the pravatar else show 
+      //the actual contact photo
       currentName: "",
       currentNumber: null,
       contacts: [],
@@ -77,7 +79,7 @@ class Friends extends Component {
     }
   }
   componentDidMount = async () => {
-    AuthSession.dismiss();
+
   }
   componentWillMount() {
     RNShake.addEventListener('ShakeEvent', () => {

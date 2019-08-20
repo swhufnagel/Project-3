@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Friends from "./friends";
-import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import { Alert, Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,10 +8,13 @@ import TouchableScale from 'react-native-touchable-scale'; // https://github.com
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import LogoTitle from '../components/contacts/LogoTitle';
 import { AuthSession } from "expo";
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
+import { Notifications } from "expo";
 
-const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
-
-
+const YOUR_NGROK_LINK = "http://7dfccb17.ngrok.io";
+const YOUR_PUSH_TOKEN = "http://7dfccb17.ngrok.io/token";
+const MESSAGE_ENPOINT = "http://7dfccb17.ngrok.io/message";
 const styles = StyleSheet.create({
   App: {
     // backgroundSize: '200%',
@@ -52,17 +54,23 @@ const styles = StyleSheet.create({
 });
 
 class Contact extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
       contacts: [],
       isVisible: false,
       switchValue: true,
+      clickedContact: {},
       key: null,
+      status: "",
       listKeys: [],
       loadRandom: false,
+      notification: null,
+      notifactionPermission: null,
     };
   }
+  //customer navbar
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: <GestureRecognizer
@@ -86,7 +94,8 @@ class Contact extends Component {
         />
       )
     };
-  }
+  };
+  //logout
   nowLogout = () => {
     console.log("logging out");
     Alert.alert(
@@ -109,18 +118,110 @@ class Contact extends Component {
         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }],
       { cancelable: true }
     )
-  }
+  };
+  //display overlay
   showSettings = () => {
     this.setState({ isVisible: true })
-  }
+  };
+  //setting notification state
+  _handleNotification = notification => {
+    console.log("notification", notification);
+    let message = `Say Hay to ${this.clickedContact}`;//needs correct contact name
+    this.setState({ notification: message });
+  };
+  //get notification permission & token for device 
+  registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log("token:", token);
 
+      // I added this for getting the push token. It might be hard-coded in "YOUR_PUSH_TOKEN" variable as of now
+      // but it said that is the same functionality as localhost:3000
+      this.notificationSubscription = Notifications.addListener(
+        this._handleNotification
+      );
+
+      return fetch(YOUR_PUSH_TOKEN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: {
+            value: token
+          },
+          user: {
+            username: "goobastank",
+            name: "Devin Powell"
+          }
+        })
+      });
+
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+  };
+  //send message to backend
+  sendMessage = async () => {
+    setInterval(async () => {
+      fetch(MESSAGE_ENPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: this.state.messageText
+        })
+      });
+      this.sendPushNotification();
+    }, 10 * 1000)
+  };
+  //send push notification to phone
+  sendPushNotification = async () => {
+    console.log("sending");
+    const message = {
+      to: YOUR_PUSH_TOKEN,
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" }
+    };
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(message)
+    });
+    const data = response;
+    console.log("response", data);
+  };
+  //setting contact include true/false
   findContactSwitch = async (event, name, id) => {
     const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
     console.log('index', index);
     const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
     this.setState({ newState })
-  }
-
+  };
+  //get contacts permissions and data
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
@@ -140,19 +241,6 @@ class Contact extends Component {
       })
     });
   };
-  goToNextPage = () => {
-    this.props.navigation.navigate("Friends");
-  };
-  componentDidMount() {
-    this.setState({ isVisible: true });
-    this.permissionFlow();
-    this.storeContacts();
-  }
-  componentDidUpdate() {
-  }
-  componentWillMount() {
-    this.props.navigation.setParams({ showSettings: this.showSettings, nowLogout: this.nowLogout });
-  }
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
@@ -192,6 +280,20 @@ class Contact extends Component {
     });
   }; // End saveContacts
 
+  componentDidMount() {
+    this.setState({ isVisible: true });
+    this.permissionFlow();
+    this.storeContacts();
+    this.registerForPushNotificationsAsync();
+  };
+
+  componentDidUpdate() {
+  };
+
+  componentWillMount() {
+    this.props.navigation.setParams({ showSettings: this.showSettings, nowLogout: this.nowLogout });
+  };
+
   // Change Remind Boolean
   // changeRemind = async () => {
   //   console.log("THIS:", this.state);
@@ -203,7 +305,6 @@ class Contact extends Component {
         colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
         <View className="App" >
-
           <View className="App-header">
             <Overlay isVisible={this.state.isVisible}>
               <View>
@@ -230,23 +331,17 @@ class Contact extends Component {
                           }}
                         />
                       </View>
-
                     ))
                   }
                 </ScrollView>
                 <Button title="Accept" onPress={() => {
+                  this.sendMessage();
                   this.setState({ isVisible: false });
                   this.setState({ loadRandom: true });
                 }}></Button>
               </View>
             </Overlay>
-
-            {/* <FlatList
-              data={this.state.listKeys}
-              renderItem={this.listItem}
-            /> */}
             <Friends
-
               contacts={this.state.listKeys}
               loadRandom={this.state.loadRandom} />
           </View>
