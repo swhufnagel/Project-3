@@ -195,6 +195,7 @@ class Contact extends Component {
       if (Array.isArray(obj.phoneNumbers)) {
         phoneInfo = obj.phoneNumbers[0].digits;
         let contact = {
+          id: obj.id,
           name: obj.name,
           remind: false,
           number: phoneInfo
