@@ -105,12 +105,26 @@ app.post("/message", (req, res) => {
 });
 
 // Create User
+// ===========================
 app.post("/users/create", async (req, res) => {
-  let user = new db.User(req.body);
-  let createdUser = await user.save();
-  console.log("Made new user:", createdUser);
-  res.json(createdUser);
+  const userInfo = req.body;
+  console.log("req.body:", userInfo);
+
+  db.User.findOne({ iss: userInfo.iss }, async (err, doc) => {
+    let response = { sucess: true, msg: "The User Created Successfully" };
+
+    //The User doesn't exist => Add New User
+    if (!doc) {
+      let user = new db.User(req.body);
+      let createdUser = await user.save();
+    } else {
+      response.msg = "The User/Email is Already Exists";
+      res.json(response);
+    }
+    console.log("response:", response);
+  });
 });
+//  ===========================
 
 // Store all contacts in database
 app.post("/contacts/store", async (req, res) => {
@@ -125,7 +139,7 @@ app.post("/contacts/store", async (req, res) => {
     // console.log("created user:", createdContacts);
     response.push(createdContacts);
   }
-  console.log("response1:", response);
+  // console.log("response1:", response);
   res.json(response);
   // =============================
 });
