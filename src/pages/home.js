@@ -85,7 +85,7 @@ class Home extends Component {
       nickname: decoded.nickname,
       contacts: []
     };
-    console.log("USer:", user);
+    // console.log("USer:", user);
 
     await fetch(YOUR_NGROK_LINK + "/users/create", {
       method: "POST",
