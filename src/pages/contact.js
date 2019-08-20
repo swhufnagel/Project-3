@@ -1,34 +1,16 @@
 import React, { Component } from "react";
-// import logo2 from './logo2.svg';
-import MainBody from "../components/contacts/MainBody";
-import NavBar from "../components/friends/NavBar";
-// import '../App.css';
-import SelectContact from "../components/contacts/SelectContact";
 import Friends from "./friends";
-import { ThemeProvider } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import {
-  Alert,
-  Switch,
-  ScrollView,
-  FlatList,
-  Button,
-  View,
-  Image,
-  Text,
-  StyleSheet
-} from "react-native";
-import { ContactList } from "../components/contacts/List";
-import { LinearGradient } from "expo-linear-gradient";
-import { ListItem, Overlay, Icon } from "react-native-elements";
-import TouchableScale from "react-native-touchable-scale"; // https://github.com/kohver/react-native-touchable-scale
-import GestureRecognizer, {
-  swipeDirections
-} from "react-native-swipe-gestures";
-import LogoTitle from "../components/contacts/LogoTitle";
+import { Alert, Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
+import { ListItem, Overlay, Icon } from 'react-native-elements'
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import LogoTitle from '../components/contacts/LogoTitle';
 import { AuthSession } from "expo";
-import * as WebBrowser from "expo-web-browser";
+
+const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
 const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
 
@@ -69,17 +51,7 @@ const styles = StyleSheet.create({
     width: "100%"
   }
 });
-function toQueryString(params) {
-  return (
-    "?" +
-    Object.entries(params)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join("&")
-  );
-}
+
 class Contact extends Component {
   constructor(props) {
     super(props);
@@ -130,12 +102,11 @@ class Contact extends Component {
               "https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
             const response = await AuthSession.startAsync({
               authUrl: authUrl
+            }, () => {
+              AuthSession.dismiss()
             });
-            console.log("response ", response);
-            // await WebBrowser.openBrowserAsync(
-            //   'https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5'
-            // )
-            this.props.navigation.navigate("Home");
+            console.log('response ', response);
+            this.props.navigation.navigate('Home');
           }
         },
         {
@@ -152,17 +123,11 @@ class Contact extends Component {
   };
 
   findContactSwitch = async (event, name, id) => {
-    // console.log('LOGGING EVENT', event, name);
-    // console.log(id);
-    const index = await this.state.listKeys.findIndex(
-      listKey => listKey.id === id
-    );
-    console.log("index", index);
-    const newState = (this.state.listKeys[index].switch = !this.state.listKeys[
-      index
-    ].switch);
-    this.setState({ newState });
-  };
+    const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
+    console.log('index', index);
+    const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
+    this.setState({ newState })
+  }
 
   permissionFlow = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
@@ -174,7 +139,6 @@ class Contact extends Component {
     }
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    // console.log(data);
     this.setState({ contacts: data });
     this.setState({
       listKeys: data.map((contact, i) => {
@@ -188,13 +152,11 @@ class Contact extends Component {
     this.props.navigation.navigate("Friends");
   };
   componentDidMount() {
-    // console.log("mounting first comp")
     this.setState({ isVisible: true });
     this.permissionFlow();
     this.storeContacts();
   }
   componentDidUpdate() {
-    // console.log('listKeys ', this.state.listKeys);
   }
   componentWillMount() {
     this.props.navigation.setParams({
@@ -216,7 +178,6 @@ class Contact extends Component {
 
       if (Array.isArray(obj.phoneNumbers)) {
         phoneInfo = obj.phoneNumbers[0].digits;
-        // console.log("is an array.", obj.phoneNumbers);
         let contact = {
           name: obj.name,
           remind: false,
@@ -235,7 +196,7 @@ class Contact extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.log("Error:", err);
       return err;
     });

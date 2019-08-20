@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
-// import logo2 from './logo2.svg';
-import FacebookButton from '../components/friends/FacebookButton'
-import MainBody from "../components/friends/MainBody"
-import GoogleButton from "../components/friends/GoogleButton"
-import NavBar from "../components/friends/NavBar"
-// import '../App.css';
-import SelectContact from '../components/friends/SelectContact';
-import FriendImg from '../components/friends/FriendImg';
 import { LinearGradient } from 'expo-linear-gradient';
-import CallButton from '../components/friends/CallButton';
-import TextButton from '../components/friends/TextButton';
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Button, ThemeProvider } from 'react-native-elements';
 import call from "react-native-phone-call";
 import Communications from "react-native-communications";
 import RNShake from 'react-native-shake';
-import * as Contacts from "expo-contacts";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { AuthSession } from 'expo';
 
