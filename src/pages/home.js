@@ -17,6 +17,27 @@ import * as Contacts from "expo-contacts";
 import createAuth0Client from '@auth0/auth0-spa-js';
 import { Asset, Font } from "expo";
 
+
+
+// Custom Font 
+constructor(props) {
+  super(props);
+  this.state = {
+  fontLoaded: false
+}
+}
+async componenetDidMount() {
+  await Font.loadAsync({
+    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf')
+  }).then(() => {
+    this.setState({fontLoaded: true})
+  })
+}
+// { this.state.fontLoaded == true ? (
+
+// )}
+
+// Custom Font End
 function toQueryString(params) {
   return (
     "?" +
