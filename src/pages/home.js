@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-import FacebookButton from "../components/home/FacebookButton";
-import MainBody from "../components/home/MainBody";
-import GoogleButton from "../components/home/GoogleButton";
-import NavBar from "../components/friends/NavBar";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AuthSession } from "expo";
 import { Constants } from "expo";
@@ -13,31 +9,31 @@ import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import { Icon } from 'react-native-elements'
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-// import SvgUri from 'react-native-svg-uri';
 import createAuth0Client from '@auth0/auth0-spa-js';
-import { Asset, Font } from "expo";
+// import { Asset, Font } from "expo";
 
 
 
 // Custom Font 
-constructor(props) {
-  super(props);
-  this.state = {
-  fontLoaded: false
-}
-}
-async componenetDidMount() {
-  await Font.loadAsync({
-    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf')
-  }).then(() => {
-    this.setState({fontLoaded: true})
-  })
-}
+// constructor(props) {
+//   super(props);
+//   this.state = {
+//   fontLoaded: false
+// }
+// }
+// async componenetDidMount() {
+//   await Font.loadAsync({
+//     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf')
+//   }).then(() => {
+//     this.setState({fontLoaded: true})
+//   })
+// }
 // { this.state.fontLoaded == true ? (
 
 // )}
 
 // Custom Font End
+
 function toQueryString(params) {
   return (
     "?" +
@@ -50,12 +46,6 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
-
-  // static navigationOptions = {
-  //   title: 'Home'
-  // };
-  // const { navigate } = this.props.navigation;
-
   static navigationOptions = ({ navigation }) => {
     return {
       headerStyle: {
@@ -65,13 +55,8 @@ class Home extends Component {
       },
       headerTitle: (
         <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
-        // style={styles.AppLogo}
       ), 
     headerRight: (
-        // <Button
-        //   title="settings" 
-        //   type="clear"
-        //   />
         <Icon
         name="cog"
         type="font-awesome"
@@ -80,10 +65,6 @@ class Home extends Component {
         />      
       ),
       headerLeft:(
-        // <Button
-        // title="logout"  
-        // type="clear"
-        // />
         <Icon
         name='arrow-left'
         type='font-awesome'
@@ -154,13 +135,6 @@ class Home extends Component {
         height: '200%'
 
       },
-      // AppHeader: {
-      //   // minHeight: '200%',
-      //   display: 'flex',
-      //   // flexDirection: 'column',
-      //   alignItems: 'center'
-      // },
-
       AppLogo: {
         marginTop: "15%",
         width: 250,
@@ -177,7 +151,6 @@ class Home extends Component {
         padding: 5,
         borderWidth: 2,
         borderColor: "#2699FB",
-        fontFamily: font.FranklinGothic
       },
 
       LoginButton: {
@@ -191,40 +164,22 @@ class Home extends Component {
         borderWidth: 2,
         borderColor: "#2699FB"
       }
-
-      // buttonArea: {
-      //   display: 'flex'
-      // }
     });
 
     return (
       <ThemeProvider>
         <View style={styles.App} className="App" >
-          <View style={styles.AppHeader} className="AppHeader">
-            {/* <NavBar /> */}
+          
             <LinearGradient
               colors={['#010d25', '#0f345a', '#124375']}
-              // 722211 , ef9337 ,efb560 - orange
-              // 010d25, 0f345a, 124375 - blue
-              // 35302c, 4c3825, 7f4d1f -brown
-
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
               <Image source={require('../../assets/SayHay-Logo-Spin.gif')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-              {/* <MainBody /> */}
-              {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-              {/* <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} /> */}
-              {/* style={ styles.buttonStyle } */}
               {name ?
                 <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
                 <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
               }
-              {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-            
-            {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <Text>Home Screen</Text>
-            </View> */}
             </LinearGradient>
-          </View>
+          
         </View>
       </ThemeProvider>
     );

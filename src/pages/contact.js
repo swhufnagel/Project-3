@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-// import logo2 from './logo2.svg';
-import MainBody from "../components/contacts/MainBody"
-import NavBar from "../components/friends/NavBar"
-// import '../App.css';
 import SelectContact from '../components/contacts/SelectContact';
 import Friends from './friends';
 import { ThemeProvider } from 'react-native-elements';
@@ -185,12 +181,9 @@ static navigationOptions = ({ navigation }) => {
         style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
         <GestureRecognizer
           onSwipeDown={() => this.setState({ isVisible: true })}>
-          {/* <NavBar /> */}
-          {/* <Button onPress={() => this.props.navigation.navigate('HomeScreen')} title="Home"/> */}
+         
         </GestureRecognizer>
-        <View className="App" >
-          <View className="App-header">
-          {/* <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" /> */}
+        
             <Overlay isVisible={this.state.isVisible}>
               <ScrollView style={styles.item}>
                 {
@@ -207,7 +200,6 @@ static navigationOptions = ({ navigation }) => {
                           onChange: event => this.findContactSwitch(event, l.name, l.id)
                         }}
                         hideChevron
-                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
@@ -215,7 +207,6 @@ static navigationOptions = ({ navigation }) => {
                         }}
                       />
                     </View>
-
                   ))
                 }
               </ScrollView>
@@ -223,15 +214,8 @@ static navigationOptions = ({ navigation }) => {
                 this.setState({ isVisible: false });
               }}></Button>
             </Overlay>
-
-            {/* <FlatList
-              data={this.state.listKeys}
-              renderItem={this.listItem}
-            /> */}
             <Friends />
-          </View>
-        </View >
-      </LinearGradient >
+         </LinearGradient >
     );
   }
 }
