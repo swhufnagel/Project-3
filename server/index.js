@@ -117,17 +117,23 @@ app.post("/contacts/store", async (req, res) => {
   // Array for database
   let response = [];
 
-  // Loop through contact array to store in database
   for (let i = 0; i < req.body.length; i++) {
-    let contact = new db.Contacts(req.body[i]);
-    // console.log("req body i:", req.body[i]);
-    let createdContacts = await contact.save();
-    // console.log("created user:", createdContacts);
-    response.push(createdContacts);
+    db.Contacts.findOne({ id: req.body[i].id }, async (err, doc) => {
+      let contResp = { success: true, msg: "The Contact Created Successfully" };
+
+      //The User doesn't exist => Add New User
+      if (!doc) {
+        let contact = new db.Contacts(req.body[i]);
+        let createdContact = await contact.save();
+        response.push(createdContact);
+      } else {
+        contResp.msg = "The Contact Already Exists";
+      }
+    });
   }
+
   console.log("response1:", response);
   res.json(response);
-  // =============================
 });
 
 app.listen(PORT_NUMBER, () => {
