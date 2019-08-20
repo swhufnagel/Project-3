@@ -1,10 +1,20 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Platform
+} from "react-native";
 import { AuthSession } from "expo";
 import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
-import LogoTitle from '../components/contacts/LogoTitle';
+import LogoTitle from "../components/contacts/LogoTitle";
+
+const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
+
 function toQueryString(params) {
   return (
     "?" +
@@ -21,7 +31,7 @@ class Home extends Component {
     return {
       headerTitle: <LogoTitle />
     };
-  }
+  };
   state = {
     text: "",
     name: null,
@@ -34,10 +44,9 @@ class Home extends Component {
     const queryParams = toQueryString({
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
-      response_type: 'id_token', // id_token will return a JWT token
-      scope: 'openid profile email', // retrieve the user's profile
-      nonce: 'nonce', // ideally, this will be a random value
-
+      response_type: "id_token", // id_token will return a JWT token
+      scope: "openid profile email", // retrieve the user's profile
+      nonce: "nonce" // ideally, this will be a random value
     });
     let authUrl = `${auth0Domain}/authorize` + queryParams;
 
@@ -62,11 +71,35 @@ class Home extends Component {
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
-    console.log("scopes: ", decoded)
+    console.log("scopes: ", decoded);
     const { name } = decoded;
     this.setState({ name });
     this.props.navigation.navigate("Contact");
+    // Make a user
+    this.createUser(decoded);
   };
+
+  createUser = async decoded => {
+    let user = {
+      iss: decoded.iss,
+      nickname: decoded.nickname,
+      contacts: []
+    };
+    console.log("USer:", user);
+
+    await fetch(YOUR_NGROK_LINK + "/users/create", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
+    });
+  };
+
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
@@ -77,8 +110,7 @@ class Home extends Component {
         //   // backgroundSize: '200%',
         //   // animation: bganimation 15s infinite,
 
-        height: '200%'
-
+        height: "200%"
       },
       // AppHeader: {
       //   // minHeight: '200%',
@@ -124,27 +156,51 @@ class Home extends Component {
 
     return (
       <ThemeProvider>
-        <View style={styles.App} className="App" >
+        <View style={styles.App} className="App">
           <View style={styles.AppHeader} className="AppHeader">
             <LinearGradient
-              colors={['#35302c', '#4c3825', '#7f4d1f']}
+              colors={["#35302c", "#4c3825", "#7f4d1f"]}
               // 722211 , ef9337 ,efb560 - orange
               // 010d25, 0f345a, 124375 - blue
               // 35302c, 4c3825, 7f4d1f -brown
 
-              style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              style={{
+                width: "100%",
+                height: "100%",
+                padding: 0,
+                alignItems: "center",
+                borderRadius: 0
+              }}
+            >
+              <Image
+                source={require("../../assets/HayLogoVertOrange.png")}
+                style={styles.AppLogo}
+                className="AppLogo"
+                alt="logo"
+              />
               {/* <MainBody /> */}
               {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-              <Button title="Change Page" type="clear" style={styles.buttonStyle} onPress={() => navigate('Contact')} />
+              <Button
+                title="Change Page"
+                type="clear"
+                style={styles.buttonStyle}
+                onPress={() => navigate("Contact")}
+              />
               {/* style={ styles.buttonStyle } */}
-              {name ?
-                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-                <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
-              }
+              {name ? (
+                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>
+                  You are logged in, {name}!
+                </Text>
+              ) : (
+                <Button
+                  style={styles.LoginButton}
+                  title="Login"
+                  type="clear"
+                  navigation={this.props.navigation}
+                  onPress={this._loginWithAuth0}
+                />
+              )}
               {/* <Button title="View Friends" onPress={() => navigate("Friends", {})} /> */}
-
-
             </LinearGradient>
           </View>
         </View>

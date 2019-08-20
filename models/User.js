@@ -4,21 +4,10 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name: { type: String },
-  contacts: [
-    {
-      name: String,
-      remind: Boolean,
-      number: String
-    }
-  ]
+  iss: { type: String },
+  nickname: { type: String },
+  contacts: { type: Array, ref: "Contacts" }
 });
-
-// const userSchema = new Schema({
-//   name: { type: String, required: true },
-//   remind: false,
-//   number: { type: String }
-// });
 
 const User = mongoose.model("User", userSchema);
 
@@ -29,12 +18,3 @@ module.exports = User;
 // ex:
 //  - Devin Table
 //    - Contacts
-
-// Old user Schema
-// const userSchema = new Schema({
-//   name: {
-//     type: String,
-//     required: true
-//   },
-//   contacts: [contacts]
-// });

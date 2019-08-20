@@ -222,17 +222,6 @@ class Contact extends Component {
           remind: false,
           number: phoneInfo
         };
-        // Make a new object to send??
-        // let user = {
-        //   name: "Test Name",
-        //   contacts: [
-        //     {
-        //       name: obj.name,
-        //       remind: false,
-        //       number: phoneInfo
-        //     }
-        //   ]
-        // };
         contacts.push(contact);
       } else {
         // console.log("is not an array:", obj);
