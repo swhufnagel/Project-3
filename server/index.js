@@ -3,6 +3,7 @@ import Expo from "expo-server-sdk";
 import timestamp from "time-stamp";
 import mongoose from "mongoose";
 import { create } from "uuid-js";
+// import { useScreens } from "react-native-screens";
 const db = require("./../models");
 // const routes = require("../routes");
 const app = express();
@@ -25,23 +26,6 @@ mongoose.connect(
   function(err, db) {
     // console.log("db:", db);
     if (err) throw err;
-
-    //     //Write databse Insert/Update/Query code here..
-    //     // db.collection("users", function(err, collection) {
-    //     //   collection.insert({
-    //     //     id: 1,
-    //     //     name: "Devin Powell",
-    //     //     contacts: [
-    //     //       "Sean Hufnagel",
-    //     //       "Matthew Metrailer",
-    //     //       "Brian Childs",
-    //     //       "Mom",
-    //     //       "Dad",
-    //     //       "Brother"
-    //     //     ],
-    //     //     lastNotified: timestamp("YYYY/MM/DD")
-    //     //   });
-    //     // });
 
     // Log the total number of rows in database
     db.collection("users").countDocuments(function(err, count) {
@@ -128,27 +112,36 @@ app.post("/users/create", async (req, res) => {
 
 // Store all contacts in database
 app.post("/contacts/store", async (req, res) => {
+  // console.log("req.body:", req.body);
   // Array for database
   let response = [];
+  let contactIds = [];
+  const owner = req.body[0].owner;
 
   for (let i = 0; i < req.body.length; i++) {
-    db.Contacts.findOne({ id: req.body[i].id }, async (err, doc) => {
-      let contResp = { success: true, msg: "The Contact Created Successfully" };
-
-      //The User doesn't exist => Add New User
-      if (!doc) {
-        let contact = new db.Contacts(req.body[i]);
-        let createdContact = await contact.save();
-        response.push(createdContact);
-      } else {
-        contResp.msg = "The Contact Already Exists";
-      }
-    });
+    const contactLookup = await db.Contacts.findOne({ id: req.body[i].id });
+    if (contactLookup) {
+      // if a contact was found
+      console.log("User already exists!");
+    } else {
+      // if a contact was not found
+      let contact = new db.Contacts(req.body[i]);
+      let createdContact = await contact.save();
+      response.push(createdContact);
+      contactIds.push(contactLookup._id);
+    }
   }
+  console.log("response:", response);
+  console.log("contact Ids ---", contactIds);
 
-  console.log("response1:", response);
-
-  res.json(response);
+  db.User.findOneAndUpdate(
+    { iss: owner },
+    { $push: { contacts: contactIds } },
+    (err, results) => {
+      if (err) res.send(err);
+      res.send(results);
+    }
+  );
 });
 
 app.listen(PORT_NUMBER, () => {

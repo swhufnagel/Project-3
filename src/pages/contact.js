@@ -27,7 +27,8 @@ import LogoTitle from "../components/contacts/LogoTitle";
 import { AuthSession } from "expo";
 
 
-const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
+const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
+
 
 const styles = StyleSheet.create({
   App: {
@@ -341,6 +342,7 @@ class Contact extends Component {
       return err;
     });
   }; // End saveContacts
+
 
   componentDidMount() {
     this.setState({ isVisible: true });
