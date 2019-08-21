@@ -22,7 +22,7 @@ import GestureRecognizer, {
 import LogoTitle from "../components/contacts/LogoTitle";
 import { AuthSession } from "expo";
 
-const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
+const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -171,7 +171,7 @@ class Contact extends Component {
   componentDidMount() {
     this.setState({ isVisible: true });
     this.permissionFlow();
-    this.storeContacts();
+    // this.storeContacts();
   }
   componentDidUpdate() {}
   componentWillMount() {
@@ -180,44 +180,6 @@ class Contact extends Component {
       nowLogout: this.nowLogout
     });
   }
-  // Save Contacts for db post request
-  storeContacts = async () => {
-    // Returns an array of objects for each contact
-    const results = await Contacts.getContactsAsync({});
-    let { data } = results;
-
-    let contacts = [];
-
-    data.map(obj => {
-      let phoneInfo;
-      phoneInfo = obj.phoneNumbers;
-
-      if (Array.isArray(obj.phoneNumbers)) {
-        phoneInfo = obj.phoneNumbers[0].digits;
-        let contact = {
-          id: obj.id,
-          name: obj.name,
-          remind: false,
-          number: phoneInfo
-        };
-        contacts.push(contact);
-      } else {
-        // console.log("is not an array:", obj);
-      }
-    });
-
-    await fetch(YOUR_NGROK_LINK + "/contacts/store", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(contacts)
-    }).catch(function(err) {
-      console.log("Error:", err);
-      return err;
-    });
-  }; // End saveContacts
 
   // Change Remind Boolean
   // changeRemind = async () => {
