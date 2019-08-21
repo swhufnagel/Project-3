@@ -35,7 +35,6 @@ import * as Font from 'expo-font';
 
 // Custom Font End
 import LogoTitle from "../components/contacts/LogoTitle";
-import * as Contacts from "expo-contacts";
 
 const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
 
@@ -182,7 +181,7 @@ class Home extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.log("Error:", err);
       return err;
     });
