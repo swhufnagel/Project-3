@@ -11,6 +11,8 @@ import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import createAuth0Client from '@auth0/auth0-spa-js';
 // import { Asset, Font } from "expo";
+import * as Font from 'expo-font';
+
 
 
 
@@ -21,7 +23,7 @@ import createAuth0Client from '@auth0/auth0-spa-js';
 //   fontLoaded: false
 // }
 // }
-// async componenetDidMount() {
+// async componenentDidMount() {
 //   await Font.loadAsync({
 //     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf')
 //   }).then(() => {
@@ -46,6 +48,19 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
+  state = {
+    fontLoaded: false
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'Merriweather-Regular': require('../../assets/fonts/Merriweather-Regular.ttf'),
+      'Merriweather-Bold': require('../../assets/fonts/Merriweather-Bold.ttf'),
+    });
+
+    this.setState({ fontLoaded: true });
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerStyle: {
@@ -162,9 +177,13 @@ class Home extends Component {
         padding: 5,
         backgroundColor: "#010d25",
         borderWidth: 2,
-        borderColor: "#2699FB"
+        borderColor: "#2699FB",
+        fontFamily: this.state.fontLoaded ? 'Merriweather-Regular' : '',
+        color: '#efefef',
       }
     });
+
+    console.log(styles.LoginButton)
 
     return (
       <ThemeProvider>
@@ -173,10 +192,10 @@ class Home extends Component {
             <LinearGradient
               colors={['#010d25', '#0f345a', '#124375']}
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/SayHay-Logo-Spin.gif')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               {name ?
                 <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-                <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
+                <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
               }
             </LinearGradient>
           
