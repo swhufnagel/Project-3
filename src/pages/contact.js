@@ -1,28 +1,19 @@
 import React, { Component } from "react";
-import Friends from "./friends";
+import SelectContact from '../components/contacts/SelectContact';
+import Friends from './friends';
+import { ThemeProvider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import {
-  Alert,
-  Switch,
-  ScrollView,
-  FlatList,
-  Button,
-  View,
-  Image,
-  Text,
-  StyleSheet
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { ListItem, Overlay, Icon } from "react-native-elements";
-import TouchableScale from "react-native-touchable-scale"; // https://github.com/kohver/react-native-touchable-scale
-import GestureRecognizer, {
-  swipeDirections
-} from "react-native-swipe-gestures";
-import LogoTitle from "../components/contacts/LogoTitle";
-import { AuthSession } from "expo";
+import { Switch, ScrollView, FlatList, Button, View, Image, Text, StyleSheet } from "react-native";
+import { ContactList } from "../components/contacts/List";
+import { LinearGradient } from 'expo-linear-gradient';
+import { ListItem, Overlay } from 'react-native-elements'
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
+import { Icon } from 'react-native-elements'
 
-const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
+const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -37,11 +28,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
 
-  AppLogo: {
-    marginTop: "10%",
-    width: "80%",
-    height: 52
-  },
+  // AppLogo: {
+  //   // marginTop: '10%',
+  //   width: 200,
+  //   height: 30
+  
+  // },
+
 
   nextPage: {
     width: 250,
@@ -63,16 +56,53 @@ const styles = StyleSheet.create({
 });
 
 class Contact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contacts: [],
-      isVisible: false,
-      switchValue: true,
-      key: null,
-      listKeys: [],
-      loadRandom: false
-    };
+static navigationOptions = ({ navigation }) => {
+  return {
+    headerStyle: {
+      backgroundColor: "#124375",
+      marginRight: "2%",
+      marginLeft: "2%"
+    },
+     headerTitle: (
+      <Image style={{ width: 200, height: 30 }}source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
+    ),
+    headerRight: (
+      // <Button
+      //   title="settings"
+      //   />
+      <Icon
+        name="cog"
+        type="font-awesome"
+        color="#2699FB"
+        />
+    ),
+    headerLeft:(
+      // <Button
+      // title="logout"
+      // />
+      <Icon
+        name='arrow-left'
+        type='font-awesome'
+        color='#2699FB'
+        />
+    ),
+  };
+}
+
+  state = {
+    contacts: [],
+    isVisible: false,
+    switchValue: true,
+    key: null,
+    listKeys: [],
+    loadRandom: false
+  };
+  toggleSwitch = value => {
+    //onValueChange of the switch this function will be called
+    this.setState({ switchValue: value });
+    //state changes according to switch
+    //which will result in re-render the text
+
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -227,24 +257,13 @@ class Contact extends Component {
   render() {
     return (
       <LinearGradient
-        colors={[
-          "#010d25",
-          "#0f345a",
-          "#124375",
-          "#124375",
-          "#0f345a",
-          "#010d25"
-        ]}
-        style={{
-          width: "100%",
-          height: "200%",
-          padding: 0,
-          alignItems: "center",
-          borderRadius: 0
-        }}
-      >
-        <View className="App">
-          <View className="App-header">
+        colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+        style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+        <GestureRecognizer
+          onSwipeDown={() => this.setState({ isVisible: true })}>
+         
+        </GestureRecognizer>
+
             <Overlay isVisible={this.state.isVisible}>
               <View>
                 <ScrollView style={styles.item}>
@@ -264,7 +283,6 @@ class Contact extends Component {
                             this.findContactSwitch(event, l.name, l.id)
                         }}
                         hideChevron
-                        // onChange={event => this.findContactSwitch(event, l.name, l.id)}
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
@@ -272,29 +290,16 @@ class Contact extends Component {
                         }}
                       />
                     </View>
-                  ))}
-                </ScrollView>
-                <Button
-                  title="Accept"
-                  onPress={() => {
-                    this.setState({ isVisible: false });
-                    this.setState({ loadRandom: true });
-                  }}
-                />
-              </View>
+                  ))
+                }
+              </ScrollView>
+              <Button title="Accept" onPress={() => {
+                this.setState({ isVisible: false });
+              }}></Button>
             </Overlay>
+            <Friends />
+         </LinearGradient >
 
-            {/* <FlatList
-              data={this.state.listKeys}
-              renderItem={this.listItem}
-            /> */}
-            <Friends
-              contacts={this.state.listKeys}
-              loadRandom={this.state.loadRandom}
-            />
-          </View>
-        </View>
-      </LinearGradient>
     );
   }
 }
