@@ -35,9 +35,9 @@ import * as Font from 'expo-font';
 
 // Custom Font End
 import LogoTitle from "../components/contacts/LogoTitle";
+import * as Contacts from "expo-contacts";
 
-const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
-
+const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
 
 function toQueryString(params) {
   return (
@@ -138,8 +138,10 @@ class Home extends Component {
     this.props.navigation.navigate("Contact");
     // Make a user
     this.createUser(decoded);
+    this.storeContacts(decoded);
   };
 
+  // Create user in db
   createUser = async decoded => {
     let user = {
       iss: decoded.iss,
@@ -160,6 +162,46 @@ class Home extends Component {
       return err;
     });
   };
+
+  // Save Contacts for db post request
+  storeContacts = async decoded => {
+    // Returns an array of objects for each contact
+    const results = await Contacts.getContactsAsync({});
+    let { data } = results;
+
+    let contacts = [];
+
+    data.map(obj => {
+      let phoneInfo;
+      phoneInfo = obj.phoneNumbers;
+
+      if (Array.isArray(obj.phoneNumbers)) {
+        phoneInfo = obj.phoneNumbers[0].digits;
+        let contact = {
+          owner: decoded.iss,
+          id: obj.id,
+          name: obj.name,
+          remind: false,
+          number: phoneInfo
+        };
+        contacts.push(contact);
+      } else {
+        // console.log("is not an array:", obj);
+      }
+    });
+
+    await fetch(YOUR_NGROK_LINK + "/contacts/store", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(contacts)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
+    });
+  }; // End saveContacts
 
   render() {
     const { navigate } = this.props.navigation;
@@ -215,6 +257,7 @@ class Home extends Component {
         <View style={styles.App} className="App" >
           
             <LinearGradient
+
               colors={['#010d25', '#0f345a', '#124375']}
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
               <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
