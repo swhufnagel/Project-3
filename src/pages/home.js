@@ -73,25 +73,10 @@ class Home extends Component {
       },
       headerTitle: (
         <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
-      ), 
-    headerRight: (
-        <Icon
-        name="cog"
-        type="font-awesome"
-        color="#2699FB"
-        // onPress={() => console.log('hello')}
-        />      
-      ),
-      headerLeft:(
-        <Icon
-        name='arrow-left'
-        type='font-awesome'
-        color='#2699FB'
-        />
-      ),
+      )
     };
   }
-  
+
 
 
   state = {
@@ -157,7 +142,7 @@ class Home extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(user)
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.log("Error:", err);
       return err;
     });
@@ -206,8 +191,8 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
-    
- 
+
+
 
     const styles = StyleSheet.create({
       App: {
@@ -250,24 +235,23 @@ class Home extends Component {
       }
     });
 
-    console.log(styles.LoginButton)
+    // console.log(styles.LoginButton)
 
     return (
       <ThemeProvider>
         <View style={styles.App} className="App" >
-          
-            <LinearGradient
+          <LinearGradient
+            colors={['#010d25', '#0f345a', '#124375']}
+            style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
+            <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+            {name ?
+              <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
+              <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
+            }
 
-              colors={['#010d25', '#0f345a', '#124375']}
-              style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-              {name ?
-                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-                <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
-              }
+          </LinearGradient>
 
-            </LinearGradient>
-          
+
         </View>
       </ThemeProvider>
     );
