@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-// import logo2 from './logo2.svg';
-import FacebookButton from '../components/friends/FacebookButton'
-import MainBody from "../components/friends/MainBody"
-import GoogleButton from "../components/friends/GoogleButton"
-import NavBar from "../components/friends/NavBar"
-// import '../App.css';
-import SelectContact from '../components/friends/SelectContact';
-import FriendImg from '../components/friends/FriendImg';
 import { LinearGradient } from 'expo-linear-gradient';
-import CallButton from '../components/friends/CallButton';
-import TextButton from '../components/friends/TextButton';
 import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Button, ThemeProvider } from 'react-native-elements';
 import call from "react-native-phone-call";
 import Communications from "react-native-communications";
 import RNShake from 'react-native-shake';
-import * as Contacts from "expo-contacts";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
+import { AuthSession } from 'expo';
+
 
 
 const styles = StyleSheet.create({
@@ -71,45 +62,59 @@ const styles = StyleSheet.create({
     padding: 5
   }
 })
-// function Friends() {
 class Friends extends Component {
-  state = {
-    currentPhoto: "https://i.pravatar.cc/300",
-    currentName: "",
-    currentNumber: null,
-    contacts: [],
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentPhoto: 'https://i.pravatar.cc/300?img=',
+      currentName: "",
+      currentNumber: null,
+      contacts: [],
+      randomContact: {},
+      done: false,
+    }
   }
-  getContacts = async () => {
-    const { data } = await Contacts.getContactsAsync({});
-    console.log('contacts: ', data);
-    await this.setState({ contacts: data });
-    await this.getRandomContact;
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (this.props.loadRandom === true && this.state.done === false) {
+      this.getContacts();
+    }
   }
   componentDidMount = async () => {
-    await this.getContacts;
-    console.log('mounted')
+    AuthSession.dismiss();
   }
   componentWillMount() {
     RNShake.addEventListener('ShakeEvent', () => {
+      console.log('shook')
+      this.getRandomContact();
     });
   }
   componentWillUnmount() {
     RNShake.removeEventListener('ShakeEvent');
   }
-  getRandomContact = async () => {
-    let randomNum = Math.floor(Math.random() * this.state.contacts.length + 1);
-    let randomContact = this.state.contacts[randomNum];
-    // alert(randomContact.name);
-    this.setState({ Alert_Visibility: true });
-    await this.setState({ currentName: randomContact.name });
-    await this.setState({
-      currentNumber: randomContact.phoneNumbers[0].number
-    });
-    await this.setState({
-      currentPhoto: 'https://i.pravatar.cc/300'
+
+  getContacts = () => {
+    this.setState({ contacts: this.props.contacts }, () => {
+      let includedContacts = this.props.contacts.filter((item) => {
+        return item.switch === true;
+      })
+      this.setState({ includedContacts: includedContacts }, () => {
+        this.getRandomContact();
+      })
+    })
+    this.setState({ done: true }, () => {
+      // console.log("is it done ", this.state.done);
+    })
+  }
+  getRandomContact = () => {
+    let randomNum = Math.floor((Math.random() * this.state.includedContacts.length));
+    let randomContact = this.state.includedContacts[randomNum];
+    this.setState({ currentPhoto: 'https://i.pravatar.cc/300?img=' + randomNum })
+    this.setState({ randomContact: randomContact })
+    this.setState({ currentName: randomContact.name });
+    this.setState({
+      currentNumber: randomContact.phoneNumbers[0].digits
     });
 
-    // this.callContact(randomContact.phoneNumbers[0].number, true)
   };
   callContact = () => {
     const contact = {
@@ -135,10 +140,11 @@ class Friends extends Component {
               style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
               <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               <Image
-                source={{ uri: 'https://i.pravatar.cc/300' }}
+                source={{ uri: this.state.currentPhoto }}
                 style={{ width: 200, height: 200, borderRadius: 100, marginTop: 25 }} />
-              <Text> {this.state.currentName} </Text>
-              <Text> {this.state.currentNumber} </Text>
+
+              <Text style={{ color: 'white' }}> {this.state.currentName} </Text>
+              <Text style={{ color: 'white' }}> {this.state.currentNumber} </Text>
               <View style={styles.buttonArea} className="buttonArea">
                 <Button title="Call" style={styles.Call} type="clear" className="Call" onPress={this.callContact}></Button>
                 <Button title="Text" style={styles.Text} type="clear" className="Text" onPress={this.textContact.bind(this)}></Button>

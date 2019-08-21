@@ -18,14 +18,14 @@ const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 const styles = StyleSheet.create({
   App: {
     // backgroundSize: '200%',
-    height: '100%'
+    height: "100%"
   },
 
   AppHeader: {
-    minHeight: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    minHeight: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
 
   // AppLogo: {
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   //   height: 30
   
   // },
+
 
   nextPage: {
     width: 250,
@@ -47,13 +48,13 @@ const styles = StyleSheet.create({
     padding: 5
   },
   item: {
-    width: '100%'
+    width: "100%"
   },
   friends: {
-    width: '100%'
+    width: "100%"
   }
 });
-let contacts = [];
+
 class Contact extends Component {
 static navigationOptions = ({ navigation }) => {
   return {
@@ -93,29 +94,89 @@ static navigationOptions = ({ navigation }) => {
     isVisible: false,
     switchValue: true,
     key: null,
-    listKeys: []
+    listKeys: [],
+    loadRandom: false
   };
   toggleSwitch = value => {
     //onValueChange of the switch this function will be called
     this.setState({ switchValue: value });
     //state changes according to switch
     //which will result in re-render the text
+
   }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: (
+        <GestureRecognizer onSwipeDown={navigation.getParam("showSettings")}>
+          <LogoTitle />
+        </GestureRecognizer>
+      ),
+      headerRight: (
+        <Icon
+          name="settings"
+          type="material"
+          color="#517fa4"
+          onPress={navigation.getParam("showSettings")}
+        />
+      ),
+      headerLeft: (
+        <Icon
+          name="directions-walk"
+          type="material"
+          color="#517fa4"
+          onPress={navigation.getParam("nowLogout")}
+        />
+      )
+    };
+  };
+  nowLogout = () => {
+    console.log("logging out");
+    Alert.alert(
+      "Logout from Hay?",
+      "This will also log you out from any services you logged in with",
+      [
+        {
+          text: "Logout",
+          onPress: async () => {
+            let authUrl =
+              "https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
+            const response = await AuthSession.startAsync(
+              {
+                authUrl: authUrl
+              },
+              () => {
+                AuthSession.dismiss();
+              }
+            );
+            console.log("response ", response);
+            this.props.navigation.navigate("Home");
+          }
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: true }
+    );
+  };
+  showSettings = () => {
+    this.setState({ isVisible: true });
+  };
+
   findContactSwitch = async (event, name, id) => {
-    // console.log('LOGGING EVENT', event, name);
-    console.log(id);
-    const index = await this.state.listKeys.findIndex(listKey => listKey.id === id)
-    console.log('index', index);
-    const newState = this.state.listKeys[index].switch = !this.state.listKeys[index].switch
-    this.setState({ newState })
-  }
+    const index = await this.state.listKeys.findIndex(
+      listKey => listKey.id === id
+    );
+    console.log("index", index);
+    const newState = (this.state.listKeys[index].switch = !this.state.listKeys[
+      index
+    ].switch);
+    this.setState({ newState });
+  };
 
   permissionFlow = async () => {
-    const newListKeys = this.state.contacts.map((contact, i) => {
-      contact.switch = true;
-      contact.key = i;
-      return contact
-    })
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
     this.setState({ status: status });
     if (status !== "granted") {
@@ -123,18 +184,16 @@ static navigationOptions = ({ navigation }) => {
       alert("You will need to enable contacts to use our app!");
       return;
     }
-
     //get data
     const { data } = await Contacts.getContactsAsync({});
-    // console.log(data);
     this.setState({ contacts: data });
     this.setState({
       listKeys: data.map((contact, i) => {
         contact.switch = true;
         contact.key = i;
-        return contact
+        return contact;
       })
-    })
+    });
   };
   goToNextPage = () => {
     this.props.navigation.navigate("Friends");
@@ -144,26 +203,39 @@ static navigationOptions = ({ navigation }) => {
     this.permissionFlow();
     this.storeContacts();
   }
-  componentDidUpdate() {
-    // console.log('listKeys ', this.state.listKeys);
+  componentDidUpdate() {}
+  componentWillMount() {
+    this.props.navigation.setParams({
+      showSettings: this.showSettings,
+      nowLogout: this.nowLogout
+    });
   }
-
   // Save Contacts for db post request
   storeContacts = async () => {
     // Returns an array of objects for each contact
-    const { data } = await Contacts.getContactsAsync({});
-    console.log("PHONE:", data[0].phoneNumbers[0].number);
-    slicedData = data.slice(0, 5);
+    const results = await Contacts.getContactsAsync({});
+    let { data } = results;
+
     let contacts = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].phoneNumbers[0].number) {
+
+    data.map(obj => {
+      let phoneInfo;
+      phoneInfo = obj.phoneNumbers;
+
+      if (Array.isArray(obj.phoneNumbers)) {
+        phoneInfo = obj.phoneNumbers[0].digits;
         let contact = {
-          name: data[i].name // name
-          // number: JSON.stringify(data[i].phoneNumbers[0].number) // phone number not working for some reason
+          id: obj.id,
+          name: obj.name,
+          remind: false,
+          number: phoneInfo
         };
         contacts.push(contact);
+      } else {
+        // console.log("is not an array:", obj);
       }
-    }
+    });
+
     await fetch(YOUR_NGROK_LINK + "/contacts/store", {
       method: "POST",
       headers: {
@@ -171,8 +243,16 @@ static navigationOptions = ({ navigation }) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
     });
   }; // End saveContacts
+
+  // Change Remind Boolean
+  // changeRemind = async () => {
+  //   console.log("THIS:", this.state);
+  // };
 
   render() {
     return (
@@ -183,27 +263,30 @@ static navigationOptions = ({ navigation }) => {
           onSwipeDown={() => this.setState({ isVisible: true })}>
          
         </GestureRecognizer>
-        
+
             <Overlay isVisible={this.state.isVisible}>
-              <ScrollView style={styles.item}>
-                {
-                  this.state.listKeys.map((l, i) => (
+              <View>
+                <ScrollView style={styles.item}>
+                  {this.state.listKeys.map((l, i) => (
                     <View key={i}>
                       <ListItem
                         key={l.id}
                         title={l.name}
                         name={l.name}
                         bottomDivider={true}
-                        leftAvatar={{ source: { uri: 'https://i.pravatar.cc/300' } }}
+                        leftAvatar={{
+                          source: { uri: "https://i.pravatar.cc/300?img=" }
+                        }}
                         switch={{
                           value: this.state.listKeys[i].switch,
-                          onChange: event => this.findContactSwitch(event, l.name, l.id)
+                          onChange: event =>
+                            this.findContactSwitch(event, l.name, l.id)
                         }}
                         hideChevron
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
-                          false: "purple",
+                          false: "purple"
                         }}
                       />
                     </View>
@@ -216,6 +299,7 @@ static navigationOptions = ({ navigation }) => {
             </Overlay>
             <Friends />
          </LinearGradient >
+
     );
   }
 }

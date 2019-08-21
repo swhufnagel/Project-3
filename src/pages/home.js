@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AuthSession } from "expo";
-import { Constants } from "expo";
 import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
@@ -35,6 +34,10 @@ import * as Font from 'expo-font';
 // )}
 
 // Custom Font End
+import LogoTitle from "../components/contacts/LogoTitle";
+
+const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
+
 
 function toQueryString(params) {
   return (
@@ -90,6 +93,7 @@ class Home extends Component {
   }
   
 
+
   state = {
     text: "",
     name: null,
@@ -102,10 +106,9 @@ class Home extends Component {
     const queryParams = toQueryString({
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
-      response_type: 'id_token', // id_token will return a JWT token
-      scope: 'openid profile email', // retrieve the user's profile
-      nonce: 'nonce', // ideally, this will be a random value
-
+      response_type: "id_token", // id_token will return a JWT token
+      scope: "openid profile email", // retrieve the user's profile
+      nonce: "nonce" // ideally, this will be a random value
     });
     let authUrl = `${auth0Domain}/authorize` + queryParams;
 
@@ -114,7 +117,6 @@ class Home extends Component {
     const response = await AuthSession.startAsync({
       authUrl: authUrl
     });
-    // console.log("response ", response);
     if (response.type === "success") {
       this.handleResponse(response.params);
     }
@@ -130,11 +132,35 @@ class Home extends Component {
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
-    console.log("scopes: ", decoded)
+    console.log("scopes: ", decoded);
     const { name } = decoded;
     this.setState({ name });
     this.props.navigation.navigate("Contact");
+    // Make a user
+    this.createUser(decoded);
   };
+
+  createUser = async decoded => {
+    let user = {
+      iss: decoded.iss,
+      nickname: decoded.nickname,
+      contacts: []
+    };
+    // console.log("USer:", user);
+
+    await fetch(YOUR_NGROK_LINK + "/users/create", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).catch(function(err) {
+      console.log("Error:", err);
+      return err;
+    });
+  };
+
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
@@ -147,8 +173,7 @@ class Home extends Component {
         //   // backgroundSize: '200%',
         //   // animation: bganimation 15s infinite,
 
-        height: '200%'
-
+        height: "200%"
       },
       AppLogo: {
         marginTop: "15%",
@@ -197,6 +222,7 @@ class Home extends Component {
                 <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
                 <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
               }
+
             </LinearGradient>
           
         </View>

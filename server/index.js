@@ -2,6 +2,7 @@ import express from "express";
 import Expo from "expo-server-sdk";
 import timestamp from "time-stamp";
 import mongoose from "mongoose";
+import { create } from "uuid-js";
 const db = require("./../models");
 // const routes = require("../routes");
 const app = express();
@@ -45,7 +46,12 @@ mongoose.connect(
     // Log the total number of rows in database
     db.collection("users").countDocuments(function(err, count) {
       if (err) throw err;
-      console.log(`Total Rows: ${count}`);
+      console.log(`Total User Rows: ${count}`);
+    });
+
+    db.collection("contacts").countDocuments(function(err, count) {
+      if (err) throw err;
+      console.log(`Total Contacts ${count}`);
     });
   }
 );
@@ -98,30 +104,52 @@ app.post("/message", (req, res) => {
   res.send(`Received message, ${req.body.message}`);
 });
 
-app.post("/contacts/store", async (req, res) => {
-  console.log("REQUEST BODY", req.body);
+// Create User
+// ===========================
+app.post("/users/create", async (req, res) => {
+  const userInfo = req.body;
+  console.log("req.body:", userInfo);
 
+  db.User.findOne({ iss: userInfo.iss }, async (err, doc) => {
+    let response = { sucess: true, msg: "The User Created Successfully" };
+
+    //The User doesn't exist => Add New User
+    if (!doc) {
+      let user = new db.User(req.body);
+      let createdUser = await user.save();
+    } else {
+      response.msg = "The User/Email is Already Exists";
+      res.json(response);
+    }
+    console.log("response:", response);
+  });
+});
+//  ===========================
+
+// Store all contacts in database
+app.post("/contacts/store", async (req, res) => {
+  // Array for database
   let response = [];
 
   for (let i = 0; i < req.body.length; i++) {
-    let user = new db.User(req.body[i]);
-    console.log("req body i:", req.body[i]);
-    let createdUser = await user.save();
-    console.log("created user:", createdUser);
-    response.push(createdUser);
+    db.Contacts.findOne({ id: req.body[i].id }, async (err, doc) => {
+      let contResp = { success: true, msg: "The Contact Created Successfully" };
+
+      //The User doesn't exist => Add New User
+      if (!doc) {
+        let contact = new db.Contacts(req.body[i]);
+        let createdContact = await contact.save();
+        response.push(createdContact);
+      } else {
+        contResp.msg = "The Contact Already Exists";
+      }
+    });
   }
+
   console.log("response1:", response);
+
   res.json(response);
 });
-
-// Store array to database
-// app.post("/contacts/stash", (req, res) => {
-//   console.log("req.body:", req.body);
-//   const contacts = req.body;
-//   db.User.insertMany(contacts).then(function(response) {
-//     console.log(response);
-//   });
-// });
 
 app.listen(PORT_NUMBER, () => {
   console.log(`Server Online on Port ${PORT_NUMBER}`);
