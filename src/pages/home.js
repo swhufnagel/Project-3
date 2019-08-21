@@ -1,16 +1,39 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Platform
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AuthSession } from "expo";
 import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
+import { Icon } from 'react-native-elements'
+import * as Permissions from "expo-permissions";
+import * as Contacts from "expo-contacts";
+import createAuth0Client from '@auth0/auth0-spa-js';
+// import { Asset, Font } from "expo";
+import * as Font from 'expo-font';
+
+
+
+
+// Custom Font 
+// constructor(props) {
+//   super(props);
+//   this.state = {
+//   fontLoaded: false
+// }
+// }
+// async componenentDidMount() {
+//   await Font.loadAsync({
+//     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf')
+//   }).then(() => {
+//     this.setState({fontLoaded: true})
+//   })
+// }
+// { this.state.fontLoaded == true ? (
+
+// )}
+
+// Custom Font End
 import LogoTitle from "../components/contacts/LogoTitle";
 
 const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
@@ -28,11 +51,49 @@ function toQueryString(params) {
   );
 }
 class Home extends Component {
+  state = {
+    fontLoaded: false
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'Merriweather-Regular': require('../../assets/fonts/Merriweather-Regular.ttf'),
+      'Merriweather-Bold': require('../../assets/fonts/Merriweather-Bold.ttf'),
+    });
+
+    this.setState({ fontLoaded: true });
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <LogoTitle />
+      headerStyle: {
+        backgroundColor: "#124375",
+        marginRight: "2%",
+        marginLeft: "2%"
+      },
+      headerTitle: (
+        <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
+      ), 
+    headerRight: (
+        <Icon
+        name="cog"
+        type="font-awesome"
+        color="#2699FB"
+        // onPress={() => console.log('hello')}
+        />      
+      ),
+      headerLeft:(
+        <Icon
+        name='arrow-left'
+        type='font-awesome'
+        color='#2699FB'
+        />
+      ),
     };
-  };
+  }
+  
+
+
   state = {
     text: "",
     name: null,
@@ -103,6 +164,8 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
+    
+ 
 
     const styles = StyleSheet.create({
       App: {
@@ -112,13 +175,6 @@ class Home extends Component {
 
         height: "200%"
       },
-      // AppHeader: {
-      //   // minHeight: '200%',
-      //   display: 'flex',
-      //   // flexDirection: 'column',
-      //   alignItems: 'center'
-      // },
-
       AppLogo: {
         marginTop: "15%",
         width: 250,
@@ -134,40 +190,41 @@ class Home extends Component {
         borderRightColor: "#175084",
         padding: 5,
         borderWidth: 2,
-        borderColor: "#2699FB"
+        borderColor: "#2699FB",
       },
 
       LoginButton: {
         width: 250,
-        marginTop: 40,
+        marginTop: 130,
         borderRadius: 25,
         borderBottomColor: "#175084",
         borderRightColor: "#175084",
         padding: 5,
         backgroundColor: "#010d25",
         borderWidth: 2,
-        borderColor: "#2699FB"
+        borderColor: "#2699FB",
+        fontFamily: this.state.fontLoaded ? 'Merriweather-Regular' : '',
+        color: '#efefef',
       }
-
-      // buttonArea: {
-      //   display: 'flex'
-      // }
     });
+
+    console.log(styles.LoginButton)
 
     return (
       <ThemeProvider>
-        <View style={styles.App} className="App">
-          <View style={styles.AppHeader} className="AppHeader">
+        <View style={styles.App} className="App" >
+          
             <LinearGradient
               colors={['#010d25', '#0f345a', '#124375']}
-              // 722211 , ef9337 ,efb560 - orange
-              // 010d25, 0f345a, 124375 - blue
-              // 35302c, 4c3825, 7f4d1f -brown
               style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-              <Image source={require('../../assets/HayLogoVertOrange.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-              <Button style={styles.LoginButton} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
+              <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
+              {name ?
+                <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
+                <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
+              }
+
             </LinearGradient>
-          </View>
+          
         </View>
       </ThemeProvider>
     );

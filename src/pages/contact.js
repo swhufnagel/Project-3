@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Friends from "./friends";
+import SelectContact from '../components/contacts/SelectContact';
+import Friends from './friends';
+import { ThemeProvider } from 'react-native-elements';
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import {
@@ -23,7 +25,8 @@ import GestureRecognizer, {
 import LogoTitle from "../components/contacts/LogoTitle";
 import { AuthSession } from "expo";
 
-const YOUR_NGROK_LINK = "http://09b85fda.ngrok.io";
+
+const YOUR_NGROK_LINK = "http://4bc3511d.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -38,11 +41,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
 
-  AppLogo: {
-    marginTop: "10%",
-    width: "80%",
-    height: 52
-  },
+  // AppLogo: {
+  //   // marginTop: '10%',
+  //   width: 200,
+  //   height: 30
+  
+  // },
+
 
   nextPage: {
     width: 250,
@@ -81,6 +86,7 @@ class Contact extends Component {
   }
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
+
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -399,6 +405,7 @@ class Contact extends Component {
                         onPress={() => {
                           this.openScheduling(l.id);
                         }}
+
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
@@ -427,6 +434,7 @@ class Contact extends Component {
                         />
                       </Overlay>
                     </View>
+
                   ))}
                   <Button
                     title="Accept"
@@ -437,7 +445,10 @@ class Contact extends Component {
                   />
                 </ScrollView>
               </View>
+
             </Overlay>
+            <Friends />
+         </LinearGradient >
 
             {/* <FlatList
               data={this.state.listKeys}
@@ -450,6 +461,7 @@ class Contact extends Component {
           </View>
         </View >
       </LinearGradient >
+
     );
   }
 }
