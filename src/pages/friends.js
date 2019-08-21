@@ -108,6 +108,7 @@ class Friends extends Component {
   getRandomContact = () => {
     let randomNum = Math.floor((Math.random() * this.state.includedContacts.length));
     let randomContact = this.state.includedContacts[randomNum];
+    console.log("random contact ", randomContact);
     this.setState({ currentPhoto: 'https://i.pravatar.cc/300?img=' + randomNum })
     this.setState({ randomContact: randomContact })
     this.setState({ currentName: randomContact.name });
@@ -131,7 +132,6 @@ class Friends extends Component {
     return (
       <View style={styles.App} className="App">
         <View style={styles.AppHeader} className="AppHeader">
-          {/* <NavBar /> */}
           <GestureRecognizer
             onSwipeUp={this.getRandomContact}
           >

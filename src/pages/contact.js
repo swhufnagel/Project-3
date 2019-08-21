@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   //   // marginTop: '10%',
   //   width: 200,
   //   height: 30
-  
+
   // },
 
 
@@ -91,29 +91,35 @@ class Contact extends Component {
   }
   static navigationOptions = ({ navigation }) => {
     return {
+      headerStyle: {
+        backgroundColor: "#124375",
+        marginRight: "2%",
+        marginLeft: "2%"
+      },
       headerTitle: (
         <GestureRecognizer onSwipeDown={navigation.getParam("showSettings")}>
-          <LogoTitle />
+          <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
         </GestureRecognizer>
       ),
       headerRight: (
         <Icon
-          name="settings"
-          type="material"
-          color="#517fa4"
+          name="cog"
+          type="font-awesome"
+          color="#2699FB"
           onPress={navigation.getParam("showSettings")}
         />
       ),
       headerLeft: (
         <Icon
-          name="directions-walk"
-          type="material"
-          color="#517fa4"
+          name='arrow-left'
+          type='font-awesome'
+          color='#2699FB'
           onPress={navigation.getParam("nowLogout")}
         />
-      )
+      ),
     };
-  };
+  }
+
   nowLogout = () => {
     console.log("logging out");
     Alert.alert(
@@ -164,10 +170,8 @@ class Contact extends Component {
     const index = await this.state.listKeys.findIndex(
       listKey => listKey.id === id
     );
-    console.log("open or nah ", this.state.listKeys[index].openSchedule)
     const newState = (this.state.listKeys[index].openSchedule =
       !this.state.listKeys[index].openSchedule);
-    console.log("newState", newState);
     this.setState({ newState });
   };
   //setting notification state
@@ -444,15 +448,7 @@ class Contact extends Component {
                   />
                 </ScrollView>
               </View>
-
             </Overlay>
-            <Friends />
-         </LinearGradient >
-
-            {/* <FlatList
-              data={this.state.listKeys}
-              renderItem={this.listItem}
-            /> */}
             <Friends
               contacts={this.state.listKeys}
               loadRandom={this.state.loadRandom}
