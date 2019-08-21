@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Friends from "./friends";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
+import { Notifications } from 'expo';
 import {
   Alert,
   Switch,
@@ -336,8 +337,6 @@ class Contact extends Component {
     this.permissionFlow();
     this.storeContacts();
     this.registerForPushNotificationsAsync();
-    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions)
-
   }
   componentDidUpdate() { }
   componentWillMount() {
