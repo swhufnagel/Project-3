@@ -193,7 +193,7 @@ class Home extends Component {
       }
     });
 
-    console.log(styles.LoginButton)
+    // console.log(styles.LoginButton)
 
     return (
       <ThemeProvider>

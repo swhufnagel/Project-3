@@ -109,12 +109,17 @@ class Friends extends Component {
     let randomNum = Math.floor((Math.random() * this.state.includedContacts.length));
     let randomContact = this.state.includedContacts[randomNum];
     console.log("random contact ", randomContact);
-    this.setState({ currentPhoto: 'https://i.pravatar.cc/300?img=' + randomNum })
-    this.setState({ randomContact: randomContact })
+    this.setState({ randomContact: randomContact });
     this.setState({ currentName: randomContact.name });
     this.setState({
-      currentNumber: randomContact.phoneNumbers[0].digits
+      currentNumber: randomContact.phoneNumbers[0].digits ?
+        randomContact.phoneNumbers[0].digits : "no number found"
     });
+    this.setState({
+      currentPhoto: randomContact.imageAvailable ?
+        randomContact.image.uri :
+        'https://i.pravatar.cc/300?img=' + randomNum
+    })
 
   };
   callContact = () => {

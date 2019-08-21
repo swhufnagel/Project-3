@@ -316,7 +316,7 @@ class Contact extends Component {
       phoneInfo = obj.phoneNumbers;
 
       if (Array.isArray(obj.phoneNumbers)) {
-        phoneInfo = obj.phoneNumbers[0].digits;
+        phoneInfo = obj.phoneNumbers[0].digits ? obj.phoneNumbers[0].digits : "no number found";
         let contact = {
           id: obj.id,
           name: obj.name,
@@ -397,7 +397,11 @@ class Contact extends Component {
                         name={l.name}
                         bottomDivider={true}
                         leftAvatar={{
-                          source: { uri: "https://i.pravatar.cc/300?img=" }
+                          source: {
+                            uri: this.state.listKeys[i].imageAvailable ?
+                              this.state.listKeys[i].image.uri :
+                              "https://i.pravatar.cc/300?img="
+                          }
                         }}
                         switch={{
                           value: this.state.listKeys[i].switch,
