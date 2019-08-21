@@ -1,10 +1,8 @@
 import React, { Fragment, Component } from "react";
-import GestureRecognizer from "react-native-swipe-gestures";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
 import Constants from "expo-constants";
 import { Notifications } from "expo";
-import Dashboard from "./src/components/Dashboard";
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,17 +15,11 @@ import {
   TextInput,
   TouchableOpacity
 } from "react-native";
-// import { ListItem } from "react-native-elements";
-// import firebase from "react-native-firebase";
-import { mapping, light as lightTheme } from "@eva-design/eva";
-import { ApplicationProvider, Layout } from "react-native-ui-kitten";
-import { HomeScreen } from "./src/components/HomeScreen";
 import call from "react-native-phone-call";
 import Communications from "react-native-communications";
-import server from "./server/index";
 
-const YOUR_PUSH_TOKEN = "http://13c13043.ngrok.io/token";
-const MESSAGE_ENPOINT = "http://13c13043.ngrok.io/message";
+const YOUR_PUSH_TOKEN = "http://7dfccb17.ngrok.io/token";
+const MESSAGE_ENPOINT = "http://7dfccb17.ngrok.io/message";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,16 +73,9 @@ export default class gimmePermission extends Component {
   };
   componentDidMount() {
     this.registerForPushNotificationsAsync();
-    this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
-    );
-    // Create notification channel required for Android devices
-    this.createNotificationChannel();
-
     // Ask notification permission and add notification listener
     this.checkPermission();
   }
-  createNotificationChannel = () => { };
 
   checkPermission = async () => {
     const enabled = await firebase.messaging().hasPermission();
@@ -139,6 +124,9 @@ export default class gimmePermission extends Component {
 
       // I added this for getting the push token. It might be hard-coded in "YOUR_PUSH_TOKEN" variable as of now
       // but it said that is the same functionality as localhost:3000
+      this.notificationSubscription = Notifications.addListener(
+        this._handleNotification
+      );
 
       return fetch(YOUR_PUSH_TOKEN, {
         method: "POST",
@@ -157,9 +145,6 @@ export default class gimmePermission extends Component {
         })
       });
 
-      this.notificationSubscription = Notifications.addListener(
-        this.handleNotification
-      );
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -170,20 +155,23 @@ export default class gimmePermission extends Component {
   };
 
   sendMessage = async () => {
-    fetch(MESSAGE_ENPOINT, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: this.state.messageText
-      })
-    });
-    this.setState({ messageText: "" });
+    setInterval(async () => {
+      fetch(MESSAGE_ENPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: this.state.messageText
+        })
+      });
+      this.sendPushNotification();
+    }, 10 * 1000)
   };
 
   sendPushNotification = async () => {
+    console.log("sending");
     const message = {
       to: YOUR_PUSH_TOKEN,
       sound: "default",
@@ -200,7 +188,7 @@ export default class gimmePermission extends Component {
       },
       body: JSON.stringify(message)
     });
-    const data = response._bodyInit;
+    const data = response;
     console.log("response", data);
   };
 
@@ -241,21 +229,21 @@ export default class gimmePermission extends Component {
     Communications.text(this.state.currentNumber, "Test Text Here");
   };
 
-  makeContact = () => {
-    const testContact = this.state.contacts[1];
-    // console.log("contact:", testContact);
-    // process.env.MONGODB_URI || "mongodb://localhost/hayapp"
-    fetch(server, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contact: testContact
-      })
-    });
-  };
+  // makeContact = () => {
+  //   const testContact = this.state.contacts[1];
+  //   // console.log("contact:", testContact);
+  //   // process.env.MONGODB_URI || "mongodb://localhost/hayapp"
+  //   fetch(server, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       contact: testContact
+  //     })
+  //   });
+  // };
 
   render() {
     return (
@@ -274,11 +262,11 @@ export default class gimmePermission extends Component {
             Send
           </Text>
         </TouchableOpacity>
-        {this.state.notification ? this._handleNotification() : null}
+        <Text> {this.state.notification ? this._handleNotification() : null}</Text>
         <Button title="Get Random Contact" onPress={this.getRandomContact} />
         <Button title="Call Contact" onPress={this.callContact} />
         <Button title="Text Contact" onPress={this.textContact.bind(this)} />
-        <Button title="Contact to Database" onPress={this.makeContact} />
+        {/* <Button title="Contact to Database" onPress={this.makeContact} /> */}
         <View style={styles.empty} />
       </View>
     );
