@@ -96,6 +96,11 @@ class Contact extends Component {
           <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
         </GestureRecognizer>
       ),
+      headerStyle: {
+        backgroundColor: "#124375",
+        marginRight: "2%",
+        marginLeft: "2%"
+      },
       headerRight: (
         <Icon
           name="cog"
@@ -359,6 +364,7 @@ class Contact extends Component {
 
   render() {
     return (
+
       <LinearGradient
         colors={[
           "#010d25",
