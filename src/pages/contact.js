@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import SelectContact from '../components/contacts/SelectContact';
-import Friends from './friends';
-import { ThemeProvider } from 'react-native-elements';
+import SelectContact from "../components/contacts/SelectContact";
+import Friends from "./friends";
+import { ThemeProvider } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import { Notifications } from 'expo';
+import { Notifications } from "expo";
 import {
   Alert,
   Switch,
@@ -26,9 +26,7 @@ import GestureRecognizer, {
 import LogoTitle from "../components/contacts/LogoTitle";
 import { AuthSession } from "expo";
 
-
-const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
-
+const YOUR_NGROK_LINK = "http://290b44c6.ngrok.io";
 
 const styles = StyleSheet.create({
   App: {
@@ -49,7 +47,6 @@ const styles = StyleSheet.create({
   //   height: 30
 
   // },
-
 
   nextPage: {
     width: 250,
@@ -81,14 +78,12 @@ class Contact extends Component {
       listKeys: [],
       loadRandom: false,
       nah: false,
-      chosenDate: new Date(),
+      chosenDate: new Date()
     };
     this.setDate = this.setDate.bind(this);
-
   }
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
-
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -99,7 +94,12 @@ class Contact extends Component {
       },
       headerTitle: (
         <GestureRecognizer onSwipeDown={navigation.getParam("showSettings")}>
-          <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
+          <Image
+            style={{ width: 200, height: 30 }}
+            source={require("../../assets/HayLogoHorz3.png")}
+            className="AppLogo"
+            alt="logo"
+          />
         </GestureRecognizer>
       ),
       headerRight: (
@@ -112,14 +112,14 @@ class Contact extends Component {
       ),
       headerLeft: (
         <Icon
-          name='arrow-left'
-          type='font-awesome'
-          color='#2699FB'
+          name="arrow-left"
+          type="font-awesome"
+          color="#2699FB"
           onPress={navigation.getParam("nowLogout")}
         />
-      ),
+      )
     };
-  }
+  };
 
   nowLogout = () => {
     console.log("logging out");
@@ -157,7 +157,7 @@ class Contact extends Component {
     this.setState({ isVisible: true });
   };
 
-  findContactSwitch = async (id) => {
+  findContactSwitch = async id => {
     const index = await this.state.listKeys.findIndex(
       listKey => listKey.id === id
     );
@@ -167,21 +167,21 @@ class Contact extends Component {
     ].switch);
     this.setState({ newState });
   };
-  openScheduling = async (id) => {
+  openScheduling = async id => {
     const index = await this.state.listKeys.findIndex(
       listKey => listKey.id === id
     );
-    const newState = (this.state.listKeys[index].openSchedule =
-      !this.state.listKeys[index].openSchedule);
+    const newState = (this.state.listKeys[index].openSchedule = !this.state
+      .listKeys[index].openSchedule);
     this.setState({ newState });
   };
   //setting notification state
   _handleNotification = notification => {
     console.log("notification", notification);
-    let message = `Say Hay to ${this.clickedContact}`;//needs correct contact name
+    let message = `Say Hay to ${this.clickedContact}`; //needs correct contact name
     this.setState({ notification: message });
   };
-  //get notification permission & token for device 
+  //get notification permission & token for device
   registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(
@@ -223,7 +223,6 @@ class Contact extends Component {
           }
         })
       });
-
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -239,7 +238,7 @@ class Contact extends Component {
     let date = currentDate.getDate();
     let not0 = new Date(year, month, date, 12);
     not0 = Date.parse(not0);
-    const schedulingOptions0 = { time: not0, repeat: 'day' };
+    const schedulingOptions0 = { time: not0, repeat: "day" };
     // call the function to send notification at 12:00
     const localnotification = {
       to: YOUR_PUSH_TOKEN,
@@ -248,7 +247,10 @@ class Contact extends Component {
       body: `Click here to stay connected`,
       data: { data: "goes here" }
     };
-    await Notifications.scheduleLocalNotificationAsync(localnotification, schedulingOptions0);
+    await Notifications.scheduleLocalNotificationAsync(
+      localnotification,
+      schedulingOptions0
+    );
     fetch(MESSAGE_ENPOINT, {
       method: "POST",
       headers: {
@@ -305,52 +307,53 @@ class Contact extends Component {
     });
   };
   // Save Contacts for db post request
-  storeContacts = async () => {
-    // Returns an array of objects for each contact
-    const results = await Contacts.getContactsAsync({});
-    let { data } = results;
+  // storeContacts = async () => {
+  //   // Returns an array of objects for each contact
+  //   const results = await Contacts.getContactsAsync({});
+  //   let { data } = results;
 
-    let contacts = [];
+  //   let contacts = [];
 
-    data.map(obj => {
-      let phoneInfo;
-      phoneInfo = obj.phoneNumbers;
+  //   data.map(obj => {
+  //     let phoneInfo;
+  //     phoneInfo = obj.phoneNumbers;
 
-      if (Array.isArray(obj.phoneNumbers)) {
-        phoneInfo = obj.phoneNumbers[0].digits ? obj.phoneNumbers[0].digits : "no number found";
-        let contact = {
-          id: obj.id,
-          name: obj.name,
-          remind: false,
-          number: phoneInfo
-        };
-        contacts.push(contact);
-      } else {
-        // console.log("is not an array:", obj);
-      }
-    });
+  //     if (Array.isArray(obj.phoneNumbers)) {
+  //       phoneInfo = obj.phoneNumbers[0].digits
+  //         ? obj.phoneNumbers[0].digits
+  //         : "no number found";
+  //       let contact = {
+  //         id: obj.id,
+  //         name: obj.name,
+  //         remind: false,
+  //         number: phoneInfo
+  //       };
+  //       contacts.push(contact);
+  //     } else {
+  //       // console.log("is not an array:", obj);
+  //     }
+  //   });
 
-    await fetch(YOUR_NGROK_LINK + "/contacts/store", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(contacts)
-    }).catch(function (err) {
-      console.log("Error:", err);
-      return err;
-    });
-  }; // End saveContacts
-
+  //   await fetch(YOUR_NGROK_LINK + "/contacts/store", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(contacts)
+  //   }).catch(function(err) {
+  //     console.log("Error:", err);
+  //     return err;
+  //   });
+  // }; // End saveContacts
 
   componentDidMount() {
     this.setState({ isVisible: true });
     this.permissionFlow();
-    this.storeContacts();
+    // this.storeContacts();
     this.registerForPushNotificationsAsync();
   }
-  componentDidUpdate() { }
+  componentDidUpdate() {}
   componentWillMount() {
     this.props.navigation.setParams({
       showSettings: this.showSettings,
@@ -384,11 +387,13 @@ class Contact extends Component {
       >
         <View className="App">
           <View className="App-header">
-            <Overlay isVisible={this.state.isVisible}
+            <Overlay
+              isVisible={this.state.isVisible}
               onBackdropPress={() => {
                 this.setState({ isVisible: false });
                 this.setState({ loadRandom: true });
-              }}>
+              }}
+            >
               <View>
                 <ScrollView style={styles.item}>
                   {this.state.listKeys.map((l, i) => (
@@ -400,39 +405,37 @@ class Contact extends Component {
                         bottomDivider={true}
                         leftAvatar={{
                           source: {
-                            uri: this.state.listKeys[i].imageAvailable ?
-                              this.state.listKeys[i].image.uri :
-                              "https://i.pravatar.cc/300?img="
+                            uri: this.state.listKeys[i].imageAvailable
+                              ? this.state.listKeys[i].image.uri
+                              : "https://i.pravatar.cc/300?img="
                           }
                         }}
                         switch={{
                           value: this.state.listKeys[i].switch,
-                          onChange: event =>
-                            this.findContactSwitch(l.id)
+                          onChange: event => this.findContactSwitch(l.id)
                         }}
                         hideChevron
                         onPress={() => {
                           this.openScheduling(l.id);
                         }}
-
                         thumbColor="red"
                         trackColor={{
                           true: "yellow",
                           false: "purple"
                         }}
                       />
-                      <Overlay isVisible={this.state.listKeys[i].openSchedule}
+                      <Overlay
+                        isVisible={this.state.listKeys[i].openSchedule}
                         onBackdropPress={() => {
                           this.openScheduling(l.id, l.name);
                         }}
                         width={250}
                         height={300}
                       >
-                        <Text style={{ textAlign: 'center' }}> Settings </Text>
-                        <Text style={{ textAlign: 'center' }}> {l.name} </Text>
+                        <Text style={{ textAlign: "center" }}> Settings </Text>
+                        <Text style={{ textAlign: "center" }}> {l.name} </Text>
                         <DatePickerIOS
                           date={this.state.listKeys[i].chosenDate}
-
                           onDateChange={this.setDate}
                         />
                         <Button
@@ -443,7 +446,6 @@ class Contact extends Component {
                         />
                       </Overlay>
                     </View>
-
                   ))}
                   <Button
                     title="Accept"
@@ -460,9 +462,8 @@ class Contact extends Component {
               loadRandom={this.state.loadRandom}
             />
           </View>
-        </View >
-      </LinearGradient >
-
+        </View>
+      </LinearGradient>
     );
   }
 }

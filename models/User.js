@@ -1,10 +1,8 @@
-import mongoose from "mongoose";
-// import Contacts from "./Contacts";
-// import contacts from "./Contacts";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  iss: { type: String },
+  sub: { type: String },
   nickname: { type: String },
   contacts: [{ type: Schema.Types.ObjectId, ref: "Contacts" }]
 });

@@ -5,17 +5,14 @@ import jwtDecode from "jwt-decode";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, Divider, Button } from "react-native-elements";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
-import { Icon } from 'react-native-elements'
+import { Icon } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as Contacts from "expo-contacts";
-import createAuth0Client from '@auth0/auth0-spa-js';
+import createAuth0Client from "@auth0/auth0-spa-js";
 // import { Asset, Font } from "expo";
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 
-
-
-
-// Custom Font 
+// Custom Font
 // constructor(props) {
 //   super(props);
 //   this.state = {
@@ -36,7 +33,7 @@ import * as Font from 'expo-font';
 // Custom Font End
 import LogoTitle from "../components/contacts/LogoTitle";
 
-const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
+const YOUR_NGROK_LINK = "http://290b44c6.ngrok.io";
 
 function toQueryString(params) {
   return (
@@ -52,12 +49,12 @@ function toQueryString(params) {
 class Home extends Component {
   state = {
     fontLoaded: false
-  }
+  };
 
   async componentDidMount() {
     await Font.loadAsync({
-      'Merriweather-Regular': require('../../assets/fonts/Merriweather-Regular.ttf'),
-      'Merriweather-Bold': require('../../assets/fonts/Merriweather-Bold.ttf'),
+      "Merriweather-Regular": require("../../assets/fonts/Merriweather-Regular.ttf"),
+      "Merriweather-Bold": require("../../assets/fonts/Merriweather-Bold.ttf")
     });
 
     this.setState({ fontLoaded: true });
@@ -71,12 +68,15 @@ class Home extends Component {
         marginLeft: "2%"
       },
       headerTitle: (
-        <Image style={{ width: 200, height: 30 }} source={require('../../assets/HayLogoHorz3.png')} className="AppLogo" alt="logo" />
+        <Image
+          style={{ width: 200, height: 30 }}
+          source={require("../../assets/HayLogoHorz3.png")}
+          className="AppLogo"
+          alt="logo"
+        />
       )
     };
-  }
-
-
+  };
 
   state = {
     text: "",
@@ -128,7 +128,7 @@ class Home extends Component {
   // Create user in db
   createUser = async decoded => {
     let user = {
-      iss: decoded.iss,
+      sub: decoded.sub,
       nickname: decoded.nickname,
       contacts: []
     };
@@ -141,7 +141,7 @@ class Home extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(user)
-    }).catch(function (err) {
+    }).catch(function(err) {
       console.log("Error:", err);
       return err;
     });
@@ -162,7 +162,7 @@ class Home extends Component {
       if (Array.isArray(obj.phoneNumbers)) {
         phoneInfo = obj.phoneNumbers[0].digits;
         let contact = {
-          owner: decoded.iss,
+          owner: decoded.sub,
           id: obj.id,
           name: obj.name,
           remind: false,
@@ -181,7 +181,7 @@ class Home extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(contacts)
-    }).catch(function (err) {
+    }).catch(function(err) {
       console.log("Error:", err);
       return err;
     });
@@ -190,8 +190,6 @@ class Home extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name } = this.state;
-
-
 
     const styles = StyleSheet.create({
       App: {
@@ -216,7 +214,7 @@ class Home extends Component {
         borderRightColor: "#175084",
         padding: 5,
         borderWidth: 2,
-        borderColor: "#2699FB",
+        borderColor: "#2699FB"
       },
 
       LoginButton: {
@@ -229,8 +227,8 @@ class Home extends Component {
         backgroundColor: "#010d25",
         borderWidth: 2,
         borderColor: "#2699FB",
-        fontFamily: this.state.fontLoaded ? 'Merriweather-Regular' : '',
-        color: '#efefef',
+        fontFamily: this.state.fontLoaded ? "Merriweather-Regular" : "",
+        color: "#efefef"
       }
     });
 
@@ -238,19 +236,37 @@ class Home extends Component {
 
     return (
       <ThemeProvider>
-        <View style={styles.App} className="App" >
+        <View style={styles.App} className="App">
           <LinearGradient
-            colors={['#010d25', '#0f345a', '#124375']}
-            style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
-            <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-            {name ?
-              <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-              <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
-            }
-
+            colors={["#010d25", "#0f345a", "#124375"]}
+            style={{
+              width: "100%",
+              height: "100%",
+              padding: 0,
+              alignItems: "center",
+              borderRadius: 0
+            }}
+          >
+            <Image
+              source={require("../../assets/HayLogoVert3.png")}
+              style={styles.AppLogo}
+              className="AppLogo"
+              alt="logo"
+            />
+            {name ? (
+              <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>
+                You are logged in, {name}!
+              </Text>
+            ) : (
+              <Button
+                style={[styles.LoginButton]}
+                title="Login"
+                type="clear"
+                navigation={this.props.navigation}
+                onPress={this._loginWithAuth0}
+              />
+            )}
           </LinearGradient>
-
-
         </View>
       </ThemeProvider>
     );
