@@ -1,15 +1,19 @@
 {
   "expo": {
-    "name": "Sean",
-    "slug": "hay",
+    "name": "Say Hay",
+    "slug": "sayhay",
+    "scheme": "sayhay",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
+    "packagerOpts": {
+      "nonPersistent": "--nonPersistent"
+    },
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.gif",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,7 +22,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.connectus.hay",
+      "bundleIdentifier": "com.connectus.sayhay",
       "supportsTablet": true
     }
   }

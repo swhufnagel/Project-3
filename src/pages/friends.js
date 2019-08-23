@@ -13,9 +13,6 @@ import { AuthSession } from 'expo';
 
 const styles = StyleSheet.create({
   App: {
-    // backgroundImage: linear - gradient(125deg, #010d25, #0f345a, #124375, #124375, #0f345a, #010d25);
-    // backgroundSize: '200%',
-    // animation: bganimation 15s infinite;
     height: '100%'
   },
 
@@ -33,11 +30,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 52
   },
-
-  // buttonArea: {
-  //   display: 'flex'
-  // },
-
   Call: {
     width: 250,
     marginTop: 50,
@@ -49,7 +41,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 5
   },
-
   Text: {
     borderWidth: 2,
     borderColor: "#2699FB",
@@ -141,7 +132,7 @@ class Friends extends Component {
             onSwipeUp={this.getRandomContact}
           >
             <LinearGradient
-              colors={['#010d25', '#0f345a', '#124375', '#124375', '#0f345a', '#010d25']}
+              colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)']}
               style={{ width: '100%', height: '200%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
               <Image source={require('../../assets/HayLogoHorz4.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
               <Image

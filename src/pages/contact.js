@@ -27,12 +27,11 @@ import LogoTitle from "../components/contacts/LogoTitle";
 import { AuthSession } from "expo";
 
 
-const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
+const YOUR_NGROK_LINK = "https://say-hay.herokuapp.com/";
 
 
 const styles = StyleSheet.create({
   App: {
-    // backgroundSize: '200%',
     height: "100%"
   },
 
@@ -42,15 +41,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center"
   },
-
-  // AppLogo: {
-  //   // marginTop: '10%',
-  //   width: 200,
-  //   height: 30
-
-  // },
-
-
   nextPage: {
     width: 250,
     marginTop: 100,
@@ -86,8 +76,12 @@ class Contact extends Component {
     this.setDate = this.setDate.bind(this);
 
   }
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
+  setDate = async (newDate, id) => {
+    const index = await this.state.listKeys.findIndex(
+      listKey => listKey.id === id
+    );
+    const newState = this.state.listKeys[index].chosenDate = newDate;
+    this.setState({ listKeys: newState });
 
   }
   static navigationOptions = ({ navigation }) => {
@@ -131,7 +125,7 @@ class Contact extends Component {
           text: "Logout",
           onPress: async () => {
             let authUrl =
-              "https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/hay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
+              "https://dev-ph5frrsm.auth0.com/v2/logout?returnTo=https://auth.expo.io/@swhufnagel/sayhay&client_id=Jv5yuTYSdW5MFJ50z0EsuVv1z58LgQI5";
             const response = await AuthSession.startAsync(
               {
                 authUrl: authUrl
@@ -432,7 +426,6 @@ class Contact extends Component {
                         <Text style={{ textAlign: 'center' }}> {l.name} </Text>
                         <DatePickerIOS
                           date={this.state.listKeys[i].chosenDate}
-
                           onDateChange={this.setDate}
                         />
                         <Button

@@ -12,9 +12,6 @@ import createAuth0Client from '@auth0/auth0-spa-js';
 // import { Asset, Font } from "expo";
 import * as Font from 'expo-font';
 
-
-
-
 // Custom Font 
 // constructor(props) {
 //   super(props);
@@ -34,9 +31,8 @@ import * as Font from 'expo-font';
 // )}
 
 // Custom Font End
-import LogoTitle from "../components/contacts/LogoTitle";
 
-const YOUR_NGROK_LINK = "http://150a151a.ngrok.io";
+const YOUR_NGROK_LINK = "https://say-hay.herokuapp.com/";
 
 function toQueryString(params) {
   return (
@@ -243,14 +239,8 @@ class Home extends Component {
             colors={['#010d25', '#0f345a', '#124375']}
             style={{ width: '100%', height: '100%', padding: 0, alignItems: 'center', borderRadius: 0 }}>
             <Image source={require('../../assets/HayLogoVert3.png')} style={styles.AppLogo} className="AppLogo" alt="logo" />
-            {name ?
-              <Text style={{ fontSize: 22, color: "white", marginTop: 25 }}>You are logged in, {name}!</Text> :
-              <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
-            }
-
+            <Button style={[styles.LoginButton]} title="Login" type="clear" navigation={this.props.navigation} onPress={this._loginWithAuth0} />
           </LinearGradient>
-
-
         </View>
       </ThemeProvider>
     );
