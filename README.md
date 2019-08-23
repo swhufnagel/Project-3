@@ -8,9 +8,11 @@ Say Hay is an iOS application that can be downloaded from the apple store. Once 
 
 Upon successful login the user will be confirmed. The next step of the application prompts the user to share the contacts in their phone with the application with a simple acceptance button. Once the user agrees to share their contacts with the app, the user will be redirected to a page that lists all of their contacts along with a radio button. The radio button allows the user to toggle weather they would like to include each contact in their list of Say Hay contacts.
 
-For example, I would like to include my brother, neice and nephew in my list of Say Hay contacts--I love them as a part of my life but am not great about keeping in touch with them. At the same time I would like to leave out my boss and my favorite cake shop--I speak with them on a regualr basis.
+For example, I would like to include my brother, neice and nephew in my list of Say Hay contacts--I love them as a part of my life but am not great about keeping in touch with them. At the same time I would like to leave out my boss and my favorite cake shop--I speak with them on a regualr basis. This is the purpose of the radio button.
 
-This is the purpose of the radio button. Once the user has assigned which contacts to include in their Say Hay app a button push will choose a random contact, display thier picture if there is one and prompt the user to either call or text that particular contact. The list of selected contacts are stored in the app and allow the user to return at any time and select another random contact to message or speak with.
+We have also included push notifications on our app. When the user is searching through their contacts, if they press on a particular contact they will have the option to schedule an assigned date and time to be reminded to contact that individual.
+
+Once the user has assigned which contacts to include in their Say Hay app an 'accept' button push will choose a random contact, display thier picture if there is one and prompt the user to either call or text that particular contact. If the user swipes up on the screen another random contact will be displayed. The list of selected contacts are stored in the app and allow the user to return at any time and select another random contact to message or speak with.
 
 ## Technologies Used
 * React Native
@@ -31,6 +33,8 @@ Say Hay currently works only with iOS. If you would like to run Say Hay locally 
 `$ cd Project-3`
 * Run npm install.
 `$ npm install`
+* Run npm install expo command line interface.
+`$ npm install expo-cli`
 * Run yarn start.
 `$ yarn start`
 
