@@ -91,15 +91,16 @@ app.post("/message", (req, res) => {
 // Create User
 // ===========================
 app.post("/users/create", async (req, res) => {
+  console.log("user req body:", req.body);
   const userInfo = req.body;
-  console.log("req.body:", userInfo);
+  // console.log("req.body:", userInfo);
 
-  db.User.findOne({ iss: userInfo.iss }, async (err, doc) => {
+  db.User.findOne({ sub: userInfo.sub }, async (err, doc) => {
     let response = { sucess: true, msg: "The User Created Successfully" };
 
     //The User doesn't exist => Add New User
     if (!doc) {
-      let user = new db.User(req.body);
+      let user = new db.User(userInfo);
       let createdUser = await user.save();
     } else {
       response.msg = "The User/Email is Already Exists";
@@ -112,30 +113,32 @@ app.post("/users/create", async (req, res) => {
 
 // Store all contacts in database
 app.post("/contacts/store", async (req, res) => {
-  // console.log("req.body:", req.body);
+  // console.log("contacts req.body:", req.body);
   // Array for database
   let response = [];
   let contactIds = [];
   const owner = req.body[0].owner;
 
   for (let i = 0; i < req.body.length; i++) {
-    const contactLookup = await db.Contacts.findOne({ id: req.body[i].id });
+    let contactLookup = await db.Contacts.findOne({ id: req.body[i].id });
     if (contactLookup) {
       // if a contact was found
-      console.log("User already exists!");
+      // console.log("user exists", contactLookup);
+      contactIds.push(contactLookup._id);
     } else {
       // if a contact was not found
       let contact = new db.Contacts(req.body[i]);
       let createdContact = await contact.save();
       response.push(createdContact);
-      contactIds.push(contactLookup._id);
+      console.log("contactLookup:", createdContact);
+      contactIds.push(createdContact._id);
     }
   }
-  console.log("response:", response);
+  console.log("contact response:", response);
   console.log("contact Ids ---", contactIds);
 
   db.User.findOneAndUpdate(
-    { iss: owner },
+    { sub: owner },
     { $push: { contacts: contactIds } },
     (err, results) => {
       if (err) res.send(err);
