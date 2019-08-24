@@ -52,3 +52,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for more
 ## Links
 * Find Say Hay on [github](https://github.com/swhufnagel/Project-3.git)
 * Find Say Hay on the [app store](https://www.apple.com/ios/app-store/)
+* Static files for Say Hay on [github](https://github.com/swhufnagel/SayHay)
