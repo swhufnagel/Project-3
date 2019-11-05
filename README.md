@@ -1,5 +1,8 @@
 ![Say Hay](/assets/HayLogoVert3.png "SayHay")
 
+[Click here to view Say Hay in Expo](https://expo.io/@swhufnagel/sayhay)
+[Click here to view Say Hay in FlightTest(https://testflight.apple.com/join/tO1A4iRa)
+
 # Say Hay
 Say Hay is an iOS application developed to help you keep in touch with friends, family and associates. In this fast paced world we often do not have time to chat with all the firends that we have stored in our phones. At one time, long ago, it was the goal of social media to help solve this problem. However, it seems that social media has become more media and less social. Say Hay is intended to get back to the roots of using technology to improve our social interactions and help us connect with the people that we want to communicate with.
 
